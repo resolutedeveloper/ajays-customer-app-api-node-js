@@ -35,3 +35,12 @@ jobs:
           fi
 
           git status
+
+          # Check if the 'ajays' app is already running with pm2
+          if pm2 list | grep -q "ajays"; then
+            echo "Restarting the 'ajays' app..."
+            pm2 restart ajays
+          else
+            echo "'ajays' app is not running, starting it..."
+            pm2 start ajays.js --name ajays
+          fi
