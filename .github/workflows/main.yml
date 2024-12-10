@@ -27,7 +27,7 @@ jobs:
 
       - name: Deploy to DigitalOcean
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa git@github.com:resolutedeveloper/Ajays-Customer-App-API-Node-JS.git << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa git@github.com:resolutedeveloper/ajays-customer-app-api-node-js.git << 'EOF'
             echo "Starting deployment..."
 
             cd /var/www/ajaysapi.resolutesolutions.in.net/public_html || exit
