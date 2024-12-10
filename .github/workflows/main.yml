@@ -25,7 +25,7 @@ jobs:
           if [ ! -d ".git" ]; then
             # If no .git directory, clone the repository
             echo "Cloning the repository..."
-            git clone https://github.com/yourusername/yourrepository.git .
+            git clone https://github.com/resolutedeveloper/ajays-customer-app-api-node-js.git .
           else
             # If .git exists, pull the latest changes
             echo "Pulling the latest changes..."
