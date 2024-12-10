@@ -34,4 +34,4 @@ jobs:
             git pull origin main
           fi
 
-          git status
+          # git status
