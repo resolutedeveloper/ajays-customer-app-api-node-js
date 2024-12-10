@@ -28,7 +28,7 @@ jobs:
       - name: Deploy to DigitalOcean
         run: |
           # SSH into the server and perform the deployment
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@139.59.1.105 << 'EOF'
+          ssh -o StrictHostKeyChecking=no -A -i ~/.ssh/id_rsa root@139.59.1.105 << 'EOF'
             echo "Starting deployment..."
 
             # Navigate to the app directory
