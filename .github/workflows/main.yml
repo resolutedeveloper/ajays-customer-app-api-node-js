@@ -34,13 +34,8 @@ jobs:
             git pull origin main
           fi
 
-          git status
+          # Kill the app if it's running
+          pm2 delete ajays || true
 
-          # Check if 'ajays' process is already running
-          if pm2 list | grep -q "ajays"; then
-            echo "Restarting the 'ajays' app..."
-            pm2 restart ajays --update-env
-          else
-            echo "'ajays' app is not running, starting it..."
-            pm2 start ajays.js --name ajays
-          fi
+          # Start or restart the app
+          pm2 start ajays.js --name ajays
