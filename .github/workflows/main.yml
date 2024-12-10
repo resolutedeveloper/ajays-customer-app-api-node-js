@@ -1,0 +1,47 @@
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Deploy to DigitalOcean
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa git@github.com:Ashishresolut/ajays.git << 'EOF'
+            echo "Starting deployment..."
+
+            cd /var/www/ajaysapi.resolutesolutions.in.net/public_html || exit
+
+            echo "Cloning repository..."
+            rm -rf .git
+            git clone git@github.com:Ashishresolut/ajays.git .
+
+            echo "Installing dependencies..."
+            npm install
+
+            echo "Stopping existing app..."
+            pm2 delete ajays || true
+
+            echo "Starting app..."
+            pm2 start ajays.js --name ajays
+
+            echo "Deployment complete!"
+          EOF
