@@ -1,41 +1,22 @@
-name: Deploy to Server
+name: Node.js CD
 
 on:
   push:
-    branches:
-      - main
-  workflow_dispatch:
+    branches: [ main ]
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Create SSH directory
-      run: mkdir -p ~/.ssh
-
-    - name: Decode SSH private key
-      run: |
-        echo "$SSH_PRIVATE_KEY" | base64 --decode > ~/.ssh/id_ed25519
-        chmod 600 ~/.ssh/id_ed25519
-
-    - name: Add GitHub to known hosts
-      run: |
-        ssh-keyscan github.com >> ~/.ssh/known_hosts
-
-    - name: Clone repository with SSH
-      run: |
-        GIT_SSH_COMMAND="ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no" git clone git@github.com:resolutedeveloper/ajays-customer-app-api-node-js.git
-
-    - name: Install Dependencies
-      run: |
-        cd ajays-customer-app-api-node-js
-        npm install
-
-    - name: Run Deployment Script
-      run: |
-        cd ajays-customer-app-api-node-js
-        npm run deploy  # Adjust this step based on your project
+    - name: Deploy using ssh
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.PRIVATE_KEY }}
+        port: 22
+        script: |
+          cd ~/var/www/ajaysapi.resolutesolutions.in.net/public_html
+          git pull origin master
+          git status
