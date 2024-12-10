@@ -25,7 +25,9 @@ jobs:
         port: 22
         script: |
           cd /var/www/ajaysapi.resolutesolutions.in.net/public_html
-
+          echo ${{ secrets.HOST }}
+          echo ${{ secrets.USERNAME }}
+          echo ${{ secrets.PRIVATE_KEY }}
           if [ ! -d ".git" ]; then
             echo "Cloning the repository using SSH..."
             git clone git@github.com:resolutedeveloper/ajays-customer-app-api-node-js.git .
