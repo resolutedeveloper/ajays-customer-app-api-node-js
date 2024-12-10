@@ -3,6 +3,8 @@ name: Node.js CD
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
@@ -19,12 +21,16 @@ jobs:
         script: |
           cd /var/www/ajaysapi.resolutesolutions.in.net/public_html
 
+          # Check if the .git directory exists
           if [ ! -d ".git" ]; then
+            # If no .git directory, clone the repository using SSH
             echo "Cloning the repository using SSH..."
             git clone git@github.com:resolutedeveloper/ajays-customer-app-api-node-js.git .
           else
+            # If .git exists, pull the latest changes
             echo "Pulling the latest changes..."
             git pull origin main
           fi
 
+          # Optional: Show git status
           git status
