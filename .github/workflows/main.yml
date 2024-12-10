@@ -16,10 +16,8 @@ jobs:
       - name: Set up SSH key
         run: |
           mkdir -p ~/.ssh
-          # Ensure the private key from GitHub secrets is correctly formatted
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          # Add GitHub to known hosts
           ssh-keyscan github.com >> ~/.ssh/known_hosts
 
       - name: Set up Node.js
@@ -29,10 +27,9 @@ jobs:
 
       - name: Deploy to DigitalOcean
         run: |
-          # SSH into the server and perform the deployment
           ssh -o StrictHostKeyChecking=no -A -i ~/.ssh/id_ed25519 root@139.59.1.105 << 'EOF'
             echo "Starting deployment..."
-
+          
             # Navigate to the app directory
             cd /var/www/ajaysapi.resolutesolutions.in.net/public_html || exit
 
