@@ -4,16 +4,13 @@ on:
   push:
     branches: [ main ]
   pull_request:
-    branches: [ main ]  # This will trigger for pull requests targeting the 'main' branch
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2  # Ensure the repo is checked out
-
     - name: Deploy using ssh
       uses: appleboy/ssh-action@master
       with:
@@ -23,5 +20,17 @@ jobs:
         port: 22
         script: |
           cd /var/www/ajaysapi.resolutesolutions.in.net/public_html
-          git pull origin main  # Ensure you're pulling from the main branch
+
+          # Check if the .git directory exists
+          if [ ! -d ".git" ]; then
+            # If no .git directory, clone the repository
+            echo "Cloning the repository..."
+            git clone https://github.com/yourusername/yourrepository.git .
+          else
+            # If .git exists, pull the latest changes
+            echo "Pulling the latest changes..."
+            git pull origin main
+          fi
+
+          # Optional: Show git status
           git status
