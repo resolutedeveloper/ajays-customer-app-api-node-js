@@ -21,7 +21,7 @@ jobs:
 
           if [ ! -d ".git" ]; then
             echo "Cloning the repository using SSH..."
-            git clone git@github.com:resolutedeveloper/ajays-customer-app-api-node-js.git .
+            git clone https://github.com/resolutedeveloper/ajays-customer-app-api-node-js .
           else
             echo "Pulling the latest changes..."
             git pull origin main
