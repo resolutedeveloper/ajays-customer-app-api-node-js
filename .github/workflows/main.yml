@@ -19,21 +19,23 @@ jobs:
 
     - name: Decode SSH key
       run: |
-        echo "$SSH_PRIVATE_KEY" | base64 --decode > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
+        echo "$SSH_PRIVATE_KEY" | base64 --decode > ~/.ssh/id_ed25519
+        chmod 600 ~/.ssh/id_ed25519
 
-    - name: Add SSH key directly for Git operations
+    - name: Add GitHub to known hosts
       run: |
-        # Ensure SSH key is usable
         ssh-keyscan github.com >> ~/.ssh/known_hosts
-        ssh-agent bash -c "ssh-add ~/.ssh/id_rsa && git clone git@github.com:resolutedeveloper/ajays-customer-app-api-node-js.git"
 
-    # - name: Install Dependencies
-    #   run: |
-    #     cd ajays-customer-app-api-node-js
-    #     npm install
+    - name: Clone repository with SSH
+      run: |
+        GIT_SSH_COMMAND="ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no" git clone git@github.com:resolutedeveloper/ajays-customer-app-api-node-js.git
 
-    # - name: Run Deployment Script
-    #   run: |
-    #     cd ajays-customer-app-api-node-js
-    #     npm run deploy  # Adjust this step based on your project
+    - name: Install Dependencies
+      run: |
+        cd ajays-customer-app-api-node-js
+        npm install
+
+    - name: Run Deployment Script
+      run: |
+        cd ajays-customer-app-api-node-js
+        npm run deploy  # Adjust this step based on your project
