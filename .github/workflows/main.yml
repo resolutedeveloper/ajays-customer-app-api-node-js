@@ -3,15 +3,20 @@ name: Node.js CD
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Deploy using ssh
+    - name: Set up SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "$PRIVATE_KEY" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+    - name: Deploy using SSH
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.HOST }}
@@ -21,16 +26,12 @@ jobs:
         script: |
           cd /var/www/ajaysapi.resolutesolutions.in.net/public_html
 
-          # Check if the .git directory exists
           if [ ! -d ".git" ]; then
-            # If no .git directory, clone the repository using SSH
             echo "Cloning the repository using SSH..."
-            git clone git@github.com:resolutedeveloper/ajays-customer-app-api-node-js.git .
+            git clone https://github.com/resolutedeveloper/ajays-customer-app-api-node-js.git .
           else
-            # If .git exists, pull the latest changes
             echo "Pulling the latest changes..."
             git pull origin main
           fi
 
-          # Optional: Show git status
           git status
