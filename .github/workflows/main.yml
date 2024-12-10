@@ -19,9 +19,9 @@ jobs:
         mkdir -p ~/.ssh
         echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
         chmod 600 ~/.ssh/id_ed25519
-        ssh-keyscan github.com >> ~/.ssh/known_hosts  # Avoid the host authenticity check
+        ssh-keyscan github.com >> ~/.ssh/known_hosts
 
-    - name: Test SSH Connection (GitHub)
+    - name: Test SSH connection to GitHub
       run: ssh -T git@github.com
 
     - name: Clone repository
@@ -35,4 +35,4 @@ jobs:
     - name: Run Deployment Script
       run: |
         cd ajays-customer-app-api-node-js
-        npm run deploy  # Adjust based on your project
+        npm run deploy  # Adjust this step based on your project
