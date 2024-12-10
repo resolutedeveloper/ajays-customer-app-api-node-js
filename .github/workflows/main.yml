@@ -1,19 +1,69 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - main  # Trigger deployment on push to the 'main' branch
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      # Step 1: Checkout the code
+      - name: Checkout repository
         uses: actions/checkout@v2
-      
-      - name: Set up SSH
+
+      # Step 2: Set up SSH key for GitHub to access your server
+      - name: Set up SSH key for GitHub actions
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-      
-      - name: Deploy to server
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa  # Add private key
+          chmod 600 ~/.ssh/id_rsa  # Set the correct permissions
+          ssh-keyscan github.com >> ~/.ssh/known_hosts  # Add GitHub to known hosts to avoid authenticity warnings
+
+      # Step 3: SSH into the server and perform the deployment
+      - name: SSH into the server and deploy
         run: |
           ssh -o StrictHostKeyChecking=no -A -i ~/.ssh/id_rsa root@139.59.1.105 << 'EOF'
-            # Deployment steps here
+            echo "Starting deployment..."
+
+            # Navigate to the app directory
+            cd /var/www/ajaysapi.resolutesolutions.in.net/public_html || exit
+
+            # Clean the directory before cloning or pulling changes
+            echo "Removing existing files..."
+            rm -rf /var/www/ajaysapi.resolutesolutions.in.net/public_html/*
+
+            # Check if git directory exists and either clone or pull the latest changes
+            if [ ! -d ".git" ]; then
+              echo "Cloning repository..."
+              git clone git@github.com:resolutedeveloper/ajays-customer-app-api-node-js.git .
+            else
+              echo "Pulling latest changes..."
+              git pull origin main
+            fi
+
+            # Ensure package.json exists
+            if [ ! -f "package.json" ]; then
+              echo "Error: package.json not found in the repository!"
+              exit 1
+            fi
+
+            echo "Installing dependencies..."
+            npm install
+
+            # Ensure ajays.js exists
+            if [ ! -f "ajays.js" ]; then
+              echo "Error: ajays.js script not found!"
+              exit 1
+            fi
+
+            echo "Stopping existing app..."
+            pm2 delete ajays || true
+
+            echo "Starting app..."
+            pm2 start ajays.js --name ajays
+
+            echo "Deployment complete!"
           EOF
