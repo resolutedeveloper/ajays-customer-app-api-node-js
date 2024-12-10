@@ -16,7 +16,7 @@ jobs:
       - name: Set up SSH key
         run: |
           mkdir -p ~/.ssh
-          # Use the SSH private key from GitHub secrets
+          # Ensure the private key from GitHub secrets is correctly formatted
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           # Add GitHub to known hosts
