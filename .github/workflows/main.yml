@@ -19,14 +19,14 @@ jobs:
 
     - name: Decode SSH key
       run: |
-        echo "$SSH_PRIVATE_KEY" | base64 --decode > ~/.ssh/id_ed25519
-        chmod 600 ~/.ssh/id_ed25519
+        echo "$SSH_PRIVATE_KEY" | base64 --decode > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
 
     - name: Add SSH key directly for Git operations
       run: |
         # Ensure SSH key is usable
         ssh-keyscan github.com >> ~/.ssh/known_hosts
-        ssh-agent bash -c "ssh-add ~/.ssh/id_ed25519 && git clone git@github.com:resolutedeveloper/ajays-customer-app-api-node-js.git"
+        ssh-agent bash -c "ssh-add ~/.ssh/id_rsa && git clone git@github.com:resolutedeveloper/ajays-customer-app-api-node-js.git"
 
     # - name: Install Dependencies
     #   run: |
