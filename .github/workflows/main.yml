@@ -34,11 +34,11 @@ jobs:
             # Navigate to the app directory
             cd /var/www/ajaysapi.resolutesolutions.in.net/public_html || exit
 
-            # Remove all files and ensure it is clean
+            # Ensure the directory is clean before cloning
             echo "Removing existing files..."
-            rm -rf *
+            rm -rf /var/www/ajaysapi.resolutesolutions.in.net/public_html/*
 
-            # Check if directory is empty before cloning
+            # Check if directory is empty before cloning or pull the latest changes
             if [ ! -d ".git" ]; then
               echo "Cloning repository..."
               git clone git@github.com:resolutedeveloper/ajays-customer-app-api-node-js.git .
@@ -47,8 +47,20 @@ jobs:
               git pull origin main
             fi
 
+            # Ensure package.json exists in the root of the repository
+            if [ ! -f "package.json" ]; then
+              echo "Error: package.json not found in the repository!"
+              exit 1
+            fi
+
             echo "Installing dependencies..."
             npm install
+
+            # Check if the ajays.js script exists
+            if [ ! -f "ajays.js" ]; then
+              echo "Error: ajays.js script not found!"
+              exit 1
+            fi
 
             echo "Stopping existing app..."
             pm2 delete ajays || true
