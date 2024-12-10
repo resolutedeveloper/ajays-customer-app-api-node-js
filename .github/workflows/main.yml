@@ -21,7 +21,11 @@ jobs:
       run: |
         echo "$SSH_PRIVATE_KEY" | base64 --decode > ~/.ssh/id_ed25519
         chmod 600 ~/.ssh/id_ed25519
+
+    - name: Add SSH key to agent (with OpenSSH support)
+      run: |
         eval $(ssh-agent -s)
+        ssh-add -D  # Clear any previously added keys
         ssh-add ~/.ssh/id_ed25519
         ssh-keyscan github.com >> ~/.ssh/known_hosts
 
