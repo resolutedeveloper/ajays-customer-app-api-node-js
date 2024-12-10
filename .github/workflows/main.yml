@@ -34,11 +34,11 @@ jobs:
             # Navigate to the app directory
             cd /var/www/ajaysapi.resolutesolutions.in.net/public_html || exit
 
-            # Ensure the directory is clean before cloning the repository
+            # Remove all files and ensure it is clean
             echo "Removing existing files..."
             rm -rf *
 
-            # Clone the repository if it is not a git repo, else pull the latest changes
+            # Check if directory is empty before cloning
             if [ ! -d ".git" ]; then
               echo "Cloning repository..."
               git clone git@github.com:resolutedeveloper/ajays-customer-app-api-node-js.git .
