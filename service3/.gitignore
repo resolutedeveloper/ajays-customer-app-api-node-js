@@ -1,0 +1,47 @@
+# Node.js dependencies
+/node_modules/
+
+# Log files
+logs/
+*.log
+
+# npm debug log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files
+# .env
+# .env.local
+# .env.*.local
+
+# Build directories
+/dist
+/build
+
+# Dependency directories
+/.pnp
+.pnp.js
+
+# VS Code settings
+.vscode/
+
+# MacOS system files
+.DS_Store
+
+# Windows system files
+Thumbs.db
+
+# JetBrains IDEs
+.idea/
+
+# Operating system files
+ehthumbs.db
+Desktop.ini
+
+# Coverage folder (for test coverage reports)
+coverage/
+
+# Database files
+*.sqlite
+*.sqlite3
