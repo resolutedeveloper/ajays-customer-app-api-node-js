@@ -1,9 +1,7 @@
 name: Service Deploy on Digital Ocean
 
 on:
-  push:
-    branches:
-      - main  # Trigger the workflow on push to the master branch
+  workflow_dispatch:  # This allows manual triggering of the workflow
 
 jobs:
   build:
@@ -27,11 +25,18 @@ jobs:
         script: |
           cd /var/www/repo
 
-          # Check if the repo is already cloned
           if [ ! -d ".git" ]; then
             echo "Cloning the repository using SSH..."
-            git clone git@github.com:resolutedeveloper/ajays-customer-app-api-node-js.git .
+            git clone https://github.com/resolutedeveloper/ajays-customer-app-api-node-js.git .
           else
             echo "Pulling the latest changes..."
-            git pull origin main  # Pull the latest changes from the master branch
+            git pull origin main
           fi
+
+          npm i
+
+          # Kill the app if it's running
+          # pm2 delete ajays || true
+
+          # Start or restart the app
+          # pm2 start ajays.js --name ajays
