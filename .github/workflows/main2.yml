@@ -1,4 +1,4 @@
-name: Node.js CD
+name: Service Deploy on Digital Ocean
 
 on:
   workflow_dispatch:  # This allows manual triggering of the workflow
