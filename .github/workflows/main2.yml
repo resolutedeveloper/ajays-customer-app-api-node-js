@@ -29,11 +29,12 @@ jobs:
             echo "Cloning the repository using SSH..."
             git clone https://github.com/resolutedeveloper/ajays-customer-app-api-node-js.git .
           else
-            echo "Pulling the latest changes..."
+            echo "Repository already exists, pulling the latest changes..."
             git pull origin main
           fi
 
-          # npm i
+          # Uncomment if you need to install npm dependencies
+          # npm install
 
           # Kill the app if it's running
           # pm2 delete ajays || true
