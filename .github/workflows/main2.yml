@@ -33,7 +33,7 @@ jobs:
             git pull origin main
           fi
 
-          npm i
+          # npm i
 
           # Kill the app if it's running
           # pm2 delete ajays || true
