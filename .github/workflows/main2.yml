@@ -1,23 +1,9 @@
-name: Service Deploy on Digital ocean
+name: Service Deploy on Digital Ocean
 
 on:
-  workflow_dispatch:  # This allows manual triggering of the workflow
-    inputs:
-      deploy_service1:
-        description: 'Deploy Service 1?'
-        required: true
-        default: 'false'
-        type: boolean
-      deploy_service2:
-        description: 'Deploy Service 2?'
-        required: true
-        default: 'false'
-        type: boolean
-      deploy_service3:
-        description: 'Deploy Service 3?'
-        required: true
-        default: 'false'
-        type: boolean
+  push:
+    branches:
+      - main  # Trigger the workflow on push to the master branch
 
 jobs:
   build:
@@ -31,8 +17,7 @@ jobs:
         chmod 600 ~/.ssh/id_rsa
         ssh-keyscan github.com >> ~/.ssh/known_hosts
 
-    - name: Deploy Service 1 using SSH
-      if: ${{ github.event.inputs.deploy_service1 == 'true' }}
+    - name: Deploy using SSH
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.HOST }}
@@ -40,74 +25,13 @@ jobs:
         key: ${{ secrets.PRIVATE_KEY }}
         port: 22
         script: |
-          cd /var/www/service1-directory
+          cd /var/www/repo
 
+          # Check if the repo is already cloned
           if [ ! -d ".git" ]; then
-            echo "Cloning the repository for service1..."
-            git clone https://github.com/your-username/service1-repo.git .
+            echo "Cloning the repository using SSH..."
+            git clone git@github.com:resolutedeveloper/ajays-customer-app-api-node-js.git .
           else
-            echo "Pulling the latest changes for service1..."
-            git pull origin main
+            echo "Pulling the latest changes..."
+            git pull origin main  # Pull the latest changes from the master branch
           fi
-
-          npm i
-
-          # Kill the app if it's running
-          pm2 delete service1 || true
-
-          # Start or restart the app for service1
-          pm2 start service1.js --name service1
-
-    - name: Deploy Service 2 using SSH
-      if: ${{ github.event.inputs.deploy_service2 == 'true' }}
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.PRIVATE_KEY }}
-        port: 22
-        script: |
-          cd /var/www/service2-directory
-
-          if [ ! -d ".git" ]; then
-            echo "Cloning the repository for service2..."
-            git clone https://github.com/your-username/service2-repo.git .
-          else
-            echo "Pulling the latest changes for service2..."
-            git pull origin main
-          fi
-
-          npm i
-
-          # Kill the app if it's running
-          pm2 delete service2 || true
-
-          # Start or restart the app for service2
-          pm2 start service2.js --name service2
-
-    - name: Deploy Service 3 using SSH
-      if: ${{ github.event.inputs.deploy_service3 == 'true' }}
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.PRIVATE_KEY }}
-        port: 22
-        script: |
-          cd /var/www/service3-directory
-
-          if [ ! -d ".git" ]; then
-            echo "Cloning the repository for service3..."
-            git clone https://github.com/your-username/service3-repo.git .
-          else
-            echo "Pulling the latest changes for service3..."
-            git pull origin main
-          fi
-
-          npm i
-
-          # Kill the app if it's running
-          pm2 delete service3 || true
-
-          # Start or restart the app for service3
-          pm2 start service3.js --name service3
