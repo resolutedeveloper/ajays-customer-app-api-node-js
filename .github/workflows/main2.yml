@@ -30,7 +30,7 @@ jobs:
           # Check if the repo is already cloned
           if [ ! -d ".git" ]; then
             echo "Cloning the repository using SSH..."
-            git clone git@github.com:resolutedeveloper/ajays-customer-app-api-node-js.git .
+            git clone https://github.com/resolutedeveloper/ajays-customer-app-api-node-js.git .
           else
             echo "Pulling the latest changes..."
             git pull origin master  # Pull the latest changes from the master branch
