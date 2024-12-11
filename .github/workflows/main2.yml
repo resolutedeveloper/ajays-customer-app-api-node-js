@@ -2,7 +2,6 @@ name: Service Deploy on Digital Ocean
 
 on:
   workflow_dispatch:  # This allows manual triggering of the workflow
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -23,21 +22,20 @@ jobs:
         key: ${{ secrets.PRIVATE_KEY }}
         port: 22
         script: |
-          cd /var/www/repo
+          cd /var/www/repo/public_html
 
           if [ ! -d ".git" ]; then
             echo "Cloning the repository using SSH..."
             git clone https://github.com/resolutedeveloper/ajays-customer-app-api-node-js.git .
           else
-            echo "Repository already exists, pulling the latest changes..."
+            echo "Pulling the latest changes..."
             git pull origin main
           fi
 
-          # Uncomment if you need to install npm dependencies
-          # npm install
+          npm i
 
           # Kill the app if it's running
-          # pm2 delete ajays || true
+          pm2 delete ajays || true
 
           # Start or restart the app
-          # pm2 start ajays.js --name ajays
+          pm2 start ajays.js --name ajays
