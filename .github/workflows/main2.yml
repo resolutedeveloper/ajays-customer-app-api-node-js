@@ -32,10 +32,10 @@ jobs:
             git pull origin main
           fi
 
-          npm i
+          # npm i
 
           # Kill the app if it's running
-          pm2 delete ajays || true
+          # pm2 delete ajays || true
 
           # Start or restart the app
-          pm2 start ajays.js --name ajays
+          # pm2 start ajays.js --name ajays
