@@ -33,7 +33,7 @@ jobs:
 
     - name: Checkout code from GitHub repository (SSH)
       run: |
-        git clone git@github.com:resolutedeveloper/ajays-customer-app-api-node-js.git /tmp/repo
+        git clone https://github.com/resolutedeveloper/ajays-customer-app-api-node-js.git /tmp/repo
         cd /tmp/repo
 
     - name: Enable sparse-checkout for service1
