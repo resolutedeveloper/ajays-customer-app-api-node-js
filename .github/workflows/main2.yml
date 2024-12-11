@@ -24,17 +24,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Set up SSH
+    - name: Checkout code from GitHub repository (SSH)
       run: |
         mkdir -p ~/.ssh
         echo "$PRIVATE_KEY" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
         ssh-keyscan github.com >> ~/.ssh/known_hosts
 
-    - name: Checkout code from GitHub repository (SSH)
-      run: |
-        git clone https://github.com/resolutedeveloper/ajays-customer-app-api-node-js.git /tmp/repo
-        cd /tmp/repo
+        - name: Deploy using SSH
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.PRIVATE_KEY }}
+        port: 22
+        script: |
+          cd /tmp/repo
+
+          if [ ! -d ".git" ]; then
+            echo "Cloning the repository using SSH..."
+            git clone https://github.com/resolutedeveloper/ajays-customer-app-api-node-js.git .
+          else
+            echo "Pulling the latest changes..."
+            git pull origin master
+          fi
 
     - name: Enable sparse-checkout for service1
       if: ${{ github.event.inputs.deploy_service1 == 'true' }}
