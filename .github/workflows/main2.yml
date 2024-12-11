@@ -39,7 +39,7 @@ jobs:
         key: ${{ secrets.PRIVATE_KEY }}
         port: 22
         script: |
-          cd /tmp/repo
+          cd /var/www/repo
           ls
           if [ ! -d ".git" ]; then
             echo "Cloning the repository using SSH..."
