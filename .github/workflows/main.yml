@@ -70,10 +70,10 @@ jobs:
           npm install
 
           # Kill the app if it's running
-          pm2 delete Catalog || true
+          pm2 delete catalog || true
 
           # Start or restart the app for Catalog
-          pm2 start catalog.js --name Catalog
+          pm2 start catalog.js --name catalog
 
     - name: Deploy Customer using SSH
       if: ${{ github.event.inputs.deploy_service2 == 'true' }}
