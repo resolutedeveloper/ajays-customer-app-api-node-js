@@ -56,3 +56,10 @@ jobs:
 
           # Start or restart the app
           # pm2 start ajays.js --name ajays
+    - name: Deploy Service 1 using SSH
+      if: ${{ github.event.inputs.deploy_service1 == 'true' }}
+      run: |
+        echo "Deploying Catalog Service..."
+        
+        # Copy the Catalog files to the target directory
+        cp -r /var/www/repo/public_html/Catalog /var/www/Catalog
