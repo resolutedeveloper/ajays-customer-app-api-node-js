@@ -56,10 +56,25 @@ jobs:
 
           # Start or restart the app
           # pm2 start ajays.js --name ajays
-    - name: Deploy Service 1 using SSH
+        - name: Deploy Service 1 using SSH
       if: ${{ github.event.inputs.deploy_service1 == 'true' }}
-      run: |
-        echo "Deploying Catalog Service..."
-        
-        # Copy the Catalog files to the target directory
-        cp -r /var/www/repo/public_html/Catalog /var/www/Catalog
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.PRIVATE_KEY }}
+        port: 22
+        script: |
+          echo "Deploying Catalog Service..."
+          
+          # Check if the Catalog directory exists, and if not, clone the repository
+          if [ ! -d "/var/www/repo/public_html/Catalog" ]; then
+            echo "Directory does not exist, cloning the repository..."
+            cd /var/www/repo/public_html
+            git clone https://github.com/resolutedeveloper/ajays-customer-app-api-node-js.git .
+          else
+            echo "Directory exists, copying files..."
+          fi
+
+          # Copy the Catalog files to the target directory
+          cp -r /var/www/repo/public_html/Catalog /var/www/Catalog
