@@ -49,7 +49,7 @@ jobs:
             git pull origin main
           fi
 
-    - name: Deploy Service 1 using SSH
+    - name: Deploy Catelog 1 using SSH
       if: ${{ github.event.inputs.deploy_service1 == 'true' }}
       uses: appleboy/ssh-action@master
       with:
@@ -62,4 +62,32 @@ jobs:
           
           # Copy the Catalog files to the target directory
           cp -r /var/www/repo/public_html/Catalog/* /var/www/Catalog/public_html
+
+    - name: Deploy Customer 1 using SSH
+      if: ${{ github.event.inputs.deploy_service2 == 'true' }}
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.PRIVATE_KEY }}
+        port: 22
+        script: |
+          echo "Deploying Customer Service..."
+          
+          # Copy the Customer files to the target directory
+          cp -r /var/www/repo/public_html/Customer/* /var/www/Customer/public_html
+
+    - name: Deploy Order 1 using SSH
+      if: ${{ github.event.inputs.deploy_service3 == 'true' }}
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.PRIVATE_KEY }}
+        port: 22
+        script: |
+          echo "Deploying Order Service..."
+          
+          # Copy the Order files to the target directory
+          cp -r /var/www/repo/public_html/Order/* /var/www/Order/public_html
 
