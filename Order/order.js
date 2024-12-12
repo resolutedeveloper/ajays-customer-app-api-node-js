@@ -7,7 +7,7 @@ const route = require('./src/routes');  // Import all routes from router/index.j
 
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 300;
 
 // Use Morgan middleware for logging HTTP requests
 app.use(morgan('tiny', { stream: { write: (msg) => logger.info(msg.trim()) } }));  // Log HTTP requests to the console and to the file
@@ -16,6 +16,11 @@ app.use(morgan('tiny', { stream: { write: (msg) => logger.info(msg.trim()) } }))
 app.use((req, res, next) => {
     logger.info(`Incoming request: ${req.method} ${req.url}`);  // Log general requests
     next();
+});
+
+// Simple GET route to test if the API is working
+app.get('/api/v1/health', (req, res) => {
+    res.status(200).send({ success: true, message: 'API is working!' });
 });
 
 // Use routes
