@@ -61,5 +61,5 @@ jobs:
           echo "Deploying Catalog Service..."
           
           # Copy the Catalog files to the target directory
-          cp -r /var/www/repo/public_html/Catalog /var/www/Catalog/public_html
+          cp -r /var/www/repo/public_html/Catalog/* /var/www/Catalog/public_html
 
