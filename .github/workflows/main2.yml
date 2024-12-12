@@ -60,14 +60,6 @@ jobs:
         script: |
           echo "Deploying Catalog Service..."
           
-          # Check if the Catalog directory exists, and if not, clone the repository
-          if [ ! -d "/var/www/repo/public_html/Catalog" ]; then
-            echo "Directory does not exist, cloning the repository..."
-            cd /var/www/repo/public_html
-            git clone https://github.com/resolutedeveloper/ajays-customer-app-api-node-js.git .
-          else
-            echo "Directory exists, copying files..."
-          fi
-
           # Copy the Catalog files to the target directory
-          cp -r /var/www/repo/public_html/Catalog /var/www/Catalog
+          cp -r /var/www/repo/public_html/Catalog /var/www/Catalog/public_html
+
