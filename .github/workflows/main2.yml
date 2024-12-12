@@ -1,7 +1,24 @@
 name: Service Deploy on Digital Ocean
 
+
 on:
   workflow_dispatch:  # This allows manual triggering of the workflow
+    inputs:
+      deploy_service1:
+        description: 'Deploy Catalog Service?'
+        required: true
+        default: 'false'
+        type: boolean
+      deploy_service2:
+        description: 'Deploy Customer Service?'
+        required: true
+        default: 'false'
+        type: boolean
+      deploy_service3:
+        description: 'Deploy Order Service?'
+        required: true
+        default: 'false'
+        type: boolean
 jobs:
   build:
     runs-on: ubuntu-latest
