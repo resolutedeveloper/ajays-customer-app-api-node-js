@@ -69,6 +69,12 @@ jobs:
           echo "installing the lib..."
           npm install
 
+          # Kill the app if it's running
+          pm2 delete Catalog || true
+
+          # Start or restart the app for Catalog
+          pm2 start catalog.js --name Catalog
+
     - name: Deploy Customer using SSH
       if: ${{ github.event.inputs.deploy_service2 == 'true' }}
       uses: appleboy/ssh-action@master
@@ -89,6 +95,12 @@ jobs:
           echo "installing the lib..."
           npm install
 
+          # Kill the app if it's running
+          pm2 delete customer || true
+
+          # Start or restart the app for Customer
+          pm2 start customer.js --name customer
+
     - name: Deploy Order using SSH
       if: ${{ github.event.inputs.deploy_service3 == 'true' }}
       uses: appleboy/ssh-action@master
@@ -108,4 +120,10 @@ jobs:
           
           echo "installing the lib..."
           npm install
+
+          # Kill the app if it's running
+          pm2 delete order || true
+
+          # Start or restart the app for Order
+          pm2 start order.js --name order
 
