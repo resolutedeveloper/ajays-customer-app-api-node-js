@@ -62,7 +62,7 @@ jobs:
 
           # Set up environment variables for Catalog service
           export PORT=302
-          export DB_HOST=localhost
+          export DB_HOST=139.59.1.105
           export DB_PORT=3306
           export DB_USER=root
           export DB_PASSWORD="${{ secrets.DB_PASSWORD }}"  # Sensitive data from secrets
