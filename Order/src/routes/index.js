@@ -1,7 +1,7 @@
+
 const express = require("express");
 const route = express.Router();
 
+route.use("/companys", require("./companyRoutes.js"));
 
-// Login Action Related Route
-route.use("/users", require("./userRoutes.js"));
 module.exports = route;
