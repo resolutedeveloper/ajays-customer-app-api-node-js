@@ -65,8 +65,8 @@ jobs:
           export DB_HOST=139.59.1.105
           export DB_PORT=3306
           export DB_USER=root
-          export DB_PASSWORD_S="${{ secrets.DB_PASSWORD }}"
-          export DB_NAME=CatalogDB
+          export DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
+          export DB_NAME_CATALOG=CatalogDB
           export NODE_ENV=production
           
           # Copy the Catalog files to the target directory
