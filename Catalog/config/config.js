@@ -1,22 +1,22 @@
 module.exports = {
     development: {
         username: process.env.DB_USER || 'root',
-        password: process.env.DB_PASSWORD_S || '',
-        database: process.env.DB_NAME || 'CatalogDB',
+        password: process.env.DB_PASSWORD || '',
+        database: process.env.DB_NAME_CATALOG || 'CatalogDB',
         host: process.env.DB_HOST || 'localhost',
         dialect: 'mysql',
     },
     test: {
         username: process.env.DB_USER || 'root',
-        password: process.env.DB_PASSWORD_S || '',
-        database: process.env.DB_NAME || 'CatalogDB',
+        password: process.env.DB_PASSWORD || '',
+        database: process.env.DB_NAME_CATALOG || 'CatalogDB',
         host: process.env.DB_HOST || 'localhost',
         dialect: 'mysql',
     },
     production: {
         username: process.env.DB_USER || 'root',
-        password: process.env.DB_PASSWORD_S || '',
-        database: process.env.DB_NAME || 'CatalogDB',
+        password: process.env.DB_PASSWORD || '',
+        database: process.env.DB_NAME_CATALOG || 'CatalogDB',
         host: process.env.DB_HOST || 'localhost',
         dialect: 'mysql',
     },
