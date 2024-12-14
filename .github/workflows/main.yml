@@ -49,6 +49,14 @@ jobs:
             git pull origin main
           fi
 
+    - name: global ENV value setup
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.PRIVATE_KEY }}
+        port: 22
+        script: |
           export DB_HOST=139.59.1.105
           export DB_PORT=3306
           export DB_USER=root
