@@ -1,9 +1,9 @@
 // scripts/generate-migrations.js
 const fs = require('fs');
 const path = require('path');
-const Sequelize = require('sequelize');
-const { sequelize } = require('../src/models'); // Import the sequelize instance from index.js
-
+// const Sequelize = require('sequelize');
+// const { sequelize } = require('../src/models'); // Import the sequelize instance from index.js
+const logger = require('../src/utils/logger'); // Import the Winston logger
 const modelsDir = path.join(__dirname, '..', 'src', 'models');
 const migrationsDir = path.join(__dirname, '..', 'migrations'); // Use root-level migrations directory
 
@@ -31,7 +31,7 @@ fs.readdirSync(modelsDir)
 
       // Write migration content to the file
       fs.writeFileSync(migrationPath, migrationContent);
-      console.log(`Generated migration for ${modelName}`);
+      logger.info(`Generated migration for ${modelName}`);
     }
   });
 
