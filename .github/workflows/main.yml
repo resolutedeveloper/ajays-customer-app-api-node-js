@@ -61,7 +61,7 @@ jobs:
           echo "Deploying Catalog Service..."
 
           # Set up environment variables for Catalog service
-          export PORT=302
+          export PORT_CATALOG=302
           export DB_HOST=139.59.1.105
           export DB_PORT=3306
           export DB_USER=root
@@ -103,6 +103,15 @@ jobs:
         port: 22
         script: |
           echo "Deploying Customer Service..."
+
+          # Set up environment variables for Customer service
+          export PORT_CUSTOMER=301
+          export DB_HOST=139.59.1.105
+          export DB_PORT=3306
+          export DB_USER=root
+          export DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
+          export DB_NAME_CUSTOMER=CustomerDB
+          export NODE_ENV=production
           
           # Copy the Customer files to the target directory
           cp -r /var/www/repo/public_html/Customer/. /var/www/Customer/public_html
@@ -138,6 +147,15 @@ jobs:
         port: 22
         script: |
           echo "Deploying Order Service..."
+
+          # Set up environment variables for Customer service
+          export PORT_ORDER=300
+          export DB_HOST=139.59.1.105
+          export DB_PORT=3306
+          export DB_USER=root
+          export DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
+          export DB_NAME_ORDER=OrderDB
+          export NODE_ENV=production
           
           # Copy the Order files to the target directory
           cp -r /var/www/repo/public_html/Order/. /var/www/Order/public_html

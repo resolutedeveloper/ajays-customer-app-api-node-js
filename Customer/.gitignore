@@ -45,3 +45,6 @@ coverage/
 # Database files
 *.sqlite
 *.sqlite3
+
+# migrations
+/migrations
