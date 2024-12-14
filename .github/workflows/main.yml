@@ -30,24 +30,7 @@ jobs:
         echo "$PRIVATE_KEY" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
         ssh-keyscan github.com >> ~/.ssh/known_hosts
-
-    # - name: Deploy using SSH
-    #   uses: appleboy/ssh-action@master
-    #   with:
-    #     host: ${{ secrets.HOST }}
-    #     username: ${{ secrets.USERNAME }}
-    #     key: ${{ secrets.PRIVATE_KEY }}
-    #     port: 22
-    #     script: |
-    #       cd /var/www/repo/public_html
-
-    #       if [ ! -d ".git" ]; then
-    #         echo "Cloning the repository using SSH..."
-    #         git clone https://github.com/resolutedeveloper/ajays-customer-app-api-node-js.git .
-    #       else
-    #         echo "Pulling the latest changes..."
-    #         git pull origin main
-    #       fi
+        
     - name: Deploy using SSH
       uses: appleboy/ssh-action@master
       with:
@@ -66,6 +49,15 @@ jobs:
             git pull origin main
           fi
 
+          export DB_HOST=139.59.1.105
+          export DB_PORT=3306
+          export DB_USER=root
+          export DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
+          export NODE_ENV=production
+          export CATALOG_LOCAL_URL=http://localhost:300/api/v1/
+          export CUSTOMER_LOCAL_URL=http://localhost:301/api/v1/
+          export ORDER_LOCAL_URL=http://localhost:302/api/v1/
+
     - name: Deploy Catelog using SSH
       if: ${{ github.event.inputs.deploy_service1 == 'true' }}
       uses: appleboy/ssh-action@master
@@ -79,12 +71,7 @@ jobs:
 
           # Set up environment variables for Catalog service
           export PORT_CATALOG=302
-          export DB_HOST=139.59.1.105
-          export DB_PORT=3306
-          export DB_USER=root
-          export DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
           export DB_NAME_CATALOG=CatalogDB
-          export NODE_ENV=production
           
           # Copy the Catalog files to the target directory
           cp -r /var/www/repo/public_html/Catalog/. /var/www/Catalog/public_html
@@ -123,12 +110,7 @@ jobs:
 
           # Set up environment variables for Customer service
           export PORT_CUSTOMER=301
-          export DB_HOST=139.59.1.105
-          export DB_PORT=3306
-          export DB_USER=root
-          export DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
           export DB_NAME_CUSTOMER=CustomerDB
-          export NODE_ENV=production
           
           # Copy the Customer files to the target directory
           cp -r /var/www/repo/public_html/Customer/. /var/www/Customer/public_html
@@ -167,12 +149,7 @@ jobs:
 
           # Set up environment variables for Customer service
           export PORT_ORDER=300
-          export DB_HOST=139.59.1.105
-          export DB_PORT=3306
-          export DB_USER=root
-          export DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
           export DB_NAME_ORDER=OrderDB
-          export NODE_ENV=production
           
           # Copy the Order files to the target directory
           cp -r /var/www/repo/public_html/Order/. /var/www/Order/public_html
