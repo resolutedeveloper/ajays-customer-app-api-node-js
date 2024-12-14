@@ -26,6 +26,21 @@ app.get('/api/v1/health', (req, res) => {
     res.status(200).send({ success: true, message: 'API is working!' });
 });
 
+app.get('/api/v1/health2', async (req, res) => {
+    try {
+        const response = await axios.get('http://localhost:3000//api/v1/health'); // Local URL
+        res.json({
+            message: "Successfully fetched data from Service Two!",
+            data: response.data
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: "Failed to fetch data from Service Two",
+            error: error.message
+        });
+    }
+});
+
 // Load all routes
 app.use('/api/v1', routes);
 
