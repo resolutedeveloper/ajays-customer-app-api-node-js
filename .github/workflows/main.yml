@@ -31,6 +31,23 @@ jobs:
         chmod 600 ~/.ssh/id_rsa
         ssh-keyscan github.com >> ~/.ssh/known_hosts
 
+    # - name: Deploy using SSH
+    #   uses: appleboy/ssh-action@master
+    #   with:
+    #     host: ${{ secrets.HOST }}
+    #     username: ${{ secrets.USERNAME }}
+    #     key: ${{ secrets.PRIVATE_KEY }}
+    #     port: 22
+    #     script: |
+    #       cd /var/www/repo/public_html
+
+    #       if [ ! -d ".git" ]; then
+    #         echo "Cloning the repository using SSH..."
+    #         git clone https://github.com/resolutedeveloper/ajays-customer-app-api-node-js.git .
+    #       else
+    #         echo "Pulling the latest changes..."
+    #         git pull origin main
+    #       fi
     - name: Deploy using SSH
       uses: appleboy/ssh-action@master
       with:
@@ -43,7 +60,7 @@ jobs:
 
           if [ ! -d ".git" ]; then
             echo "Cloning the repository using SSH..."
-            git clone https://github.com/resolutedeveloper/ajays-customer-app-api-node-js.git .
+            git clone git@github.com:resolutedeveloper/ajays-customer-app-api-node-js.git .
           else
             echo "Pulling the latest changes..."
             git pull origin main
