@@ -5,6 +5,7 @@ const { connectDB } = require('./src/config/sequelize');
 const morgan = require('morgan');
 const logger = require('./src/utils/logger'); // Import the Winston logger
 const routes = require('./src/routes'); // Import all routes from src/routes/index.js
+const axios = require('axios');
 
 const app = express();
 const PORT = process.env.PORT_CATALOG || 302;
