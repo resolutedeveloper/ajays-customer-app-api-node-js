@@ -55,6 +55,7 @@ app.use((err, req, res, next) => {
 connectDB()
     .then(() => {
         app.listen(PORT, () => {
+            console.log(process.env)
             logger.info(`Server running on http://localhost:${PORT}`);
         });
     })
