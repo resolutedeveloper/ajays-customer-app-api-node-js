@@ -28,7 +28,7 @@ app.get('/api/v1/health', (req, res) => {
 
 app.get('/api/v1/health2', async (req, res) => {
     try {
-        const response = await axios.get('http://localhost:3000//api/v1/health'); // Local URL
+        const response = await axios.get('http://localhost:301/api/v1/health'); // Local URL
         res.json({
             message: "Successfully fetched data from Service Two!",
             data: response.data
