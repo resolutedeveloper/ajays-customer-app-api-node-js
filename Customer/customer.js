@@ -23,7 +23,7 @@ app.use((req, res, next) => {
 
 // Health check route
 app.get('/api/v1/health', (req, res) => {
-    res.status(200).send({ success: true, message: 'API is working!' });
+    res.status(200).send({ success: true, message: 'customer API is working!' });
 });
 
 // Load all routes
