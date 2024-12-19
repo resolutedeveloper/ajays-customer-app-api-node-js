@@ -73,7 +73,7 @@ jobs:
           export ORDER_LOCAL_URL=http://localhost:302/api/v1/
           
           # Copy the Catalog files to the target directory
-          cp -r /var/www/repo/public_html/Catalog/. /var/www/Catalog/public_html
+          cp -r /var/www/repo/public_html/Catalog/* /var/www/Catalog/public_html
 
           echo "move to Catalog service .."
           cd /var/www/Catalog/public_html
@@ -111,7 +111,7 @@ jobs:
           export ORDER_LOCAL_URL=http://localhost:302/api/v1/
           
           # Copy the Customer files to the target directory
-          cp -r /var/www/repo/public_html/Customer/. /var/www/Customer/public_html
+          cp -r /var/www/repo/public_html/Customer/* /var/www/Customer/public_html
 
           echo "move to Customer service .."
           cd /var/www/Customer/public_html
@@ -149,7 +149,7 @@ jobs:
           export ORDER_LOCAL_URL=http://localhost:302/api/v1/
           
           # Copy the Order files to the target directory
-          cp -r /var/www/repo/public_html/Order/. /var/www/Order/public_html
+          cp -r /var/www/repo/public_html/Order/* /var/www/Order/public_html
 
           echo "move to Order service .."
           cd /var/www/Order/public_html
