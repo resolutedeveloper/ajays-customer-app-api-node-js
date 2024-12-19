@@ -61,7 +61,7 @@ jobs:
           echo "Deploying Catalog Service..."
 
           # Set up environment variables for Catalog service
-          export PORT_CATALOG=302
+          export PORT_CATALOG=300
           export DB_HOST=139.59.1.105
           export DB_PORT=3306
           export DB_USER=root
@@ -80,15 +80,6 @@ jobs:
           
           echo "installing the lib..."
           npm install
-
-          echo "sequelize-cli the lib..."
-          npm install --save-dev sequelize-cli
-
-          echo "migrations table or column generating.."
-          node scripts/generate-migrations.js
-
-          echo "migrations the tables.."
-          npx sequelize-cli db:migrate
 
           # Kill the app if it's running
           pm2 delete catalog || true
@@ -128,15 +119,6 @@ jobs:
           echo "installing the lib..."
           npm install
 
-          echo "sequelize-cli the lib..."
-          npm install --save-dev sequelize-cli
-
-          echo "migrations table or column generating.."
-          node scripts/generate-migrations.js
-
-          echo "migrations the tables.."
-          npx sequelize-cli db:migrate
-
           # Kill the app if it's running
           pm2 delete customer || true
 
@@ -155,7 +137,7 @@ jobs:
           echo "Deploying Order Service..."
 
           # Set up environment variables for Customer service
-          export PORT_ORDER=300
+          export PORT_ORDER=302
           export DB_HOST=139.59.1.105
           export DB_PORT=3306
           export DB_USER=root
@@ -174,15 +156,6 @@ jobs:
           
           echo "installing the lib..."
           npm install
-
-          echo "sequelize-cli the lib..."
-          npm install --save-dev sequelize-cli
-
-          echo "migrations table or column generating.."
-          node scripts/generate-migrations.js
-
-          echo "migrations the tables.."
-          npx sequelize-cli db:migrate
 
           # Kill the app if it's running
           pm2 delete order || true
