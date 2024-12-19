@@ -18,7 +18,14 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.admin = require('../models/customerModel')(sequelize, DataTypes);
+// db.admin = require('../models/customerModel')(sequelize, DataTypes);
+db.admin = require('../models/locationModel')(sequelize, DataTypes);
+db.admin = require('../models/unitModel')(sequelize, DataTypes);
+db.admin = require('../models/categoryModel')(sequelize, DataTypes);
+db.admin = require('../models/itemModel')(sequelize, DataTypes);
+db.admin = require('../models/itemAllocationModel')(sequelize, DataTypes);
+db.admin = require('../models/categoryAllocationModel')(sequelize, DataTypes);
+db.admin = require('../models/itemHistoryModel')(sequelize, DataTypes);
 
 
 
