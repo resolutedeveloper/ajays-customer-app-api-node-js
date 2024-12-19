@@ -18,7 +18,12 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.admin = require('../models/customerModel')(sequelize, DataTypes);
+db.customer = require('../models/customerModel')(sequelize, DataTypes);
+db.customerEmail = require('../models/customerEmailModel')(sequelize, DataTypes);
+db.customerMobile = require('../models/customerMobileModel')(sequelize, DataTypes);
+db.favoriteLocation = require('../models/favoriteLocationModel')(sequelize, DataTypes);
+db.mobileVerificationOTP = require('../models/mobileVerificationOTPModel')(sequelize, DataTypes);
+db.emailVerificationOTP = require('../models/emailVerificationOTPModel')(sequelize, DataTypes);
 
 
 
