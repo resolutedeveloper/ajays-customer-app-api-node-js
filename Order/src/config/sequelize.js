@@ -1,7 +1,7 @@
 const { Sequelize } = require('sequelize');
 const logger = require('../../src/utils/logger');
 const sequelize = new Sequelize(
-    process.env.DB_NAME_ORDER,
+    process.env.DB_NAME_CUSTOMER,
     process.env.DB_USER,
     process.env.DB_PASSWORD,
     {

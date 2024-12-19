@@ -1,8 +1,7 @@
 const { Sequelize } = require('sequelize');
-const logger = require('../../src/utils/logger'); // Import the Winston logger
-
+const logger = require('../../src/utils/logger');
 const sequelize = new Sequelize(
-    process.env.DB_NAME_CATALOG,
+    process.env.DB_NAME_CUSTOMER,
     process.env.DB_USER,
     process.env.DB_PASSWORD,
     {
@@ -20,6 +19,7 @@ const connectDB = async () => {
     } catch (error) {
         logger.info(process.env)
         logger.info('Unable to connect to the database:', error);
+
         process.exit(1);
     }
 };
