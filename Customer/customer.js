@@ -7,6 +7,7 @@ const logger = require('./src/utils/logger'); // Import the Winston logger
 const routes = require('./src/routes'); // Import all routes from src/routes/index.js
 
 const app = express();
+console.log(process.env)
 const PORT = process.env.PORT_CUSTOMER || 301;
 
 // Middleware for parsing JSON requests

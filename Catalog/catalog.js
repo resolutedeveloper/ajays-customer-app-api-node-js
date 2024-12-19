@@ -8,7 +8,8 @@ const routes = require('./src/routes'); // Import all routes from src/routes/ind
 const axios = require('axios');
 
 const app = express();
-const PORT = process.env.PORT_CATALOG || 302;
+console.log(process.env)
+const PORT = process.env.PORT_CATALOG || 300;
 
 // Middleware for parsing JSON requests
 app.use(express.json());
