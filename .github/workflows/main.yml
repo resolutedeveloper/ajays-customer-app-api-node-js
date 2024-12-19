@@ -61,16 +61,16 @@ jobs:
           echo "Deploying Catalog Service..."
 
           # Set up environment variables for Catalog service
-          export PORT_CATALOG=300
+          export PORT_CATALOG=302
           export DB_HOST=139.59.1.105
           export DB_PORT=3306
           export DB_USER=root
           export DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
           export DB_NAME_CATALOG=CatalogDB
           export NODE_ENV=production
-          export CATALOG_LOCAL_URL=http://localhost:300/api/v1/
+          export CATALOG_LOCAL_URL=http://localhost:302/api/v1/
           export CUSTOMER_LOCAL_URL=http://localhost:301/api/v1/
-          export ORDER_LOCAL_URL=http://localhost:302/api/v1/
+          export ORDER_LOCAL_URL=http://localhost:300/api/v1/
           
           # Copy the Catalog files to the target directory
           cp -r /var/www/repo/public_html/Catalog/* /var/www/Catalog/public_html
@@ -106,9 +106,9 @@ jobs:
           export DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
           export DB_NAME_CUSTOMER=CustomerDB
           export NODE_ENV=production
-          export CATALOG_LOCAL_URL=http://localhost:300/api/v1/
+          export CATALOG_LOCAL_URL=http://localhost:302/api/v1/
           export CUSTOMER_LOCAL_URL=http://localhost:301/api/v1/
-          export ORDER_LOCAL_URL=http://localhost:302/api/v1/
+          export ORDER_LOCAL_URL=http://localhost:300/api/v1/
           
           # Copy the Customer files to the target directory
           cp -r /var/www/repo/public_html/Customer/* /var/www/Customer/public_html
@@ -137,16 +137,16 @@ jobs:
           echo "Deploying Order Service..."
 
           # Set up environment variables for Customer service
-          export PORT_ORDER=302
+          export PORT_ORDER=300
           export DB_HOST=139.59.1.105
           export DB_PORT=3306
           export DB_USER=root
           export DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
           export DB_NAME_ORDER=OrderDB
           export NODE_ENV=production
-          export CATALOG_LOCAL_URL=http://localhost:300/api/v1/
+          export CATALOG_LOCAL_URL=http://localhost:302/api/v1/
           export CUSTOMER_LOCAL_URL=http://localhost:301/api/v1/
-          export ORDER_LOCAL_URL=http://localhost:302/api/v1/
+          export ORDER_LOCAL_URL=http://localhost:300/api/v1/
           
           # Copy the Order files to the target directory
           cp -r /var/www/repo/public_html/Order/* /var/www/Order/public_html
