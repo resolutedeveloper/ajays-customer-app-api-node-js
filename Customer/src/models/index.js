@@ -19,6 +19,11 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.admin = require('../models/customerModel')(sequelize, DataTypes);
+db.admin = require('../models/customerEmailModel')(sequelize, DataTypes);
+db.admin = require('../models/customerMobileModel')(sequelize, DataTypes);
+db.admin = require('../models/favoriteLocationModel')(sequelize, DataTypes);
+db.admin = require('../models/mobileVerificationOTPModel')(sequelize, DataTypes);
+db.admin = require('../models/emailVerificationOTPModel')(sequelize, DataTypes);
 
 
 
