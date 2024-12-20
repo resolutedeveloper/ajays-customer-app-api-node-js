@@ -8,5 +8,6 @@ const router = express.Router();
 router.post("/creates", createLocation);
 
 router.get("/gets/:LocationID", getLocation);
+router.get("/lazy", getLocationsLazy);
 
 module.exports = router;
