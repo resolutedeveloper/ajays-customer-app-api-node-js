@@ -51,7 +51,7 @@ const getLocation = async (req, res) => {
 };
 const getAllLocation = async (req, res) => {
     try {
-        const { LocationID } = req.params;
+        // const { LocationID } = req.params;
         const locations = await location.findAll({});
 
         if (locations.length === 0) {
@@ -81,7 +81,14 @@ const searchLocations = async (req, res) => {
     try {
         const { LocationID, LocationName, CityId, CountryID, LocationSName, page, size } = req.body;
 
-        // Default values for pagination
+        if (!LocationID && !LocationName && !CityId && !CountryID && !LocationSName) {
+            return res.status(400).json({
+                success: false,
+                message: 'At least one search criteria must be provided'
+            });
+        }
+
+        // Ensure that `size` and `page` are parsed correctly and fall back to default values if missing
         const limit = size ? parseInt(size, 10) : 10; // Default size: 10 records
         const offset = page ? (parseInt(page, 10) - 1) * limit : 0; // Default page: 1
 
@@ -93,7 +100,20 @@ const searchLocations = async (req, res) => {
         }
 
         if (LocationName) {
-            whereUse.LocationName = { [Op.like]: `${LocationName}%` }; // Matches names starting with LocationName
+            // Check if the input is an exact match or partial match
+            if (LocationName.trim().length === 0) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'LocationName cannot be empty'
+                });
+            }
+
+            if (LocationName.trim().includes(" ")) {
+                whereUse.LocationName = LocationName.trim(); // Exact match for specific Location names (e.g., "Location 1")
+            } else {
+                // If it's a general search (e.g., "Location"), do a partial match
+                whereUse.LocationName = { [Op.like]: `${LocationName}%` }; // Partial match for "Location%"
+            }
         }
 
         if (CityId) {
@@ -115,23 +135,18 @@ const searchLocations = async (req, res) => {
             offset
         });
 
-        if (locations.length === 0) {
-            return res.status(404).json({
-                success: false,
-                message: 'No locations found'
-            });
-        }
 
-        // Response with pagination metadata
+
+        // Return paginated results
         res.status(200).json({
-            success: true,
-            data: locations,
             meta: {
                 totalRecords: count,
-                totalPages: Math.ceil(count / limit),
-                currentPage: page ? parseInt(page, 10) : 1,
-                pageSize: limit
-            }
+                totalPages: Math.ceil(count / limit), // Calculate total pages
+                currentPage: page ? parseInt(page, 10) : 1, // Return current page
+                pageSize: limit // Return page size (limit)
+            },
+            success: true,
+            data: locations, // Return location data
         });
     } catch (err) {
         console.error(err);
@@ -142,7 +157,6 @@ const searchLocations = async (req, res) => {
         });
     }
 };
-
 
 
 
