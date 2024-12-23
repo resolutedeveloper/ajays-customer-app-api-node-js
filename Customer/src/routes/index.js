@@ -1,7 +1,6 @@
-
 const express = require("express");
 const route = express.Router();
 
-route.use("/companys", require("./companyRoutes.js"));
+route.use("/favoriteLocation", require("./favoriteLocationRoutes"));
 
 module.exports = route;
