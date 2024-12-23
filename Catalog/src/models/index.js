@@ -25,8 +25,10 @@ db.category = require('../models/categoryModel')(sequelize, DataTypes);
 db.item = require('../models/itemModel')(sequelize, DataTypes);
 db.itemAllocation = require('../models/itemAllocationModel')(sequelize, DataTypes);
 db.categoryAllocation = require('../models/categoryAllocationModel')(sequelize, DataTypes);
-db.itemHistory = require('../models/itemHistoryModel')(sequelize, DataTypes);
-
+db.country = require('../models/countryModel')(sequelize, DataTypes);
+db.state = require('../models/stateModel')(sequelize, DataTypes);
+db.city = require('../models/cityModel')(sequelize, DataTypes);
+db.itemLocationRate = require('./itemRateModel')(sequelize,DataTypes);
 
 
 db.sequelize.sync({ force: false, alter: true })
