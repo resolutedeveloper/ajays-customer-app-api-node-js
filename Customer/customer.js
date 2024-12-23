@@ -5,12 +5,22 @@ const { connectDB } = require('./src/config/sequelize');
 const morgan = require('morgan');
 const logger = require('./src/utils/logger'); // Import the Winston logger
 const routes = require('./src/routes'); // Import all routes from src/routes/index.js
+const bodyParser = require('body-parser');
+const CryptoJS = require('crypto-js');
 
 const app = express();
 const PORT = process.env.PORT_CUSTOMER || 301;
 
 // Middleware for parsing JSON requests
 app.use(express.json());
+app.use(bodyParser.json());
+
+const secretKey = process.env.SECRET_KEY;
+
+const decryptData = (encryptedData, secretKey) => {
+    const bytes = CryptoJS.AES.decrypt(encryptedData, secretKey);
+    return bytes.toString(CryptoJS.enc.Utf8);  // Decrypted data
+  };
 
 // Use Morgan middleware for logging HTTP requests
 app.use(morgan('tiny', { stream: { write: (msg) => logger.info(msg.trim()) } }));
