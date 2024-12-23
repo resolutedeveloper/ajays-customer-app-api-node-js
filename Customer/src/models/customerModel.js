@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         PhoneNumber: {
             type: DataTypes.TEXT,
+            allowNull: false
         },
         EmailID: {
             type: DataTypes.TEXT,
