@@ -2,6 +2,7 @@ module.exports = (sequelize, DataTypes) => {
 const itemModel = sequelize.define("Item",{
     ItemID:{
         type: DataTypes.INTEGER,
+        primaryKey: true,
     },
     CategoryID:{
         type: DataTypes.INTEGER,
