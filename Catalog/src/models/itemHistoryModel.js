@@ -2,7 +2,7 @@ module.exports = (sequelize, DataTypes) => {
     const itemHistoryModel = sequelize.define("ItemHistory",{
         id:{
             type: DataTypes.INTEGER,
-        primaryKey: true,
+            primaryKey: true,
         },
         LocationID:{
             type: DataTypes.INTEGER,

@@ -1,6 +1,8 @@
 const db = require('../models');  // Import the db object from index.js
 const location = db.location;  // Get the location model from the db object
 const logger = require("../utils/logger");
+const { Op } = require('sequelize');
+
 
 const createLocation = async (req, res) => {
     try {
@@ -25,129 +27,107 @@ const createLocation = async (req, res) => {
 
 const getLocation = async (req, res) => {
     try {
-        const { LocationID } = req.params;
-        const locations = await location.findAll(
-            {where: {LocationID: LocationID}}
-        );
-
-        if (locations.length === 0) {
-            return res.status(404).json({
-                success: false,
-                message: `No location found with LocationID: ${LocationID}`
-            });
-        }
-
-        res.status(200).json({
-            success: true,
-            data: locations
+      const { LocationID } = req.params;
+      const locations = await location.findAll({
+        where: {
+          LocationID: LocationID,
+        },
+      });
+  
+      if (locations.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message: `No location found with LocationID: ${LocationID}`,
         });
+      }
+  
+      res.status(200).json({
+        success: true,
+        data: locations,
+      });
     } catch (err) {
-        res.status(500).json({
-            success: false,
-            message: 'Error fetching location',
-            error: err.message
-        });
+      res.status(500).json({
+        success: false,
+        message: "Error fetching location",
+        error: err.message || err,
+      });
     }
-};
-const getAllLocation = async (req, res) => {
+  };
+
+
+  const getAllLocation = async (req, res) => {
     try {
-        // const { LocationID } = req.params;
-        const locations = await location.findAll({});
 
-        if (locations.length === 0) {
-            return res.status(404).json({
-                success: false,
-                message: `No location found`
-            });
-        }
-
-        res.status(200).json({
-            success: true,
-            data: locations
+      const locations = await location.findAll({ });
+  
+      if (locations.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message: `No location found `,
         });
+      }
+  
+      res.status(200).json({
+        success: true,
+        data: locations,
+      });
     } catch (err) {
-        res.status(500).json({
-            success: false,
-            message: 'Error fetching location',
-            error: err.message
-        });
+      res.status(500).json({
+        success: false,
+        message: "Error fetching location",
+        error: err.message || err,
+      });
     }
-};
+  };
 
-
-const { Op } = require("sequelize"); // Import Sequelize operators
-
-const searchLocations = async (req, res) => {
+  const searchLocations = async (req, res) => {
     try {
         const { LocationID, LocationName, CityId, CountryID, LocationSName, page, size } = req.body;
 
-        if (!LocationID && !LocationName && !CityId && !CountryID && !LocationSName) {
-            return res.status(400).json({
-                success: false,
-                message: 'At least one search criteria must be provided'
-            });
-        }
-
-        // Ensure that `size` and `page` are parsed correctly and fall back to default values if missing
-        const limit = size ? parseInt(size, 10) : 10; // Default size: 10 records
-        const offset = page ? (parseInt(page, 10) - 1) * limit : 0; // Default page: 1
+        // Default values for pagination      
+        const limit = size ? parseInt(size, 5) : 5; 
+        const offset = page ? (parseInt(page, 10) - 1) * limit : 0;
 
         // Build the `where` clause dynamically
         const whereUse = {};
-
         if (LocationID) {
             whereUse.LocationID = LocationID;
         }
-
         if (LocationName) {
-            // Check if the input is an exact match or partial match
-            if (LocationName.trim().length === 0) {
-                return res.status(400).json({
-                    success: false,
-                    message: 'LocationName cannot be empty'
-                });
-            }
-
-            if (LocationName.trim().includes(" ")) {
-                whereUse.LocationName = LocationName.trim(); // Exact match for specific Location names (e.g., "Location 1")
-            } else {
-                // If it's a general search (e.g., "Location"), do a partial match
-                whereUse.LocationName = { [Op.like]: `${LocationName}%` }; // Partial match for "Location%"
-            }
+            whereUse.LocationName = { [Op.like]: `${LocationName}%` }; 
         }
-
         if (CityId) {
             whereUse.CityId = { [Op.like]: `${CityId}%` };
         }
-
         if (CountryID) {
             whereUse.CountryID = { [Op.like]: `${CountryID}%` };
         }
-
         if (LocationSName) {
             whereUse.LocationSName = { [Op.like]: `${LocationSName}%` };
         }
-
         // Fetch locations with pagination and filters
         const { count, rows: locations } = await location.findAndCountAll({
             where: whereUse,
             limit,
             offset
         });
-
-
-
-        // Return paginated results
+        if (locations.length === 0) {
+            return res.status(404).json({ success: false,
+                message: 'No locations found'
+            });
+        }
+        // Response with pagination metadata
         res.status(200).json({
+            success: "Location Search Successfully",
             meta: {
                 totalRecords: count,
-                totalPages: Math.ceil(count / limit), // Calculate total pages
-                currentPage: page ? parseInt(page, 10) : 1, // Return current page
-                pageSize: limit // Return page size (limit)
+                totalPages: Math.ceil(count / limit),
+                currentPage: page ? parseInt(page, 10) : 1,
+                pageLimit: limit
             },
-            success: true,
-            data: locations, // Return location data
+            data: locations,
         });
+
     } catch (err) {
         console.error(err);
         res.status(500).json({
@@ -159,5 +139,6 @@ const searchLocations = async (req, res) => {
 };
 
 
+module.exports = { createLocation, getLocation, searchLocations ,getAllLocation };
 
 module.exports = {createLocation,getLocation,searchLocations,getAllLocation};

@@ -2,7 +2,6 @@ module.exports = (sequelize, DataTypes) => {
 const unitModel = sequelize.define("Unit",{
     UnitID:{
         type: DataTypes.INTEGER,
-        primaryKey: true,
     },
     UnitName:{
         type: DataTypes.STRING(200),
