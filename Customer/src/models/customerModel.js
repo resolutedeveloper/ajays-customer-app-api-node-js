@@ -33,6 +33,14 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.DATE,
             allowNull: false
         },
+        isActive:{
+            type:DataTypes.BOOLEAN,
+            allowNull: false
+        },
+        isDeleted:{
+            type:DataTypes.BOOLEAN,
+            allowNull: false
+        },
         CreatedBy: {
             type: DataTypes.STRING(256),
             allowNull: false
