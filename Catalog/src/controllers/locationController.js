@@ -80,65 +80,126 @@ const getLocation = async (req, res) => {
     }
   };
 
+
+
+
+
   const searchLocations = async (req, res) => {
     try {
-        const { LocationID, LocationName, CityId, CountryID, LocationSName, page, size } = req.body;
+      const {
+        LocationID,
+        LocationName,
+        CityId,
+        CountryID,
+        LocationSName,
+        page,
+        size,
+      } = req.body;
 
-        // Default values for pagination      
-        const limit = size ? parseInt(size, 5) : 5; 
-        const offset = page ? (parseInt(page, 10) - 1) * limit : 0;
+      const limit = size ? parseInt(size, 5) : 5;
+      const offset = page ? (parseInt(page, 10) - 1) * limit : 0;
 
-        // Build the `where` clause dynamically
-        const whereUse = {};
-        if (LocationID) {
-            whereUse.LocationID = LocationID;
-        }
-        if (LocationName) {
-            whereUse.LocationName = { [Op.like]: `${LocationName}%` }; 
-        }
-        if (CityId) {
-            whereUse.CityId = { [Op.like]: `${CityId}%` };
-        }
-        if (CountryID) {
-            whereUse.CountryID = { [Op.like]: `${CountryID}%` };
-        }
-        if (LocationSName) {
-            whereUse.LocationSName = { [Op.like]: `${LocationSName}%` };
-        }
-        // Fetch locations with pagination and filters
-        const { count, rows: locations } = await location.findAndCountAll({
-            where: whereUse,
-            limit,
-            offset
+      const whereUse = {};
+
+      if (!LocationID &&!LocationName &&!CityId &&!CountryID &&!LocationSName) {
+        return res.status(400).json({
+          success: false,
+          message: "At least one search criteria must be provided",
         });
-        if (locations.length === 0) {
-            return res.status(404).json({ success: false,
-                message: 'No locations found'
-            });
+      }
+
+      if (LocationID) {
+        whereUse.LocationID = LocationID;
+      }
+
+      if (LocationName) {
+        if (LocationName.trim().length === 0) {
+          return res.status(400).json({
+            success: false,
+            message: "LocationName cannot be empty",
+          });
         }
-        // Response with pagination metadata
-        res.status(200).json({
-            success: "Location Search Successfully",
-            meta: {
-                totalRecords: count,
-                totalPages: Math.ceil(count / limit),
-                currentPage: page ? parseInt(page, 10) : 1,
-                pageLimit: limit
-            },
-            data: locations,
-        });
+        if (LocationName.trim().includes(" ")) {
+          whereUse.LocationName = LocationName.trim();
+        } else {
+          whereUse.LocationName = { [Op.like]: `${LocationName}%` };
+        }
+      }
+
+      if (CityId) {
+        if (CityId.trim().length === 0) {
+          return res.status(400).json({
+            success: false,
+            message: "CityId cannot be empty",
+          });
+        }
+        if (CityId.trim().includes(" ")) {
+          whereUse.CityId = CityId.trim();
+        } else {
+          whereUse.CityId = { [Op.like]: `${CityId}%` };
+        }
+      }
+
+      if (CountryID) {
+        if (CountryID.trim().length === 0) {
+          return res.status(400).json({
+            success: false,
+            message: "CountryID cannot be empty",
+          });
+        }
+        if (CountryID.trim().includes(" ")) {
+          whereUse.CountryID = CountryID.trim();
+        } else {
+          whereUse.CountryID = { [Op.like]: `${CountryID}%` };
+        }
+      }
+
+      if (LocationSName) {
+        if (LocationSName.trim().length === 0) {
+          return res.status(400).json({
+            success: false,
+            message: "LocationSName cannot be empty",
+          });
+        }
+        if (LocationSName.trim().length === 4) { 
+          whereUse.LocationSName = LocationSName.trim();
+        } else {
+          whereUse.LocationSName = { [Op.like]: `${LocationSName.trim()}%` };
+        }
+      }
+
+      const { count, rows: locations } = await location.findAndCountAll({
+        where: whereUse,
+        limit,
+        offset,
+      });
+
+      if (locations.length === 0) {
+        return res
+          .status(404)
+          .json({ success: false, message: "No locations found" });
+      }
+      // Response with pagination metadata
+      res.status(200).json({
+        success: "Location Search Successfully",
+        meta: {
+          totalRecords: count,
+          totalPages: Math.ceil(count / limit),
+          currentPage: page ? parseInt(page, 10) : 1,
+          pageLimit: limit,
+        },
+        data: locations,
+      });
 
     } catch (err) {
-        console.error(err);
-        res.status(500).json({
-            success: false,
-            message: 'Error searching locations',
-            error: err.message
-        });
+      console.error(err);
+      res.status(500).json({
+        success: false,
+        message: "Error searching locations",
+        error: err.message,
+      });
     }
-};
+  };
 
 
 module.exports = { createLocation, getLocation, searchLocations ,getAllLocation };
-
-module.exports = {createLocation,getLocation,searchLocations,getAllLocation};
