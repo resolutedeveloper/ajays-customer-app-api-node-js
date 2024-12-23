@@ -1,13 +1,14 @@
 // locationRoutes.js
 
 const express = require('express');
-const { createLocation, getLocation, getLocationsLazy } = require('../controllers/locationController');
+const { createLocation, getLocation, searchLocations,getAllLocation } = require('../controllers/locationController');
 
 const router = express.Router();
 
 router.post("/creates", createLocation);
 
 router.get("/gets/:LocationID", getLocation);
-router.get("/lazy", getLocationsLazy);
+router.get("/", getAllLocation);
+router.get("/search",searchLocations);
 
 module.exports = router;
