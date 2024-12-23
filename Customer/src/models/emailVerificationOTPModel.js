@@ -25,6 +25,10 @@ module.exports = (sequelize ,DataTypes) =>{
             type:DataTypes.DATE,
             allowNull:false
         },
+        UsedOn:{
+            type:DataTypes.DATE,
+            allowNull:false
+        },
         ExpiredOn:{
             type:DataTypes.DATE,
             allowNull:false

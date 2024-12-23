@@ -13,11 +13,19 @@ module.exports = (sequelize ,DataTypes) =>{
             type: DataTypes.TEXT,
             allowNull:false
         },
+        OTP:{
+            type: DataTypes.INTEGER(6),
+            allowNull:false
+        },
         IsStatus:{
             type: DataTypes.BOOLEAN,
             allowNull:false
         },
         CreatedOn:{
+            type:DataTypes.DATE,
+            allowNull:false
+        },
+        UsedOn:{
             type:DataTypes.DATE,
             allowNull:false
         },
