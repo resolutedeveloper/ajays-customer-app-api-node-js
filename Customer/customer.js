@@ -5,6 +5,7 @@ const { connectDB } = require('./src/config/sequelize');
 const morgan = require('morgan');
 const logger = require('./src/utils/logger'); // Import the Winston logger
 const routes = require('./src/routes'); // Import all routes from src/routes/index.js
+const bodyParser = require('body-parser');
 
 const app = express();
 const PORT = process.env.PORT_CUSTOMER || 301;
@@ -20,6 +21,13 @@ app.use((req, res, next) => {
     logger.info(`Incoming request: ${req.method} ${req.url}`);
     next();
 });
+
+
+// Parse application/json
+app.use(bodyParser.json());
+
+// Parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Health check route
 app.get('/api/v1/health', (req, res) => {

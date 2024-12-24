@@ -17,6 +17,14 @@ module.exports = (sequelize ,DataTypes) =>{
             type:DataTypes.DATE,
             allowNull:false
         },
+        IsActive:{
+            type:DataTypes.BOOLEAN,
+            allowNull: false
+        },
+        IsDeleted:{
+            type:DataTypes.BOOLEAN,
+            allowNull: false
+        },
     },{
         timestamps:false,
     });
