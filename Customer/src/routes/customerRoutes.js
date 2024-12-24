@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-const {createCustomer} = require('../controllers/customerController');
+const {createCustomer, loginCustomer} = require('../controllers/customerController');
 
-router.post('/' , createCustomer)
+router.post('/' , createCustomer);
+router.get('/' , loginCustomer);
 
 
 
