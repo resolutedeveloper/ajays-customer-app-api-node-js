@@ -12,6 +12,9 @@ module.exports = (sequelize , DataTypes) =>{
         EmailId:{
             type: DataTypes.STRING(256),
             allowNull: false
+        },IsDeleted:{
+            type:DataTypes.BOOLEAN,
+            allowNull: false
         },
     },{
         timestamps: false,

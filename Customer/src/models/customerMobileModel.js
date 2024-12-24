@@ -12,6 +12,9 @@ module.exports = (sequelize ,DataTypes) =>{
         PhoneNumber:{
             type: DataTypes.STRING(15),
             allowNull: false
+        },IsDeleted:{
+            type:DataTypes.BOOLEAN,
+            allowNull: false
         },
     },{
         timestamps:false,
