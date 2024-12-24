@@ -10,19 +10,13 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-<<<<<<< HEAD
     "body-parser": "^1.20.3",
-=======
->>>>>>> 63acf3e332013307f93588c7fc589f66a8608a4b
     "crypto-js": "^4.2.0",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "joi": "^17.13.3",
-<<<<<<< HEAD
     "jsonwebtoken": "^9.0.2",
     "moment-timezone": "^0.5.46",
-=======
->>>>>>> 63acf3e332013307f93588c7fc589f66a8608a4b
     "morgan": "^1.10.0",
     "mysql2": "^3.11.5",
     "sequelize": "^6.37.5",
