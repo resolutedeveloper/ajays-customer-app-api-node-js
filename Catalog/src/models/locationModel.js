@@ -2,6 +2,7 @@ module.exports = (sequelize, DataTypes) => {
 const locationModel = sequelize.define("Location",{
     LocationID:{
         type: DataTypes.INTEGER,
+        primaryKey: true,
     },
     LocationName:{
         type: DataTypes.STRING(200),
@@ -38,7 +39,6 @@ const locationModel = sequelize.define("Location",{
     },
     CountryID:{
         type: DataTypes.INTEGER,
-        primaryKey: true,
     },
     StateID:{
         type: DataTypes.INTEGER,

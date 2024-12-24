@@ -15,7 +15,11 @@ module.exports = (sequelize ,DataTypes) =>{
         },
         OTP:{
             type: DataTypes.INTEGER(6),
+<<<<<<< HEAD
             allowNull: false
+=======
+            allowNull:false
+>>>>>>> 63acf3e332013307f93588c7fc589f66a8608a4b
         },
         IsStatus:{
             type: DataTypes.BOOLEAN,

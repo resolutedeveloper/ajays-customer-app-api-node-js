@@ -12,6 +12,8 @@ const PORT = process.env.PORT_CUSTOMER || 301;
 
 // Middleware for parsing JSON requests
 app.use(express.json());
+app.use(bodyParser.json());
+
 
 // Use Morgan middleware for logging HTTP requests
 app.use(morgan('tiny', { stream: { write: (msg) => logger.info(msg.trim()) } }));
