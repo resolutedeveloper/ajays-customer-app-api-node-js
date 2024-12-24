@@ -13,7 +13,7 @@ module.exports = (sequelize ,DataTypes) =>{
             type: DataTypes.STRING(100),
             allowNull:false
         },
-        CreateOn:{
+        CreatedOn:{
             type:DataTypes.DATE,
             allowNull:false
         }
