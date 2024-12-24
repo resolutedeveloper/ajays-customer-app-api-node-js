@@ -18,7 +18,7 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-// db.admin = require('../models/customerModel')(sequelize, DataTypes);
+db.company = require('../models/companyModel')(sequelize, DataTypes);
 db.location = require('../models/locationModel')(sequelize, DataTypes);
 db.unit = require('../models/unitModel')(sequelize, DataTypes);
 db.category = require('../models/categoryModel')(sequelize, DataTypes);
