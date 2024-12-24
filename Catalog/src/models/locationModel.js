@@ -39,7 +39,6 @@ const locationModel = sequelize.define("Location",{
     },
     CountryID:{
         type: DataTypes.INTEGER,
-        primaryKey: true,
     },
     StateID:{
         type: DataTypes.INTEGER,
