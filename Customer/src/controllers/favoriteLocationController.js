@@ -48,19 +48,17 @@ const createFavoriteLocation = async (req, res) => {
 
 
     try {
-
-      // Updated the URL to use LocationID from the request body dynamically
       const locationResponse = await axios.get(`http://localhost:302/api/v1/locations/gets/${LocationID}`);
-
+    
       console.log("Location response from catalog:", locationResponse.data);
-
-      // Check if the first item in the data array exists and has a valid LocationID
+    
+      // Check if the LocationID is returned and valid
       if (!locationResponse.data || !locationResponse.data.LocationID) {
         return res.status(404).json({
-            success: false,
-            message: 'Location not found in catalog database.',
+          success: false,
+          message: 'Location not found in catalog database.',
         });
-    }
+      }
     } catch (err) {
       console.error("Error while fetching location from catalog:", err);
       return res.status(500).json({
@@ -68,6 +66,7 @@ const createFavoriteLocation = async (req, res) => {
         message: "Error checking location in catalog database.",
       });
     }
+    
 
     let existingLocation = await favoriteLocation.findOne({
       where: {
