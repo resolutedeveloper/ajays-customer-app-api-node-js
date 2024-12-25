@@ -28,28 +28,31 @@ const loginCustomer = async (req, res) => {
   try {
     const schema = Joi.object({
       EmailID: Joi.string().required(),
-      PhoneNumber: Joi.string().pattern(/^\d+$/).required(),
-      CustomerID: Joi.string().uuid().required()
     });
 
-    const { EmailID, PhoneNumber, CustomerID } = await schema.validateAsync(req.body);
+    const { EmailID } = await schema.validateAsync(req.body);
 
     let decryptedEmail = EmailID;
-    let decryptedPhone = PhoneNumber;
 
-    // Decrypt data if encrypted
+    // Decrypt email if encrypted
     if (isEncrypted(EmailID)) {
       decryptedEmail = decryptData(EmailID);
     }
-    if (isEncrypted(PhoneNumber)) {
-      decryptedPhone = decryptData(PhoneNumber);
-    }
 
     console.log("🚀 ~ Decrypted Email:", decryptedEmail);
-    console.log("🚀 ~ Decrypted Phone:", decryptedPhone);
+
+    const customerIDFromToken = req.UserDetail.CustomerID;
+    const phoneNumberFromToken = req.UserDetail.PhoneNumber;
+
+    if (!customerIDFromToken || !phoneNumberFromToken) {
+      return res.status(400).json({ message: "CustomerID or PhoneNumber is missing in the token." });
+    }
+
+    const decryptedPhone = decryptData(phoneNumberFromToken);
+    console.log("🚀 ~ Decrypted Phone from Token:", decryptedPhone);
 
     const existingEmail = await CustomerEmail.findOne({
-      where: { EmailId: decryptedEmail }
+      where: { EmailId: decryptedEmail },
     });
 
     if (existingEmail) {
@@ -57,28 +60,32 @@ const loginCustomer = async (req, res) => {
       return res.status(200).json({
         message: "Email already exists.",
         email: encryptData(decryptedEmail),
-        phone: encryptData(decryptedPhone)
+        phone: encryptData(decryptedPhone),
       });
     }
 
     const emailRecord = await CustomerEmail.create({
-      CustomerID,
+      CustomerID: customerIDFromToken,
       EmailId: decryptedEmail,
-      IsDeleted: false
+      IsDeleted: false,
+    }).catch((err) => {
+      console.error("Error creating email record:", err.message);
     });
-
+    
     const phoneRecord = await CustomerMobile.create({
-      CustomerID,
+      CustomerID: customerIDFromToken,
       PhoneNumber: decryptedPhone,
-      IsDeleted: false
+      IsDeleted: false,
+    }).catch((err) => {
+      console.error("Error creating phone record:", err.message);
     });
+    
 
     res.status(200).json({
       message: "Login successful",
       email: encryptData(decryptedEmail),
-      phone: encryptData(decryptedPhone)
+      phone: encryptData(decryptedPhone),
     });
-
   } catch (error) {
     console.error("🚀 ~ Error:", error.message);
     res.status(400).json({ message: "Error during processing", error: error.message });
@@ -87,7 +94,7 @@ const loginCustomer = async (req, res) => {
 
 // Function to check if the data is encrypted
 function isEncrypted(data) {
-  return typeof data === 'string' && data.startsWith('U2FsdGVkX1+');
+  return typeof data === "string" && data.startsWith("U2FsdGVkX1+");
 }
 
 
