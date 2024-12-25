@@ -1,6 +1,5 @@
 const db = require("../models/index.js");
 const logger = require('../utils/logger');
-const notificationService = require("../config/notificationService.js")
 
 const saveFCMKey = async (req, res) => {
     try {
