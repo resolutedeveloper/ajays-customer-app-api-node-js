@@ -9,7 +9,7 @@ const bodyParser = require('body-parser');
 
 const app = express();
 const PORT = process.env.PORT_CUSTOMER || 301;
-
+const path = require('path');
 // Middleware for parsing JSON requests
 app.use(express.json());
 app.use(bodyParser.json());
@@ -44,6 +44,10 @@ app.use((err, req, res, next) => {
     logger.error(`Error: ${err.message}`);
     res.status(500).send({ success: false, message: 'Something went wrong!' });
 });
+
+// upload
+app.use("/uploads", express.static(path.join(__dirname, 'uploads')));
+app.use("/Jsonfiles", express.static(path.join(__dirname, 'Jsonfiles')));
 
 // Start the server and connect to the database
 connectDB()
