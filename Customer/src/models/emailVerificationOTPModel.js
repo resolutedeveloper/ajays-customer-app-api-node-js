@@ -10,15 +10,15 @@ module.exports = (sequelize ,DataTypes) =>{
             allowNull: false
         },
         EmailID:{
-            type:DataTypes.INTEGER(6),
+            type:DataTypes.TEXT,
             allowNull: false
         },
         OTP:{
-            type: DataTypes.BOOLEAN,
+            type: DataTypes.INTEGER,
             allowNull: false
         },
         IsStatus:{
-            type: DataTypes.DATE,
+            type: DataTypes.BOOLEAN,
             allowNull:false
         },
         CreatedOn:{
