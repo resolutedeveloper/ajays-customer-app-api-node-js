@@ -8,28 +8,30 @@ const jwt = require("jsonwebtoken");
 
 const MobileNumberVerification = async (req, res) => {
     try {
-
         const DecryptMobileNumber = (encryptedField, secretKey) => {
             const bytes = CryptoJS.AES.decrypt(encryptedField, secretKey);
             return bytes.toString(CryptoJS.enc.Utf8);
         };
         var DecryptedMobile = DecryptMobileNumber(req.body.PhoneNumber, secretKey);
-        //Check customer available or not
-        const CurrentDateTime = moment.tz(new Date(), "Asia/Kolkata").format('YYYY-MM-DD HH:mm:ss')
-        const findcustomer = await db.customerMobile.findOne({ where: { PhoneNumber: req.body.PhoneNumber } });
+        const CurrentDateTime = moment.tz(new Date(), "Asia/Kolkata").format('YYYY-MM-DD HH:mm:ss');
+
+        const OTPVerificationAddedTime = moment.tz(CurrentDateTime, "Asia/Kolkata").add(process.env.OTPEXTRATIME, 'minutes').format('YYYY-MM-DD HH:mm:ss');
+        
+
+        const findcustomer = await db.customerMobile.findOne({ where: { PhoneNumber: DecryptedMobile } });
         if(!findcustomer){
             const NewCustomerCreate = await db.customer.create({
                 PhoneNumber:req.body.PhoneNumber,
-                LastLogin: CurrentDateTime,
+                LastLogin: '',
                 CreatedOn:CurrentDateTime,
-                LastModifiedOn:CurrentDateTime,
-                CreatedBy:'newuser',
-                LastModifiedBy:'newuser',
+                LastModifiedOn:'',
+                CreatedBy:'',
+                LastModifiedBy:'',
                 IsActive:1, 
                 IsDeleted:0
             });    
 
-            const DecryptedMobileNumber = await db.customerMobile.create({
+            await db.customerMobile.create({
                 CustomerID: NewCustomerCreate.CustomerID, 
                 PhoneNumber: DecryptedMobile, 
                 IsDeleted:0
@@ -69,22 +71,36 @@ const MobileNumberVerification = async (req, res) => {
                             otp += characters[randomIndex];
                         }
                         return otp;
-                        //return 123456;
                     }
 
                     
+<<<<<<< HEAD
                     // const currentTime = new Date();
                     // const expirationTime = new Date(currentTime.getTime() + 5 * 60000); // 5 mi
                     const currentTimeUTC = new Date();
                     const currentTimeIST = new Date(currentTimeUTC.getTime() + (5.5 * 60 * 60 * 1000)); // Add 5 hours 30 minutes
                     const expirationTimeIST = new Date(currentTimeIST.getTime() + 5 * 60000); 
                     
+=======
+                    db.mobileVerificationOTP.update({ 
+                        IsStatus: true,
+                        ExpiredOn: CurrentDateTime},{ 
+                        where: { 
+                        CustomerID: FindCustomer.CustomerID 
+                    }});
+
+>>>>>>> 4c6c1dbc741528bd803a38549501a4484683d8c7
                     const otptable = await db.mobileVerificationOTP.create({
                         CustomerID: FindCustomer.CustomerID, 
                         PhoneNumber: FindCustomer.PhoneNumber, 
                         OTP: generateOTP(),
+<<<<<<< HEAD
                         CreatedOn: currentTimeIST,
                         ExpiredOn: expirationTimeIST,
+=======
+                        CreatedOn: OTPVerificationAddedTime,
+                        ExpiredOn: '',
+>>>>>>> 4c6c1dbc741528bd803a38549501a4484683d8c7
                         UsedOn:'',
                         IsStatus:0,
                         IsDeleted:0
@@ -141,18 +157,34 @@ const MobileNumberVerification = async (req, res) => {
                         }
 
                         
+<<<<<<< HEAD
                         // const currentTime = new Date();
                         // const expirationTime = new Date(currentTime.getTime() + 5 * 60000); // 5 mi
                         const currentTimeUTC = new Date();
                         const currentTimeIST = new Date(currentTimeUTC.getTime() + (5.5 * 60 * 60 * 1000)); // Add 5 hours 30 minutes
                         const expirationTimeIST = new Date(currentTimeIST.getTime() + 5 * 60000); 
+=======
+>>>>>>> 4c6c1dbc741528bd803a38549501a4484683d8c7
                         
+                        
+                        db.mobileVerificationOTP.update({ 
+                            IsStatus: true,
+                            ExpiredOn: CurrentDateTime},{ 
+                            where: { 
+                            CustomerID: FindCustomer.CustomerID 
+                        }});
+
                         const otptable = await db.mobileVerificationOTP.create({
                             CustomerID: FindCustomer.CustomerID, 
                             PhoneNumber: FindCustomer.PhoneNumber, 
                             OTP: generateOTP(),
+<<<<<<< HEAD
                             CreatedOn: currentTimeIST,
                             ExpiredOn: expirationTimeIST,
+=======
+                            CreatedOn: OTPVerificationAddedTime,
+                            ExpiredOn: '',
+>>>>>>> 4c6c1dbc741528bd803a38549501a4484683d8c7
                             UsedOn:'',
                             IsStatus:0,
                             IsDeleted:0
@@ -204,7 +236,21 @@ const OTPverification = async (req, res) => {
                 const CustomerOTPVarification = await db.mobileVerificationOTP.findOne({ where: { OTP: data.OTP, IsStatus: '0' } });
 
                 
+                
                 if (CustomerOTPVarification) {
+                    //Time Out OTP
+                    const { Sequelize } = require('sequelize');
+                    const currentDateTime = Sequelize.fn('DATE_FORMAT', Sequelize.fn('NOW'), '%Y-%m-%d %H:%i:%s');
+                    const DatabaseCurrentTime = await db.mobileVerificationOTP.findOne({attributes: [[currentDateTime, 'currentDateTime']]});
+                    
+                    var CurrentDBDateTime = new Date(DatabaseCurrentTime.dataValues.currentDateTime); // Convert to Date object
+                    var OTPDateTime = new Date(CustomerOTPVarification.dataValues.CreatedOn); // Convert to Date object
+                    
+                    if (CurrentDBDateTime > OTPDateTime) {
+                        return res.status(400).send({ ErrorCode: "OTPTIME", ErrorMessage: 'OTP time out..' });
+                    }
+
+
                     const token = jwt.sign(FindCustomer.toJSON(), LoginToken, { expiresIn: "2592000s" });
                     if (token) {
                         db.mobileVerificationOTP.update({ IsStatus: true }, { where: { CustomerID: FindCustomer.CustomerID } });

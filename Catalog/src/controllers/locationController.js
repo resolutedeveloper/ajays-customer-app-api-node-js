@@ -201,5 +201,29 @@ const getLocation = async (req, res) => {
     }
   };
 
+  const latlonglocation = async (req, res) => {
+    try {
+      const locations = await location.findAll({ });
+  
+      if (locations.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message: `No location found `,
+        });
+      }
+  
+      res.status(200).json({
+        success: true,
+        data: locations,
+      });
+    } catch (err) {
+      res.status(500).json({
+        success: false,
+        message: "Error fetching location",
+        error: err.message || err,
+      });
+    }
+  };
 
-module.exports = { createLocation, getLocation, searchLocations ,getAllLocation };
+
+module.exports = { createLocation, getLocation, searchLocations ,getAllLocation, latlonglocation };
