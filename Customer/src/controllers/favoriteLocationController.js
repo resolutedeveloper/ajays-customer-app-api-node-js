@@ -3,34 +3,46 @@ const favoriteLocation = db.favoriteLocation  // Import the db object from index
 const logger = require("../utils/logger");
 
 
-const createFavoriteLocation = async (req,res)=>{
-    try{
-        const{CustomerID,LocationID} = req.body;
+const createFavoriteLocation = async (req, res) => {
+    try {
+        const currentTimeUTC = new Date();
+        const currentTimeIST = new Date(currentTimeUTC.getTime() + (5.5 * 60 * 60 * 1000)); 
 
-        if(!CustomerID || !LocationID){
-            return res.status(500).json({
+        const { CustomerID } = req.UserDetail;
+        const { LocationID } = req.body;
+
+        if (!CustomerID || !LocationID) {
+            return res.status(400).json({
                 success: false,
-                message: "CustomerId And LocationId required"
+                message: "CustomerID and LocationID are required",
             });
         }
 
-        const createLocation = await favoriteLocation.create({CustomerID,LocationID,CreatedOn: new Date()})
-        logger.info(" favorite Location created: ", JSON.stringify(createLocation));
+        const createLocation = await favoriteLocation.create({
+            CustomerID,
+            LocationID,
+            CreatedOn: currentTimeIST,
+            IsActive: true, // Set default value
+            IsDeleted: false, // Set default value
+        });
+
+        logger.info("Favorite Location created: ", JSON.stringify(createLocation));
 
         res.status(200).json({
             success: true,
-            message: "favrotie Location create successfully",
+            message: "Favorite location created successfully",
             data: createLocation,
-        })
-    }
-    catch(err){
+        });
+    } catch (err) {
+        logger.error("Error creating favorite location: ", err);
         res.status(400).json({
             success: false,
             data: null,
-            message: err.message
-        })
+            message: err.message,
+        });
     }
-}
+};
+
 
 
 const updateFavoriteLocation = async (req, res) => {

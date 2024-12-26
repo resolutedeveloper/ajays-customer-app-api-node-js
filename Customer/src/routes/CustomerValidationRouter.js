@@ -1,18 +1,21 @@
 const express = require('express');
 const router = express.Router();
 
-const { saveFCMKey} = require('../controllers/CustomerFcmController');
+
+const customerVersionHandler = require('../controllers/CustomerVersionController');
 const { validateRequest } = require('../config/validate-request');
 const Joi = require('joi');
 
-const fcmKey = (req, res, next) => {
+
+const versionkey = (req, res, next) => {
     const schema = Joi.object({
         Version: Joi.string().required()
     });
     validateRequest(req, res, next, schema);
 }
 
-router.post("/save-fcm",fcmKey,saveFCMKey);
+router.post("/version",versionkey, customerVersionHandler);
+
 
 
 module.exports = router;

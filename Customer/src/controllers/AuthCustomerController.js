@@ -73,15 +73,18 @@ const MobileNumberVerification = async (req, res) => {
                     }
 
                     
-                    const currentTime = new Date();
-                    const expirationTime = new Date(currentTime.getTime() + 5 * 60000); // 5 mi
+                    // const currentTime = new Date();
+                    // const expirationTime = new Date(currentTime.getTime() + 5 * 60000); // 5 mi
+                    const currentTimeUTC = new Date();
+                    const currentTimeIST = new Date(currentTimeUTC.getTime() + (5.5 * 60 * 60 * 1000)); // Add 5 hours 30 minutes
+                    const expirationTimeIST = new Date(currentTimeIST.getTime() + 5 * 60000); 
                     
                     const otptable = await db.mobileVerificationOTP.create({
                         CustomerID: FindCustomer.CustomerID, 
                         PhoneNumber: FindCustomer.PhoneNumber, 
                         OTP: generateOTP(),
-                        CreatedOn: currentTime,
-                        ExpiredOn: expirationTime,
+                        CreatedOn: currentTimeIST,
+                        ExpiredOn: expirationTimeIST,
                         UsedOn:'',
                         IsStatus:0,
                         IsDeleted:0
@@ -138,15 +141,18 @@ const MobileNumberVerification = async (req, res) => {
                         }
 
                         
-                        const currentTime = new Date();
-                        const expirationTime = new Date(currentTime.getTime() + 5 * 60000); // 5 mi
+                        // const currentTime = new Date();
+                        // const expirationTime = new Date(currentTime.getTime() + 5 * 60000); // 5 mi
+                        const currentTimeUTC = new Date();
+                        const currentTimeIST = new Date(currentTimeUTC.getTime() + (5.5 * 60 * 60 * 1000)); // Add 5 hours 30 minutes
+                        const expirationTimeIST = new Date(currentTimeIST.getTime() + 5 * 60000); 
                         
                         const otptable = await db.mobileVerificationOTP.create({
                             CustomerID: FindCustomer.CustomerID, 
                             PhoneNumber: FindCustomer.PhoneNumber, 
                             OTP: generateOTP(),
-                            CreatedOn: currentTime,
-                            ExpiredOn: expirationTime,
+                            CreatedOn: currentTimeIST,
+                            ExpiredOn: expirationTimeIST,
                             UsedOn:'',
                             IsStatus:0,
                             IsDeleted:0

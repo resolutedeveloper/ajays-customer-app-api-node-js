@@ -5,8 +5,15 @@ const secretKey = process.env.CRYPTOJSKEY;
 
 const name_update = async (req, res) => {
     try {
+        const currentTimeUTC = new Date();
+        const currentTimeIST = new Date(currentTimeUTC.getTime() + (5.5 * 60 * 60 * 1000));
+
+
         const NameUpdated = await db.customer.update({ 
-            Name: req.body.Name 
+            Name: req.body.Name,
+            LastLogin:currentTimeIST,
+            CreatedOn:currentTimeIST,
+            LastModifiedOn:currentTimeIST
             }, { where: { 
                 CustomerID: req.UserDetail.CustomerID 
             } 
@@ -55,17 +62,20 @@ const email_generate_otp = async (req, res) => {
         }
         
                             
-        const currentTime = new Date();
-        const expirationTime = new Date(currentTime.getTime() + 5 * 60000); // 5 mi
+        // const currentTime = new Date();
+        // const expirationTime = new Date(currentTime.getTime() + 5 * 60000); // 5 mi
+        const currentTimeUTC = new Date();
+        const currentTimeIST = new Date(currentTimeUTC.getTime() + (5.5 * 60 * 60 * 1000)); // Add 5 hours 30 minutes
+        const expirationTimeIST = new Date(currentTimeIST.getTime() + 5 * 60000); 
     
         const DecryptedMobileNumber = await db.emailVerificationOTP.create({
             CustomerID: req.UserDetail.CustomerID, 
             EmailID: req.body.EmailID, 
             OTP: generateOTP(),
             IsStatus: 0,
-            CreatedOn: expirationTime,
+            CreatedOn: currentTimeIST,
             UsedOn : '',
-            ExpiredOn: '',
+            ExpiredOn: expirationTimeIST,
             IsDeleted:0
         });
         
@@ -120,11 +130,14 @@ const email_otp_verification = async (req, res) => {
                         
                     }
 
-                    const currentTime = new Date();
-                    const expirationTime = new Date(currentTime.getTime() + 5 * 60000); // 5 mi
+                    // const currentTime = new Date();
+                    // const expirationTime = new Date(currentTime.getTime() + 5 * 60000); // 5 mi
+                    const currentTimeUTC = new Date();
+                    const currentTimeIST = new Date(currentTimeUTC.getTime() + (5.5 * 60 * 60 * 1000)); // Add 5 hours 30 minutes
+                    const expirationTimeIST = new Date(currentTimeIST.getTime() + 5 * 60000); 
 
                     db.customer.update({ EmailID: req.body.EmailID }, { where: { CustomerID: req.UserDetail.CustomerID } });
-                    db.emailVerificationOTP.update({ IsStatus: true, UsedOn: expirationTime}, { where: { CustomerID: req.UserDetail.CustomerID } });
+                    db.emailVerificationOTP.update({ IsStatus: true, UsedOn: expirationTimeIST}, { where: { CustomerID: req.UserDetail.CustomerID } });
                     
                     return res.status(200).json({ 
                         message: 'Email Is updated successfully'
@@ -161,17 +174,20 @@ const mobile_generate_otp = async (req, res) => {
         }
         
                             
-        const currentTime = new Date();
-        const expirationTime = new Date(currentTime.getTime() + 5 * 60000); // 5 mi
+        // const currentTime = new Date();
+        // const expirationTime = new Date(currentTime.getTime() + 5 * 60000); // 5 mi
+        const currentTimeUTC = new Date();
+        const currentTimeIST = new Date(currentTimeUTC.getTime() + (5.5 * 60 * 60 * 1000)); // Add 5 hours 30 minutes
+        const expirationTimeIST = new Date(currentTimeIST.getTime() + 5 * 60000); 
     
         const DecryptedMobileNumber = await db.mobileVerificationOTP.create({
             CustomerID: req.UserDetail.CustomerID, 
             PhoneNumber: req.body.PhoneNumber, 
             OTP: generateOTP(),
             IsStatus: 0,
-            CreatedOn: expirationTime,
+            CreatedOn: currentTimeIST,
             UsedOn : '',
-            ExpiredOn: ''
+            ExpiredOn: expirationTimeIST
         });
         
 
@@ -224,11 +240,14 @@ const mobile_otp_verification = async (req, res) => {
                         
                     }
 
-                    const currentTime = new Date();
-                    const expirationTime = new Date(currentTime.getTime() + 5 * 60000); // 5 mi
+                    // const currentTime = new Date();
+                    // const expirationTime = new Date(currentTime.getTime() + 5 * 60000); // 5 mi
+                    const currentTimeUTC = new Date();
+                    const currentTimeIST = new Date(currentTimeUTC.getTime() + (5.5 * 60 * 60 * 1000)); // Add 5 hours 30 minutes
+                    const expirationTimeIST = new Date(currentTimeIST.getTime() + 5 * 60000); 
 
                     db.customer.update({ PhoneNumber: req.body.PhoneNumber }, { where: { CustomerID: req.UserDetail.CustomerID } });
-                    db.mobileVerificationOTP.update({ IsStatus: true, UsedOn: expirationTime}, { where: { CustomerID: req.UserDetail.CustomerID } });
+                    db.mobileVerificationOTP.update({ IsStatus: true, UsedOn: expirationTimeIST}, { where: { CustomerID: req.UserDetail.CustomerID } });
                     
                     return res.status(200).json({ 
                         message: 'Mobile Is updated successfully'
