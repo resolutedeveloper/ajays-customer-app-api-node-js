@@ -21,6 +21,65 @@ const createCustomer = async (req ,res) =>{
 
 }
 
+// const { Customer, HistoryCustomer } = require('../models'); // Assuming you have models for Customer and HistoryCustomer
+
+// const updateCustomerName = async (req, res) => {
+//     try {
+//         // Get the customer ID from request (e.g., from URL params or authentication context)
+//         const { CustomerID } = req.UserDetail; // Assuming you're using req.UserDetail for logged-in user
+
+//         // Fetch the current customer data (before update)
+//         const existingCustomer = await Customer.findOne({ where: { CustomerID } });
+
+//         // If no customer found, return an error
+//         if (!existingCustomer) {
+//             return res.status(404).json({ message: 'Customer not found' });
+//         }
+
+//         // Capture the old data to insert into HistoryCustomer table
+//         const oldData = {
+//             CustomerID: existingCustomer.CustomerID,
+//             Name: existingCustomer.Name,
+//             PhoneNumber: existingCustomer.PhoneNumber,
+//             EmailID: existingCustomer.EmailID,
+//             Gender: existingCustomer.Gender,
+//             LastUpdateBy: existingCustomer.LastUpdateBy,
+//         };
+
+//         // Save the old data into HistoryCustomer table
+//         await HistoryCustomer.create({
+//             CustomerID: oldData.CustomerID,
+//             Name: oldData.Name,
+//             PhoneNumber: oldData.PhoneNumber,
+//             EmailID: oldData.EmailID,
+//             Gender: oldData.Gender,
+//             LastUpdateBy: oldData.LastUpdateBy,
+//         });
+
+//         // Now update the customer with new data (e.g., from the request body)
+//         const { Name } = req.body; // Assuming you're updating the Name field
+//         await Customer.update(
+//             { Name },
+//             { where: { CustomerID } }
+//         );
+
+//         // Return success response
+//         return res.status(200).json({
+//             message: 'Customer name updated successfully',
+//             updatedCustomer: { CustomerID, Name }, // You can include the updated data if needed
+//         });
+
+//     } catch (error) {
+//         console.error('Error updating customer:', error);
+//         return res.status(500).json({
+//             message: 'Error updating customer data',
+//             error: error.message,
+//         });
+//     }
+// };
+
+// module.exports = { updateCustomerName };
+
 
 const loginCustomer = async (req, res) => {
   console.log("🚀 ~ Incoming request body:", req.body);

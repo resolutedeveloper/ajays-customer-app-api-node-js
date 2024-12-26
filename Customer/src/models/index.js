@@ -25,7 +25,8 @@ db.favoriteLocation = require('../models/favoriteLocationModel')(sequelize, Data
 db.mobileVerificationOTP = require('../models/mobileVerificationOTPModel')(sequelize, DataTypes);
 db.emailVerificationOTP = require('../models/emailVerificationOTPModel')(sequelize, DataTypes);
 db.customerFCM = require('../models/customerFCMModel')(sequelize, DataTypes);
-db.customerVerManagement = require('../models/customerVerManagementModel')(sequelize,DataTypes)
+db.customerVerManagement = require('../models/customerVerManagementModel')(sequelize,DataTypes);
+db.historyCustomer = require('../models/historyCustomerModel')(sequelize,DataTypes);
 
 
 

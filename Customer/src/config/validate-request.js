@@ -13,7 +13,7 @@ function validateRequest(req, res, next, schema) {
           .map((x) => x.message)
           .join(", ")}`,
       });
-    } else {
+    } else {  
       req.body = value;
       next();
     }
