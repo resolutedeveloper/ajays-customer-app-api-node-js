@@ -2,7 +2,7 @@
 
 const express = require('express');
 
-const { createLocation, getLocation, searchLocations,getAllLocation } = require('../controllers/locationController');
+const { createLocation, getLocation, searchLocations,getAllLocation,latlonglocation } = require('../controllers/locationController');
 
 // const { createLocation, getLocation, searchLocations ,getAllLocation} = require('../controllers/locationController');
 
@@ -16,6 +16,8 @@ router.get("/", getAllLocation);
 router.get("/search",searchLocations);
 
 router.get("/search", searchLocations);
+
+router.get("/latlonglocation", latlonglocation);
 
 
 module.exports = router;
