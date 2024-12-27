@@ -1,32 +1,34 @@
-module.exports = (sequelize ,DataTypes) =>{
-    const favoriteLocationModel = sequelize.define("favoriteLocation" ,{
+module.exports = (sequelize, DataTypes) => {
+    const favoriteLocationModel = sequelize.define("favoriteLocation", {
         FavoriteLocationID: {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4, 
             primaryKey: true
         },
-        CustomerID:{
+        CustomerID: {
             type: DataTypes.UUID,
             allowNull: false
         },
-        LocationID:{
+        LocationID: {
             type: DataTypes.INTEGER(12),
             allowNull: false
         },
-        CreatedOn:{
-            type:DataTypes.DATE,
-            allowNull:false
-        },
-        IsActive:{
-            type:DataTypes.BOOLEAN,
+        CreatedOn: {
+            type: DataTypes.DATE,
             allowNull: false
         },
-        IsDeleted:{
-            type:DataTypes.BOOLEAN,
-            allowNull: false
+        IsActive: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: true // Default value set to true
         },
-    },{
-        timestamps:false,
+        IsDeleted: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false // Default value set to false
+        },
+    }, {
+        timestamps: false,
     });
     return favoriteLocationModel;
-}
+};

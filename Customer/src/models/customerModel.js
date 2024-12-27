@@ -7,55 +7,51 @@ module.exports = (sequelize, DataTypes) => {
         },
         Name: {
             type: DataTypes.STRING(256),
-            allowNull: true
         },
         PhoneNumber: {
             type: DataTypes.TEXT,
-            allowNull: false
         },
         EmailID: {
             type: DataTypes.TEXT,
-            allowNull: true
         },
         DOB: {
             type: DataTypes.DATE,
-            allowNull: true
         },
         Anniversary: {
             type: DataTypes.DATE,
-            allowNull: true
         },
         Gender: {
             type: DataTypes.STRING(256),
-            allowNull: true
         },
         LastLogin: {
             type: DataTypes.DATE,
-            allowNull: false
+            allowNull: true,
         },
         CreatedBy: {
             type: DataTypes.STRING(256),
-            allowNull: false
+            allowNull: true,
         },
         CreatedOn: {
             type: DataTypes.DATE,
-            allowNull: false
+            allowNull: true,
         },
         LastModifiedBy: {
             type: DataTypes.STRING(256),
-            allowNull: false
+            allowNull: true,
         },
         LastModifiedOn: {
             type: DataTypes.DATE,
-            allowNull: false
+            allowNull: true,
         },
         IsActive:{
             type:DataTypes.BOOLEAN,
-            allowNull: false
+            allowNull: false,
+            defaultValue: true,
         },
         IsDeleted:{
             type:DataTypes.BOOLEAN,
-            allowNull: false
+            allowNull: false,
+            defaultValue: false,
         },
     }, {
         timestamps: false,

@@ -48,6 +48,9 @@ const check_existing_customer = async (req, res) => {
     }
 };
 
+
+
+
 const email_generate_otp = async (req, res) => {
     try {
         function generateOTP() {

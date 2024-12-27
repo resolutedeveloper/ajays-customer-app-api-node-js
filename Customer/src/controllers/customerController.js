@@ -28,19 +28,25 @@ const loginCustomer = async (req, res) => {
 
   try {
     const schema = Joi.object({
-      EmailID: Joi.string().required(),
+      EmailID: Joi.string().email().required(),
     });
 
     const { EmailID } = await schema.validateAsync(req.body);
 
     let decryptedEmail = EmailID;
 
-    // Decrypt email if encrypted
+    // Decrypt email only if it is encrypted
     if (isEncrypted(EmailID)) {
-      decryptedEmail = decryptData(EmailID);
+      try {
+        decryptedEmail = decryptData(EmailID);
+        console.log("🚀 ~ Decrypted Email:", decryptedEmail);
+      } catch (decryptionError) {
+        console.error("🚀 ~ Decryption failed for Email:", decryptionError.message);
+        return res.status(400).json({ message: "Invalid encrypted EmailID provided." });
+      }
+    } else {
+      console.log("🚀 ~ Email is not encrypted, using as is.");
     }
-
-    console.log("🚀 ~ Decrypted Email:", decryptedEmail);
 
     const customerIDFromToken = req.UserDetail.CustomerID;
     const phoneNumberFromToken = req.UserDetail.PhoneNumber;
@@ -49,8 +55,27 @@ const loginCustomer = async (req, res) => {
       return res.status(400).json({ message: "CustomerID or PhoneNumber is missing in the token." });
     }
 
-    const decryptedPhone = decryptData(phoneNumberFromToken);
-    console.log("🚀 ~ Decrypted Phone from Token:", decryptedPhone);
+    let decryptedPhone = phoneNumberFromToken;
+
+    // Decrypt phone number only if it is encrypted
+    if (isEncrypted(phoneNumberFromToken)) {
+      try {
+        decryptedPhone = decryptData(phoneNumberFromToken);
+        console.log("🚀 ~ Decrypted Phone from Token:", decryptedPhone);
+      } catch (decryptionError) {
+        console.error("🚀 ~ Decryption failed for PhoneNumber:", decryptionError.message);
+        return res.status(400).json({ message: "Invalid encrypted PhoneNumber provided." });
+      }
+    } else {
+      console.log("🚀 ~ Phone number is not encrypted, using as is.");
+    }
+
+    console.log("🚀 ~ Preparing to insert email:", decryptedEmail);
+
+    if (!decryptedEmail) {
+      console.error("🚀 ~ Error: Decrypted email is null or empty.");
+      return res.status(400).json({ message: "Decrypted email cannot be null or empty." });
+    }
 
     const existingEmail = await CustomerEmail.findOne({
       where: { EmailId: decryptedEmail },
@@ -69,18 +94,15 @@ const loginCustomer = async (req, res) => {
       CustomerID: customerIDFromToken,
       EmailId: decryptedEmail,
       IsDeleted: false,
-    }).catch((err) => {
-      console.error("Error creating email record:", err.message);
     });
-    
+    console.log("🚀 ~ Email record created:", emailRecord);
+
     const phoneRecord = await CustomerMobile.create({
       CustomerID: customerIDFromToken,
       PhoneNumber: decryptedPhone,
       IsDeleted: false,
-    }).catch((err) => {
-      console.error("Error creating phone record:", err.message);
     });
-    
+    console.log("🚀 ~ Phone record created:", phoneRecord);
 
     res.status(200).json({
       message: "Login successful",
@@ -93,12 +115,9 @@ const loginCustomer = async (req, res) => {
   }
 };
 
-// Function to check if the data is encrypted
 function isEncrypted(data) {
   return typeof data === "string" && data.startsWith("U2FsdGVkX1+");
 }
-
-
 
 
 

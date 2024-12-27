@@ -1,5 +1,7 @@
 var express = require('express');
 const router = express.Router();
+const fs = require('fs');
+const path = require('path');
 var multer  =   require('multer');
 var bodyParser = require('body-parser');
 router.use(bodyParser.json());
@@ -11,7 +13,11 @@ const FileUpload = async(req,res)=>{
     
     var storage =   multer.diskStorage({    
         destination: function (req, file, callback) {
-            callback(null, process.env.UPLOADPATH+'ProfileImage');
+            const dir = path.join(process.env.UPLOADPATH, 'ProfileImage');
+            if (!fs.existsSync(dir)) {
+                fs.mkdirSync(dir, { recursive: true });
+            }
+            callback(null, dir);
         },
         filename: function (req, file, callback) {
             let fine_name = Date.now()+'_'+file.originalname;
@@ -40,7 +46,11 @@ const ExcelFileUpload = async(req,res)=>{
     
     var storage =   multer.diskStorage({    
         destination: function (req, file, callback) {
-            callback(null, process.env.UPLOADPATH+'ImportExcel');
+            const dir = path.join(process.env.UPLOADPATH, 'ImportExcel');
+            if (!fs.existsSync(dir)) {
+                fs.mkdirSync(dir, { recursive: true });
+            }
+            callback(null, dir);
         },
         filename: function (req, file, callback) {
             let fine_name = Date.now()+'_'+file.originalname;

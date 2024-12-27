@@ -27,9 +27,9 @@ const MobileNumberVerification = async (req, res) => {
                 LastModifiedOn:'',
                 CreatedBy:'',
                 LastModifiedBy:'',
-                IsActive:1, 
+                IsActive:1,
                 IsDeleted:0
-            });    
+            });
 
             await db.customerMobile.create({
                 CustomerID: NewCustomerCreate.CustomerID, 
@@ -204,6 +204,7 @@ const MobileNumberVerification = async (req, res) => {
         res.status(500).send({ success: false, message: 'Error creating Company' });
     }
 };
+
 
 const OTPverification = async (req, res) => {
     const DecryptMobileNumber = (encryptedField, secretKey) => {

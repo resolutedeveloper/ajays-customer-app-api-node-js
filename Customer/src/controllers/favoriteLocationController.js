@@ -22,8 +22,6 @@ const createFavoriteLocation = async (req, res) => {
             CustomerID,
             LocationID,
             CreatedOn: currentTimeIST,
-            IsActive: true, // Set default value
-            IsDeleted: false, // Set default value
         });
 
         logger.info("Favorite Location created: ", JSON.stringify(createLocation));
@@ -47,36 +45,51 @@ const createFavoriteLocation = async (req, res) => {
 
 const updateFavoriteLocation = async (req, res) => {
     try {
-        const { FavoriteLocationID } = req.body;
-        const input = req.body;
+        // Extracting FavoriteLocationID from the request parameters
+        const { FavoriteLocationID } = req.params;
 
+        // Validating FavoriteLocationID
         if (!FavoriteLocationID) {
-            return res.status(500).json({
+            return res.status(400).json({
                 success: false,
-                message: 'FavoriteLocationID is required.'
+                message: 'FavoriteLocationID is required in the URL parameters.'
             });
         }
 
-        // Update the record using Sequelize's update method
-        const result = await favoriteLocation.update(input, {
+        // Extracting input data from the request body
+        const input = req.body;
+
+        // Updating the record in the database
+        const [updatedCount] = await favoriteLocation.update(input, {
             where: { FavoriteLocationID },
         });
 
+        // Checking if the record was found and updated
+        if (updatedCount === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'Favorite location not found or no changes were made.',
+            });
+        }
 
+        // Fetching the updated record
         const updatedFavoriteLocation = await favoriteLocation.findByPk(FavoriteLocationID);
 
+        // Sending the response with the updated record
         res.status(200).json({
             success: true,
-            message: 'Favorite location updated successfully',
+            message: 'Favorite location updated successfully.',
             data: updatedFavoriteLocation
         });
     } catch (err) {
+        // Handling errors
         res.status(400).json({
             success: false,
             message: err.message
         });
     }
 };
+
 
 
 

@@ -10,11 +10,6 @@ const router = express.Router();
 const locationKey = (req,res,next)=>{
 
     const schema = Joi.object({
-      FavoriteLocationID: Joi.string().guid({ version: "uuidv4" }).required().messages({
-        "string.empty": "FavoriteLocationID cannot be empty",
-        "any.required": "FavoriteLocationID is required",
-        "string.guid": "FavoriteLocationID must be a valid UUID",
-      }),
         LocationID: Joi.number().integer().strict().min(1).required().messages({
           "number.base": "LocationID must be a number",
           "number.integer": "LocationID must be an integer",
@@ -46,9 +41,11 @@ const getlocationKey = (req, res, next) => {
 
 
 router.post("/", createFavoriteLocation);
-router.put("/",locationKey, updateFavoriteLocation);
+router.put("/:FavoriteLocationID",locationKey, updateFavoriteLocation);
 router.delete("/:id",getlocationKey, deleteFavoriteLocation);
 router.get("/", viewAllFavoriteLocation);
 router.get("/:id",getlocationKey, getFavoriteLocationById);
+
+
 
 module.exports = router;

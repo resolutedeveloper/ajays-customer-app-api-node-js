@@ -3,7 +3,10 @@ const db = require("../models/index.js");
 
 const customerVersionHandler = async (req, res) => {
     try {
-        const { CustomerID } = req.UserDetail;    // from middlewware
+        const currentTimeUTC = new Date();
+        const currentTimeIST = new Date(currentTimeUTC.getTime() + (5.5 * 60 * 60 * 1000));
+
+        const { CustomerID } = req.UserDetail;
         const { Version } = req.body;
 
         if (!Version) {
@@ -14,7 +17,7 @@ const customerVersionHandler = async (req, res) => {
         const newVersionEntry = await db.customerVerManagement.create({
             CustomerID,
             Version,
-            CreateOn: new Date()
+            CreateOn: currentTimeIST
         });
 
         logger.info(`New version entry created for CustomerID: ${CustomerID}, Version: ${Version}`);
