@@ -74,14 +74,13 @@ const MobileNumberVerification = async (req, res) => {
                     }
 
                     
-<<<<<<< HEAD
                     // const currentTime = new Date();
                     // const expirationTime = new Date(currentTime.getTime() + 5 * 60000); // 5 mi
                     const currentTimeUTC = new Date();
                     const currentTimeIST = new Date(currentTimeUTC.getTime() + (5.5 * 60 * 60 * 1000)); // Add 5 hours 30 minutes
                     const expirationTimeIST = new Date(currentTimeIST.getTime() + 5 * 60000); 
                     
-=======
+
                     db.mobileVerificationOTP.update({ 
                         IsStatus: true,
                         ExpiredOn: CurrentDateTime},{ 
@@ -89,18 +88,17 @@ const MobileNumberVerification = async (req, res) => {
                         CustomerID: FindCustomer.CustomerID 
                     }});
 
->>>>>>> 4c6c1dbc741528bd803a38549501a4484683d8c7
+
                     const otptable = await db.mobileVerificationOTP.create({
                         CustomerID: FindCustomer.CustomerID, 
                         PhoneNumber: FindCustomer.PhoneNumber, 
                         OTP: generateOTP(),
-<<<<<<< HEAD
                         CreatedOn: currentTimeIST,
                         ExpiredOn: expirationTimeIST,
-=======
+
                         CreatedOn: OTPVerificationAddedTime,
                         ExpiredOn: '',
->>>>>>> 4c6c1dbc741528bd803a38549501a4484683d8c7
+
                         UsedOn:'',
                         IsStatus:0,
                         IsDeleted:0
@@ -157,14 +155,13 @@ const MobileNumberVerification = async (req, res) => {
                         }
 
                         
-<<<<<<< HEAD
+
                         // const currentTime = new Date();
                         // const expirationTime = new Date(currentTime.getTime() + 5 * 60000); // 5 mi
                         const currentTimeUTC = new Date();
                         const currentTimeIST = new Date(currentTimeUTC.getTime() + (5.5 * 60 * 60 * 1000)); // Add 5 hours 30 minutes
                         const expirationTimeIST = new Date(currentTimeIST.getTime() + 5 * 60000); 
-=======
->>>>>>> 4c6c1dbc741528bd803a38549501a4484683d8c7
+
                         
                         
                         db.mobileVerificationOTP.update({ 
@@ -178,13 +175,11 @@ const MobileNumberVerification = async (req, res) => {
                             CustomerID: FindCustomer.CustomerID, 
                             PhoneNumber: FindCustomer.PhoneNumber, 
                             OTP: generateOTP(),
-<<<<<<< HEAD
                             CreatedOn: currentTimeIST,
                             ExpiredOn: expirationTimeIST,
-=======
+
                             CreatedOn: OTPVerificationAddedTime,
                             ExpiredOn: '',
->>>>>>> 4c6c1dbc741528bd803a38549501a4484683d8c7
                             UsedOn:'',
                             IsStatus:0,
                             IsDeleted:0
