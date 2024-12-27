@@ -1,5 +1,5 @@
 const express = require('express');
-const { itemlist, locationDetail, citystores} = require('../controllers/httpResponseController');
+const { itemlist, locationDetail, citystores, latlonglocation, latlonglocationItem} = require('../controllers/httpResponseController');
 
 const router = express.Router();
 
@@ -9,9 +9,10 @@ const router = express.Router();
 
 // router.get("/search",searchLocations);
 
-router.get("/itemlist/:ItemID", itemlist);
+router.get("/item-detail/:ItemID", itemlist);
 router.get("/location-detail/:LocationID", locationDetail);
 router.get("/city-stores", citystores);
-
+router.get("/latlonglocation", latlonglocation);
+router.get("/latlonglocationItem", latlonglocationItem);
 
 module.exports = router;

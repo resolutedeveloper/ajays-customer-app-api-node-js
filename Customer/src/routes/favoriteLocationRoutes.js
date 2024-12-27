@@ -20,8 +20,7 @@ const locationKey = (req,res,next)=>{
           "number.integer": "LocationID must be an integer",
           "any.required": "LocationID is required",
           "number.min": "LocationID must be a positive integer",
-          "number.strict":
-            "LocationID must not be a string or a non-integer value",
+          "number.strict":"LocationID must not be a string or a non-integer value",
         }),
     
       });

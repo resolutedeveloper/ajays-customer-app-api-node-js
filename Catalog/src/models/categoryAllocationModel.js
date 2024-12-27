@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
     const categoryAllocationModel = sequelize.define("CategoryAllocation",{
-        id:{
+        ID:{
             type: DataTypes.INTEGER,
             primaryKey: true,
         },

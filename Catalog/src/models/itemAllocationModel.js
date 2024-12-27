@@ -1,10 +1,10 @@
 module.exports =(sequelize, DataTypes)=>{
     const itemAllocationModel = sequelize.define("ItemAllocation", {
-        id: { // Renamed to 'id' and set as primary key
+        ID: { // Renamed to 'id' and set as primary key
             type: DataTypes.INTEGER,
             primaryKey: true,
         },
-        LocationId: {
+        LocationID: {
             type: DataTypes.INTEGER,
         },
         CategoryID: {

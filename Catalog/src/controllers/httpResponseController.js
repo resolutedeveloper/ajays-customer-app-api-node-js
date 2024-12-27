@@ -95,4 +95,125 @@ const locationDetail = async (req, res) => {
       });
     }
   };
-module.exports = { itemlist, locationDetail, citystores};
+
+  const latlonglocation = async (req, res) => {
+    const axios = require('axios');
+    const lat = req.query.latitude;
+    const lon = req.query.longitude;
+    const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`;
+    async function fetchCityData() {
+        try {
+            const response = await axios.get(url);
+            const stateDistrict = response.data?.address?.state_district;
+
+            if (!stateDistrict) {
+                throw new Error("State district not found in the response.");
+            }
+
+            const { Op } = require('sequelize');
+
+            const cityData = await db.city.findOne({
+                where: {
+                    CityName: {
+                        [Op.like]: stateDistrict
+                    }
+                }
+            });
+            const LatLongcityID = cityData.dataValues.CityID;
+            
+            const locations = await db.location.findAll({
+              where: {
+                CityID: LatLongcityID,
+              },
+            });
+
+            if(locations){
+              return res.status(200).json({
+                  message: 'Location details found successfully',
+                  data: locations
+              });
+              }else{
+                  return res.status(400).send({
+                      ErrorCode: "VALIDATION", 
+                      ErrorMessage: 'Location details not found' 
+                  });
+              }
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+    fetchCityData();
+  };
+
+
+
+  const latlonglocationItem = async (req, res) => {
+    const axios = require('axios');
+    const lat = req.query.latitude;
+    const lon = req.query.longitude;
+    const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`;
+    async function fetchCityData() {
+        try {
+            const response = await axios.get(url);
+            const stateDistrict = response.data?.address?.state_district;
+
+            if (!stateDistrict) {
+                throw new Error("State district not found in the response.");
+            }
+
+            const { Op } = require('sequelize');
+
+            const cityData = await db.city.findOne({
+                where: {
+                    CityName: {
+                        [Op.like]: stateDistrict
+                    }
+                }
+            });
+            const LatLongcityID = cityData.dataValues.CityID;
+            
+            const locations = await db.location.findOne({
+              where: {
+                CityID: LatLongcityID,
+              },
+            });
+
+            const LocationWiseMap = await db.itemAllocation.findOne({
+              where: {
+                LocationID: locations.dataValues.LocationID,
+              },
+            });
+
+            const CategoryData = await db.category.findOne({
+              where: {
+                CategoryID: LocationWiseMap.dataValues.CategoryID,
+              },
+            });
+
+            const ItemData = await db.item.findOne({
+              where: {
+                ItemID: LocationWiseMap.dataValues.ItemID,
+              },
+            });
+
+            
+            if(locations){
+              return res.status(200).json({
+                  message: 'Location details found successfully',
+                  data: [{"Location":locations,"CategoryData":CategoryData,"ItemData":ItemData}]
+              });
+              }else{
+                  return res.status(400).send({
+                      ErrorCode: "VALIDATION", 
+                      ErrorMessage: 'Location details not found' 
+                  });
+              }
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+    fetchCityData();
+  };
+module.exports = { itemlist, locationDetail, citystores, latlonglocation, latlonglocationItem};
