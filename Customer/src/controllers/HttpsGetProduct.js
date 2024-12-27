@@ -13,7 +13,7 @@ const ItemDetail = async (req, res) => {
         const url = process.env.CATALOG_LOCAL_URL;
         const token = process.env.HTTP_REQUEST_SECRET_KEY;
         //const respVideoCount = await axios.get(`${url}/courseVideoNumbers?courseId=${CourseId}`, {
-        const respVideoCount = await axios.get(`${url}/httpResponse/itemlist/${ItemID}`, {
+        const respVideoCount = await axios.get(`${url}/httpResponse/item-detail/${ItemID}`, {
             headers: { "Authorization": "Bearer " + token }
         });
         if(respVideoCount.data){
@@ -97,4 +97,52 @@ const Storecitieslist = async (req, res) => {
         res.status(500).send({ success: false, message: 'Product not found' });
     }
 };
-module.exports = { ItemDetail, LocationDetails, Storecitieslist};
+
+
+const LatLongBaseLocation = async (req, res) => {
+    try {
+        const { latitude,longitude } = req.query;
+        const url = process.env.CATALOG_LOCAL_URL;
+        const token = process.env.HTTP_REQUEST_SECRET_KEY;
+        //const respVideoCount = await axios.get(`${url}/courseVideoNumbers?courseId=${CourseId}`, {
+        const respVideoCount = await axios.get(`${url}/httpResponse/latlonglocation?latitude=${latitude}&longitude=${longitude}`, {
+            headers: { "Authorization": "Bearer " + token }
+        });
+        if(respVideoCount.data){
+            return res.send(respVideoCount.data);
+        }else{
+            return res.status(400).send({
+                ErrorCode: "VALIDATION", 
+                ErrorMessage: 'LatLong wise details not found' 
+            });
+        }
+    } catch (err) {
+        logger.error(`Product not found: ${err.message}`);  // Log errors
+        res.status(500).send({ success: false, message: 'Product not found' });
+    }
+};
+
+
+const LatLongBaseLocationCatitem = async (req, res) => {
+    try {
+        const { latitude,longitude } = req.query;
+        const url = process.env.CATALOG_LOCAL_URL;
+        const token = process.env.HTTP_REQUEST_SECRET_KEY;
+        //const respVideoCount = await axios.get(`${url}/courseVideoNumbers?courseId=${CourseId}`, {
+        const respVideoCount = await axios.get(`${url}/httpResponse/latlonglocationItem?latitude=${latitude}&longitude=${longitude}`, {
+            headers: { "Authorization": "Bearer " + token }
+        });
+        if(respVideoCount.data){
+            return res.send(respVideoCount.data);
+        }else{
+            return res.status(400).send({
+                ErrorCode: "VALIDATION", 
+                ErrorMessage: 'LatLong wise details not found' 
+            });
+        }
+    } catch (err) {
+        logger.error(`Product not found: ${err.message}`);  // Log errors
+        res.status(500).send({ success: false, message: 'Product not found' });
+    }
+};
+module.exports = { ItemDetail, LocationDetails, Storecitieslist, LatLongBaseLocation, LatLongBaseLocationCatitem};

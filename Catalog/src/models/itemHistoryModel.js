@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
     const itemHistoryModel = sequelize.define("ItemHistory",{
-        id:{
+        ID:{
             type: DataTypes.INTEGER,
             primaryKey: true,
         },
