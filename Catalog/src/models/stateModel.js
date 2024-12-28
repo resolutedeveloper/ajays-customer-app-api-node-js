@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes)=>{
         CountryID:{
             type: DataTypes.INTEGER,
         }
-    },{timeStamps: false});
+    },{timestamps: false});
 
     return stateModel;
 }

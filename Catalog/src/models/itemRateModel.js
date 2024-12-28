@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes)=>{
     const itemLocationRateModel = sequelize.define("ItemLocationRate",{
-        id:{
+        ID:{
             type: DataTypes.INTEGER,
             primaryKey: true,
         },

@@ -29,6 +29,7 @@ db.country = require('../models/countryModel')(sequelize, DataTypes);
 db.state = require('../models/stateModel')(sequelize, DataTypes);
 db.city = require('../models/cityModel')(sequelize, DataTypes);
 db.itemLocationRate = require('./itemRateModel')(sequelize,DataTypes);
+db.itemHistory = require('./itemHistoryModel')(sequelize,DataTypes);
 
 
 db.sequelize.sync({ force: false, alter: true })

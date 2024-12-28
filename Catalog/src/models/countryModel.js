@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) =>{
     CountryName:{
         type: DataTypes.STRING(300)
     },
-    },{timeStamps: false});
+    },{ timestamps: false,});
 
     return countryModel;
 }
