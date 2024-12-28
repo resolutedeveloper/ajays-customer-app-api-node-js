@@ -1,6 +1,6 @@
-const admin = require('../utils/fireBaseConfig.js');  // Firebase initialization
 const db = require("../models/index.js");
 const logger = require('../utils/logger');
+const sendNotification = require('../config/sendNotification.js');
 
 const saveFCMKey = async (req, res) => {
     try {
@@ -25,41 +25,31 @@ const saveFCMKey = async (req, res) => {
 };
 
 
-// services/sendNotification.js
 
+const sendCustomerNotification = async (req, res) => {
+    const CustomerID = req.UserDetail?.CustomerID;
+    const { title, body, customData } = req.body;
 
-const sendNotification = async (customerId, title, message) => {
+    if (!CustomerID || !title || !body) {
+        return res.status(400).json({ message: 'CustomerID, title, and body are required.' });
+    }
+
     try {
-        // Retrieve FCM key for the customer
-        const customerFCM = await db.customerFCM.findOne({ where: { CustomerID: customerId } });
-        console.log("🚀 ~ sendNotification ~ customerFCM:", customerFCM)
+        // If customData not provided, default an empty object
+        const result = await sendNotification(CustomerID, title, body, customData || {});
 
-        if (!customerFCM) {
-            throw new Error('FCM Key not found for this customer');
+        if (result.success) {
+            return res.status(200).json({ message: 'Notification sent successfully' });
+        } else {
+            return res.status(400).json({ message: 'Error sending notification', error: result.error });
         }
-
-        // Create the notification payload
-        const payload = {
-            notification: {
-                title: title,
-                body: message,
-            },
-            token: customerFCM.FCMKEY,  // Use the customer's FCM key to send the notification
-        };
-
-        // Send the notification to the customer's device
-        const response = await admin.messaging().send(payload);
-        logger.info('Notification sent:', response);
-
-        return { success: true, response };
     } catch (error) {
         logger.error('Error sending notification:', error.message);
-        return { success: false, error: error.message };
+        return res.status(400).json({ message: 'Error sending notification', error: error.message });
     }
 };
 
 
 
 
-
-module.exports = { saveFCMKey, sendNotification };
+module.exports = { saveFCMKey, sendCustomerNotification };
