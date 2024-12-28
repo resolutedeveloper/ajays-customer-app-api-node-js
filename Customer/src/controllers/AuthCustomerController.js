@@ -13,6 +13,14 @@ const MobileNumberVerification = async (req, res) => {
             return bytes.toString(CryptoJS.enc.Utf8);
         };
         var DecryptedMobile = DecryptMobileNumber(req.body.PhoneNumber, secretKey);
+
+        //Blank or in valid mobile number check validation
+        const regex = /^[6-9]\d{9}$/;
+
+        if (!regex.test(DecryptedMobile)) {
+            return res.status(400).send({ErrorCode: "VALIDATION", ErrorMessage: 'Invalid mobile number' });
+        }
+
         const CurrentDateTime = moment.tz(new Date(), "Asia/Kolkata").format('YYYY-MM-DD HH:mm:ss');
 
         const OTPVerificationAddedTime = moment.tz(CurrentDateTime, "Asia/Kolkata").add(process.env.OTPEXTRATIME, 'minutes').format('YYYY-MM-DD HH:mm:ss');
@@ -74,13 +82,6 @@ const MobileNumberVerification = async (req, res) => {
                     }
 
                     
-                    // const currentTime = new Date();
-                    // const expirationTime = new Date(currentTime.getTime() + 5 * 60000); // 5 mi
-                    const currentTimeUTC = new Date();
-                    const currentTimeIST = new Date(currentTimeUTC.getTime() + (5.5 * 60 * 60 * 1000)); // Add 5 hours 30 minutes
-                    const expirationTimeIST = new Date(currentTimeIST.getTime() + 5 * 60000); 
-                    
-
                     db.mobileVerificationOTP.update({ 
                         IsStatus: true,
                         ExpiredOn: CurrentDateTime},{ 
@@ -88,17 +89,12 @@ const MobileNumberVerification = async (req, res) => {
                         CustomerID: FindCustomer.CustomerID 
                     }});
 
-
                     const otptable = await db.mobileVerificationOTP.create({
                         CustomerID: FindCustomer.CustomerID, 
                         PhoneNumber: FindCustomer.PhoneNumber, 
                         OTP: generateOTP(),
-                        CreatedOn: currentTimeIST,
-                        ExpiredOn: expirationTimeIST,
-
                         CreatedOn: OTPVerificationAddedTime,
                         ExpiredOn: '',
-
                         UsedOn:'',
                         IsStatus:0,
                         IsDeleted:0
@@ -155,13 +151,6 @@ const MobileNumberVerification = async (req, res) => {
                         }
 
                         
-
-                        // const currentTime = new Date();
-                        // const expirationTime = new Date(currentTime.getTime() + 5 * 60000); // 5 mi
-                        const currentTimeUTC = new Date();
-                        const currentTimeIST = new Date(currentTimeUTC.getTime() + (5.5 * 60 * 60 * 1000)); // Add 5 hours 30 minutes
-                        const expirationTimeIST = new Date(currentTimeIST.getTime() + 5 * 60000); 
-
                         
                         
                         db.mobileVerificationOTP.update({ 
@@ -175,9 +164,6 @@ const MobileNumberVerification = async (req, res) => {
                             CustomerID: FindCustomer.CustomerID, 
                             PhoneNumber: FindCustomer.PhoneNumber, 
                             OTP: generateOTP(),
-                            CreatedOn: currentTimeIST,
-                            ExpiredOn: expirationTimeIST,
-
                             CreatedOn: OTPVerificationAddedTime,
                             ExpiredOn: '',
                             UsedOn:'',
@@ -207,13 +193,18 @@ const MobileNumberVerification = async (req, res) => {
 
 
 const OTPverification = async (req, res) => {
-    const DecryptMobileNumber = (encryptedField, secretKey) => {
-        const bytes = CryptoJS.AES.decrypt(encryptedField, secretKey);
-        return bytes.toString(CryptoJS.enc.Utf8);
-    };
-    var DecryptedMobile = DecryptMobileNumber(req.body.PhoneNumber, secretKey);
     try {
-        const data = req.body;
+        const DecryptMobileNumber = (encryptedField, secretKey) => {
+            const bytes = CryptoJS.AES.decrypt(encryptedField, secretKey);
+            return bytes.toString(CryptoJS.enc.Utf8);
+        };
+        var DecryptedMobile = DecryptMobileNumber(req.body.PhoneNumber, secretKey);
+        //Blank or in valid mobile number check validation
+        const regex = /^[6-9]\d{9}$/;
+        if (!regex.test(DecryptedMobile)) {
+            return res.status(400).send({ErrorCode: "VALIDATION", ErrorMessage: 'Invalid mobile number' });
+        }
+
         const CustomerDecDetails = await db.customerMobile.findOne({ where: { PhoneNumber: DecryptedMobile } });
         
         if(!CustomerDecDetails){
@@ -225,28 +216,21 @@ const OTPverification = async (req, res) => {
         if (FindCustomer) {
             if (FindCustomer.IsActive) {
 
-                const CustomerUsedOTP = await db.mobileVerificationOTP.findOne({ where: { OTP: data.OTP, IsStatus: '1' } });
+                const CustomerUsedOTP = await db.mobileVerificationOTP.findOne({ where: { CustomerID:CustomerDecDetails.dataValues.CustomerID, OTP: req.body.OTP, IsStatus: '1' } });
                 if (CustomerUsedOTP) {
                     return res.json( {ErrorCode: "VALIDATION", ErrorMessage: 'This OTP is already used..' });
                 }
-                const CustomerOTPVarification = await db.mobileVerificationOTP.findOne({ where: { OTP: data.OTP, IsStatus: '0' } });
-
-                
-                
+                const CustomerOTPVarification = await db.mobileVerificationOTP.findOne({ where: { OTP: req.body.OTP, IsStatus: 0, CustomerID:CustomerDecDetails.dataValues.CustomerID} });
                 if (CustomerOTPVarification) {
                     //Time Out OTP
-                    const { Sequelize } = require('sequelize');
-                    const currentDateTime = Sequelize.fn('DATE_FORMAT', Sequelize.fn('NOW'), '%Y-%m-%d %H:%i:%s');
-                    const DatabaseCurrentTime = await db.mobileVerificationOTP.findOne({attributes: [[currentDateTime, 'currentDateTime']]});
+                   var CurrentDateTime = new Date(moment.tz(new Date(), "Asia/Kolkata").format('YYYY-MM-DD HH:mm:ss'));
+                   var OTPDateTime = new Date(CustomerOTPVarification.dataValues.CreatedOn); // Convert to Date object
                     
-                    var CurrentDBDateTime = new Date(DatabaseCurrentTime.dataValues.currentDateTime); // Convert to Date object
-                    var OTPDateTime = new Date(CustomerOTPVarification.dataValues.CreatedOn); // Convert to Date object
-                    
-                    if (CurrentDBDateTime > OTPDateTime) {
+                    //return res.json(CurrentDateTime +' ---- '+ OTPDateTime);
+                    if (CurrentDateTime > OTPDateTime) {
                         return res.status(400).send({ ErrorCode: "OTPTIME", ErrorMessage: 'OTP time out..' });
                     }
-
-
+                    
                     const token = jwt.sign(FindCustomer.toJSON(), LoginToken, { expiresIn: "2592000s" });
                     if (token) {
                         db.mobileVerificationOTP.update({ IsStatus: true }, { where: { CustomerID: FindCustomer.CustomerID } });
@@ -264,7 +248,7 @@ const OTPverification = async (req, res) => {
                 return res.status(400).send( {ErrorCode: "VALIDATION", ErrorMessage: 'Your Account Is Deactive..' });
             }
         } else {
-            return res.status(400).send({ErrorCode: "VALIDATION", ErrorMessage: 'Invalid Customer ID or Mobile Number..' });
+            return res.status(400).send({ErrorCode: "VALIDATION", ErrorMessage: 'Invalid OTP..' });
         }
     } catch (error) {
         res.status(400).json({ error: error.message });
