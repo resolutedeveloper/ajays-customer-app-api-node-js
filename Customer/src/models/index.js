@@ -28,6 +28,11 @@ db.customerFCM = require('../models/customerFCMModel')(sequelize, DataTypes);
 db.customerVerManagement = require('../models/customerVerManagementModel')(sequelize,DataTypes);
 db.historyCustomer = require('../models/historyCustomerModel')(sequelize,DataTypes);
 
+//version
+db.CustomerVersionManagment = require('../models/CustomerVersionManagementModel')(sequelize,DataTypes);
+db.VersionManagementSupport = require('../models/VersionManagementSupportModel')(sequelize,DataTypes);
+db.VersionManagement = require('../models/VersionManagementModel')(sequelize,DataTypes);
+
 
 
 db.sequelize.sync({ force: false, alter: true })
