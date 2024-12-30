@@ -2,6 +2,7 @@ const db = require("../models/index.js");
 const logger = require('../utils/logger');
 const sendNotification = require('../config/sendNotification.js');
 
+
 const saveFCMKey = async (req, res) => {
     try {
         const { FCMKEY } = req.body;

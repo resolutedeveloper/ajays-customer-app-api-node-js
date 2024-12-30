@@ -22,6 +22,9 @@ const createFavoriteLocation = async (req, res) => {
             CustomerID,
             LocationID,
             CreatedOn: currentTimeIST,
+            IsActive: true, // Set default value
+            IsDeleted: false, // Set default value
+
         });
 
         logger.info("Favorite Location created: ", JSON.stringify(createLocation));
@@ -82,15 +85,12 @@ const updateFavoriteLocation = async (req, res) => {
             data: updatedFavoriteLocation
         });
     } catch (err) {
-        // Handling errors
-        res.status(400).json({
+   res.status(400).json({
             success: false,
             message: err.message
         });
     }
 };
-
-
 
 
 const deleteFavoriteLocation = async (req,res)=>{

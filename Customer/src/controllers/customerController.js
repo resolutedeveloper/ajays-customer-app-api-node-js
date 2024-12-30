@@ -28,14 +28,15 @@ const loginCustomer = async (req, res) => {
 
   try {
     const schema = Joi.object({
+
       EmailID: Joi.string().email().required(),
+
     });
 
     const { EmailID } = await schema.validateAsync(req.body);
 
     let decryptedEmail = EmailID;
 
-    // Decrypt email only if it is encrypted
     if (isEncrypted(EmailID)) {
       try {
         decryptedEmail = decryptData(EmailID);
@@ -47,6 +48,7 @@ const loginCustomer = async (req, res) => {
     } else {
       console.log("🚀 ~ Email is not encrypted, using as is.");
     }
+
 
     const customerIDFromToken = req.UserDetail.CustomerID;
     const phoneNumberFromToken = req.UserDetail.PhoneNumber;
@@ -77,6 +79,9 @@ const loginCustomer = async (req, res) => {
       return res.status(400).json({ message: "Decrypted email cannot be null or empty." });
     }
 
+
+
+
     const existingEmail = await CustomerEmail.findOne({
       where: { EmailId: decryptedEmail },
     });
@@ -94,15 +99,16 @@ const loginCustomer = async (req, res) => {
       CustomerID: customerIDFromToken,
       EmailId: decryptedEmail,
       IsDeleted: false,
+
     });
     console.log("🚀 ~ Email record created:", emailRecord);
+
 
     const phoneRecord = await CustomerMobile.create({
       CustomerID: customerIDFromToken,
       PhoneNumber: decryptedPhone,
       IsDeleted: false,
-    });
-    console.log("🚀 ~ Phone record created:", phoneRecord);
+    })
 
     res.status(200).json({
       message: "Login successful",

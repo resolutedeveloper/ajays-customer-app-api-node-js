@@ -10,7 +10,9 @@ module.exports = (sequelize, DataTypes)=>{
         StateID:{
             type: DataTypes.INTEGER,
         }
+
     },{timestamps: false});
+
 
     return cityModel;
 }

@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         Name: {
             type: DataTypes.STRING(256),
+
         },
         PhoneNumber: {
             type: DataTypes.TEXT,
@@ -52,6 +53,7 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: false,
+            allowNull: true
         },
     }, {
         timestamps: false,

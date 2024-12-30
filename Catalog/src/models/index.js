@@ -32,6 +32,7 @@ db.itemLocationRate = require('./itemRateModel')(sequelize,DataTypes);
 db.itemHistory = require('./itemHistoryModel')(sequelize,DataTypes);
 
 
+
 db.sequelize.sync({ force: false, alter: true })
     .then(() => {
         console.log("yes re-sync done!");
