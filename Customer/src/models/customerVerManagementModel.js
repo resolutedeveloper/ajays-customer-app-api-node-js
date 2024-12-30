@@ -15,7 +15,7 @@ module.exports = (sequelize ,DataTypes) =>{
         },
         CreateOn:{
             type:DataTypes.DATE,
-            allowNull:false
+            allowNull:true
         }
     },{
         timestamps:false,
