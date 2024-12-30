@@ -5,16 +5,11 @@ const router = require("express").Router();
 const { validateRequest } = require("../config/validate-request");
 const Joi = require("joi");
 
-const VehicleRegAdd = (req, res, next) => {
+const Maintanace = (req, res, next) => {
     const schema = Joi.object({
         Version: Joi.string().max(20).required()
     });
     validateRequest(req, res, next, schema);
 }
-
-router.post("/", VehicleRegAdd, AppVersionController.appversioncheck); //currently not used
-router.post("/version_maintanance", VehicleRegAdd, AppVersionController.version_maintanance);
-router.post("/version_maintanance_operator", VehicleRegAdd, AppVersionController.version_maintanance_operator);
-
-
+router.post("/", Maintanace, AppVersionController.appversioncheck);
 module.exports = router;
