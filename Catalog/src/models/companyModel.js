@@ -43,10 +43,7 @@ module.exports = (sequelize, DataTypes)=>{
     MarchantID:{
         type: DataTypes.STRING(500),
     },
-    IsOnline:{
-        type: DataTypes.BOOLEAN,
-    }
-    },{timeStamps: false});
+    },{timestamps: false});
 
     return companyModel;
 }

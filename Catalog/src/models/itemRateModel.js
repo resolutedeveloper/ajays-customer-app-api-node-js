@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes)=>{
         TaxForSale:{
             type: DataTypes.DECIMAL(8,4),
         }
-    },{timeStamps: false});
+    },{timestamps: false});
 
     return itemLocationRateModel;
 }
