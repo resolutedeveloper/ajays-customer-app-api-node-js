@@ -30,11 +30,11 @@ const MobileNumberVerification = async (req, res) => {
         if(!findcustomer){
             const NewCustomerCreate = await db.customer.create({
                 PhoneNumber:req.body.PhoneNumber,
-                LastLogin: '',
+                LastLogin: CurrentDateTime,
                 CreatedOn:CurrentDateTime,
-                LastModifiedOn:'',
-                CreatedBy:'',
-                LastModifiedBy:'',
+                LastModifiedOn:CurrentDateTime,
+                CreatedBy:'null',
+                LastModifiedBy:'null',
 
                 IsActive:1,
                 IsDeleted:0
@@ -97,8 +97,8 @@ const MobileNumberVerification = async (req, res) => {
                         PhoneNumber: FindCustomer.PhoneNumber, 
                         OTP: generateOTP(),
                         CreatedOn: OTPVerificationAddedTime,
-                        ExpiredOn: '',
-                        UsedOn:'',
+                        ExpiredOn: OTPVerificationAddedTime,
+                        UsedOn:CurrentDateTime,
                         IsStatus:0,
                         IsDeleted:0
                     });
@@ -168,8 +168,8 @@ const MobileNumberVerification = async (req, res) => {
                             PhoneNumber: FindCustomer.PhoneNumber, 
                             OTP: generateOTP(),
                             CreatedOn: OTPVerificationAddedTime,
-                            ExpiredOn: '',
-                            UsedOn:'',
+                            ExpiredOn: OTPVerificationAddedTime,
+                            UsedOn:CurrentDateTime,
                             IsStatus:0,
                             IsDeleted:0
                         });
