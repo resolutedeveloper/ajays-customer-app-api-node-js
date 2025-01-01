@@ -3,7 +3,7 @@ const { createItem,getItemDetails } = require('../controllers/itemController');
 const router = express.Router();
 
 
-router.post("/",createItem);
+router.post("/add-item",createItem);
 router.get("/:itemID",getItemDetails);
 
 
