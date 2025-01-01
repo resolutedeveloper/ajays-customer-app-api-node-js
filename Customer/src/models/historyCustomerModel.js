@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         LastUpdateBy: {
             type: DataTypes.STRING(256),
-            allowNull: false
+            allowNull: true
         },
     }, {
         timestamps: false,
