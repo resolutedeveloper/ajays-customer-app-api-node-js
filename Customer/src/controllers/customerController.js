@@ -28,9 +28,7 @@ const loginCustomer = async (req, res) => {
 
   try {
     const schema = Joi.object({
-
       EmailID: Joi.string().email().required(),
-
     });
 
     const { EmailID } = await schema.validateAsync(req.body);
@@ -49,9 +47,9 @@ const loginCustomer = async (req, res) => {
       console.log("🚀 ~ Email is not encrypted, using as is.");
     }
 
-
     const customerIDFromToken = req.UserDetail.CustomerID;
     const phoneNumberFromToken = req.UserDetail.PhoneNumber;
+    console.log("🚀 ~ loginCustomer ~ phoneNumberFromToken:", phoneNumberFromToken)
 
     if (!customerIDFromToken || !phoneNumberFromToken) {
       return res.status(400).json({ message: "CustomerID or PhoneNumber is missing in the token." });
@@ -79,9 +77,6 @@ const loginCustomer = async (req, res) => {
       return res.status(400).json({ message: "Decrypted email cannot be null or empty." });
     }
 
-
-
-
     const existingEmail = await CustomerEmail.findOne({
       where: { EmailId: decryptedEmail },
     });
@@ -91,29 +86,29 @@ const loginCustomer = async (req, res) => {
       return res.status(200).json({
         message: "Email already exists.",
         email: encryptData(decryptedEmail),
-        phone: encryptData(decryptedPhone),
+        phone: decryptedPhone,
       });
     }
 
     const emailRecord = await CustomerEmail.create({
       CustomerID: customerIDFromToken,
-      EmailId: decryptedEmail,
+      EmailID: decryptedEmail,
       IsDeleted: false,
-
     });
     console.log("🚀 ~ Email record created:", emailRecord);
 
-
+    // Store phone number in decrypted
     const phoneRecord = await CustomerMobile.create({
       CustomerID: customerIDFromToken,
       PhoneNumber: decryptedPhone,
       IsDeleted: false,
-    })
+    });
+    console.log("🚀 ~ loginCustomer ~ phoneRecord:", phoneRecord)
 
     res.status(200).json({
       message: "Login successful",
       email: encryptData(decryptedEmail),
-      phone: encryptData(decryptedPhone),
+      phone: decryptedPhone,
     });
   } catch (error) {
     console.error("🚀 ~ Error:", error.message);

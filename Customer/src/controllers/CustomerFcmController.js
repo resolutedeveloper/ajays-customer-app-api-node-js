@@ -8,22 +8,45 @@ const saveFCMKey = async (req, res) => {
         const { FCMKEY } = req.body;
         const CustomerID = req.UserDetail.CustomerID;
 
+        // Log request body and CustomerID for debugging
+        console.log("🚀 ~ saveFCMKey ~ req.body:", req.body);
+        console.log("🚀 ~ saveFCMKey ~ CustomerID:", CustomerID);
+
+        // Validation for FCMKEY and CustomerID
+        if (!FCMKEY || !CustomerID) {
+            return res.status(400).json({ message: "FCM Key or CustomerID is missing in the request" });
+        }
+
+        // Additional validation to check if FCMKEY is an empty string
+        if (FCMKEY.trim() === "") {
+            return res.status(400).json({ message: "FCM Key cannot be an empty string" });
+        }
+
+        // Check if the FCM key already exists for this customer
         const existingFCMKey = await db.customerFCM.findOne({ where: { CustomerID } });
+
         if (existingFCMKey) {
-            await db.customerFCM.update({ FCMKEY }, { where: { CustomerID } }); // Update FCM if it's there
+            // Update the existing FCM Key
+            console.log("🚀 ~ Existing FCM Key found, updating...");
+            await db.customerFCM.update({ FCMKEY }, { where: { CustomerID } });
             logger.info(`FCM Key updated for customer: ${CustomerID}`);
             return res.status(200).json({ message: 'FCM key updated successfully' });
         } else {
+            // Create a new FCM Key record
+            console.log("🚀 ~ No existing FCM Key found, creating new...");
             await db.customerFCM.create({ CustomerID, FCMKEY });
             logger.info(`FCM Key saved for customer: ${CustomerID}`);
             return res.status(200).json({ message: 'FCM key saved successfully' });
         }
 
     } catch (error) {
+        // Log the error for debugging
         logger.error(`Error saving FCM key: ${error.message}`);
         return res.status(400).json({ message: 'Error saving FCM key', error: error.message });
     }
 };
+
+
 
 
 

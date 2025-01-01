@@ -3,40 +3,6 @@ const db = require('../models/index.js');
 const logger = require('../utils/logger');
 
 
-// const sendNotification = async (customerId, title, message, customData = {}) => {
-//     try {
-//         const customerFCM = await db.customerFCM.findOne({ where: { CustomerID: customerId } });
-//         console.log("🚀 ~ sendNotification ~ customerFCM:", customerFCM);
-
-//         if (!customerFCM) {
-//             throw new Error('FCM Key not found for this customer');
-//         }
-
-
-//         const notificationPayload = {
-//             notification: {
-//                 title: title,
-//                 body: message,
-//             },
-//             data: customData,
-//             token: customerFCM.FCMKEY,  // Use the customer's FCM key
-//         };
-
-        
-//         logger.info('Notification payload:', notificationPayload);
-
-//         // Send the notification
-//         const response = await admin.messaging().send(notificationPayload);
-//         logger.info('Notification sent:', response);
-
-//         return { success: true, response };
-//     } catch (error) {
-//         logger.error('Error sending notification:', error.message);
-//         return { success: false, error: error.message };
-//     }
-// };
-
-// Define constants
 const promotion = "promotion";
 const success = "success";
 const user = "user";
