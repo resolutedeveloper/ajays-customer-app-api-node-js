@@ -6,9 +6,9 @@ const sendNotification = require('../config/sendNotification.js');
 const saveFCMKey = async (req, res) => {
     try {
         const { FCMKEY } = req.body;
-        const CustomerID = req.UserDetail.CustomerID;
+        const CustomerID = req.UserDetail.CustomerID; // Get CustomerID from the token
 
-        // Log request body and CustomerID for debugging
+        // Log the request and CustomerID for debugging
         console.log("🚀 ~ saveFCMKey ~ req.body:", req.body);
         console.log("🚀 ~ saveFCMKey ~ CustomerID:", CustomerID);
 
@@ -25,27 +25,28 @@ const saveFCMKey = async (req, res) => {
         // Check if the FCM key already exists for this customer
         const existingFCMKey = await db.customerFCM.findOne({ where: { CustomerID } });
 
-        if (existingFCMKey) {
-            // Update the existing FCM Key
-            console.log("🚀 ~ Existing FCM Key found, updating...");
-            await db.customerFCM.update({ FCMKEY }, { where: { CustomerID } });
-            logger.info(`FCM Key updated for customer: ${CustomerID}`);
-            return res.status(200).json({ message: 'FCM key updated successfully' });
-        } else {
+        // If no existing record, create a new one
+        if (!existingFCMKey) {
             // Create a new FCM Key record
             console.log("🚀 ~ No existing FCM Key found, creating new...");
             await db.customerFCM.create({ CustomerID, FCMKEY });
-            logger.info(`FCM Key saved for customer: ${CustomerID}`);
+            console.log("🚀 ~ FCM Key saved for customer:", CustomerID);
             return res.status(200).json({ message: 'FCM key saved successfully' });
+        } else {
+            // If FCM key already exists for the customer, handle accordingly
+            return res.status(400).json({ message: 'FCM key already exists for this customer' });
         }
 
     } catch (error) {
-        // Log the error for debugging
-        logger.error(`Error saving FCM key: ${error.message}`);
-        return res.status(400).json({ message: 'Error saving FCM key', error: error.message });
+        // Log the error with more context
+        console.error("🚨 ~ Error saving FCM Key:", error);
+        return res.status(500).json({
+            message: 'Error saving FCM key',
+            error: error.message || 'Internal Server Error',
+            details: error.stack || 'No stack trace available'
+        });
     }
 };
-
 
 
 
