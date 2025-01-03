@@ -1,15 +1,11 @@
 // Updated main file (index.js)
 require('dotenv').config();
-console.log('process.env', process.env)
-
 const express = require('express');
-/*
 const { connectDB } = require('./src/config/sequelize');
 const morgan = require('morgan');
 const logger = require('./src/utils/logger'); // Import the Winston logger
 const routes = require('./src/routes'); // Import all routes from src/routes/index.js
 const bodyParser = require('body-parser');
-*/
 
 const app = express();
 const PORT = process.env.PORT_CUSTOMER || 301;
