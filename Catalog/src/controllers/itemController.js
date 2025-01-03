@@ -15,7 +15,7 @@ const createItem = async (req, res) => {
 
     if (existingItem) {
       logger.warn(`Item with ItemID: ${ItemID} already exists.`);
-      return res.status(409).json({ message: `Item with ItemID ${ItemID} already exists.` });
+      return res.status(400).json({ message: `Item with ItemID ${ItemID} already exists.` });
     }
 
     // Create a new item in the database
@@ -30,11 +30,11 @@ const createItem = async (req, res) => {
       Remarks,
     });
 
-    return res.status(201).json({ message: "Item created successfully", item: newItem });
+    return res.status(200).json({ message: "Item created successfully", item: newItem });
   } catch (error) {
     logger.error(`Error creating item: ${error.message}`);
     console.error("Error creating item:", error);
-    return res.status(500).json({ message: "Internal server error", error: error.message });
+    return res.status(400).json({ message: "Internal server error", error: error.message });
   }
 };
 
@@ -65,7 +65,7 @@ const getItemDetails = async (req, res) => {
     });
   } catch (error) {
     console.error("Error fetching item details:", error.message);
-    return res.status(500).json({ message: "Internal server error", error: error.message });
+    return res.status(400).json({ message: "Internal server error", error: error.message });
   }
 };
 
