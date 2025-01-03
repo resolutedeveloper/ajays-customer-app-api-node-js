@@ -18,7 +18,8 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.admin = require('../models/customerModel')(sequelize, DataTypes);
+db.order = require('../models/orderModel')(sequelize, DataTypes);
+db.rating = require('../models/ratingModel')(sequelize, DataTypes);
 
 
 
