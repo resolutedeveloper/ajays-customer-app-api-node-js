@@ -33,7 +33,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Health check route
 app.get('/api/v1/health', (req, res) => {
-    res.status(200).send({ success: true, message: 'customer API is working!', env: process.env });
+    res.status(200).send({ success: true, message: 'customer API is working!' });
 });
 
 // Load all routes
