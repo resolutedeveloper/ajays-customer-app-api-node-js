@@ -4,13 +4,13 @@ const db = require("../models/index.js");
 
 const orderList = async (req, res) => {
     try {
-        const customerId = req.UserDetail.CustomerID; // Get CustomerID from the token
+        const customerId = req.UserDetail.CustomerID;
 
-        // Fetch only accepted orders for the customer
+       
         const orders = await db.order.findAll({
             where: { 
                 CustomerID: customerId,
-                OrderStatus: 'accepted' // Only fetch orders with 'accepted' status
+                OrderStatus: 'accepted' 
             }
         });
 
@@ -18,9 +18,9 @@ const orderList = async (req, res) => {
             return res.status(404).json({ message: 'No accepted orders found for this customer' });
         }
 
-        // Map the orders into the desired response format, including totalAmount for the list
+        
         const orderList = orders.map(order => {
-            // Calculate the total amount for the order by multiplying quantity and mrp
+            
             const totalAmount = order.Quantity * parseFloat(order.MRP);
 
             return {
@@ -33,7 +33,7 @@ const orderList = async (req, res) => {
                         orderStatus: order.OrderStatus,
                     }
                 ],
-                totalAmount: totalAmount.toFixed(2) // Calculating total amount and formatting it
+                totalAmount: totalAmount.toFixed(2)
             };
         });
 
@@ -48,13 +48,13 @@ const orderList = async (req, res) => {
 
 const orderDetails = async (req, res) => {
     try {
-        const customerId = req.UserDetail.CustomerID; // Get CustomerID from the token
+        const customerId = req.UserDetail.CustomerID;
 
-        // Fetch only accepted orders for the customer
+
         const orders = await db.order.findAll({
             where: { 
                 CustomerID: customerId,
-                OrderStatus: 'accepted' // Only fetch orders with 'accepted' status
+                OrderStatus: 'accepted'
             }
         });
 
@@ -62,7 +62,7 @@ const orderDetails = async (req, res) => {
             return res.status(404).json({ message: 'No accepted orders found for this customer' });
         }
 
-        // Map the orders into the desired response format, including more item details
+        
         const orderDetails = orders.map(order => {
             // Calculate the total amount for the order by multiplying quantity and finalRate
             const totalAmount = order.Quantity * parseFloat(order.MRP);
@@ -78,7 +78,7 @@ const orderDetails = async (req, res) => {
                         orderStatus: order.OrderStatus,
                     }
                 ],
-                totalAmount: totalAmount.toFixed(2) // Calculating total amount and formatting it to 2 decimal places
+                totalAmount: totalAmount.toFixed(2)
             };
         });
 
