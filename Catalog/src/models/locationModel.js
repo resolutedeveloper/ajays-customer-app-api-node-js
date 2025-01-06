@@ -43,7 +43,7 @@ const locationModel = sequelize.define("Location",{
     StateID:{
         type: DataTypes.INTEGER,
     },
-    CityID:{
+    Cityid:{
         type: DataTypes.INTEGER,
     },
     Latitude:{

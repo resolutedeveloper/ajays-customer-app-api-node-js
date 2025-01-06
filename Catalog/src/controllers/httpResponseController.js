@@ -68,8 +68,8 @@ const locationDetail = async (req, res) => {
     try {
         const Cities = await db.sequelize.query(
             `SELECT DISTINCT c.*
-             FROM cities c
-             INNER JOIN locations l ON c.CityID = l.CityID`,
+             FROM Cities c
+             INNER JOIN Locations l ON c.CityID = l.Cityid`,
             {
                 type: db.Sequelize.QueryTypes.SELECT,
             }
@@ -123,7 +123,7 @@ const locationDetail = async (req, res) => {
             
             const locations = await db.location.findAll({
               where: {
-                CityID: LatLongcityID,
+                Cityid: LatLongcityID,
               },
             });
 
@@ -145,8 +145,6 @@ const locationDetail = async (req, res) => {
     }
     fetchCityData();
   };
-
-
 
   const latlonglocationItem = async (req, res) => {
     const axios = require('axios');
@@ -175,7 +173,7 @@ const locationDetail = async (req, res) => {
             
             const locations = await db.location.findOne({
               where: {
-                CityID: LatLongcityID,
+                Cityid: LatLongcityID,
               },
             });
 
