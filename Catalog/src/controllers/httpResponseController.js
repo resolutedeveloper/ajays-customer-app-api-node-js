@@ -33,35 +33,117 @@ const itemlist = async (req, res) => {
     }
 };
 
-const locationDetail = async (req, res) => {
-    try {
-      const { CityID } = req.params;
-      const location = await db.location.findOne({
-        where: {
-          Cityid: CityID,
-        },
-      });
+// const locationDetail = async (req, res) => {
+//     try {
+//       const { CityID } = req.params;
+//       const location = await db.location.findOne({
+//         where: {
+//           Cityid: CityID,
+//         },
+//       });
   
       
-      if(location){
-        return res.status(200).json({
-            message: 'Location details found successfully',
-            data: location,
-        });
-        }else{
-            return res.status(400).send({
-                ErrorCode: "VALIDATION", 
-                ErrorMessage: 'Location details not found' 
-            });
-        }
-    } catch (err) {
-      res.status(500).json({
-        success: false,
-        message: "Error fetching Location",
-        error: err.message || err,
+//       if(location){
+//         return res.status(200).json({
+//             message: 'Location details found successfully',
+//             data: location,
+//         });
+//         }else{
+//             return res.status(400).send({
+//                 ErrorCode: "VALIDATION", 
+//                 ErrorMessage: 'Location details not found' 
+//             });
+//         }
+//     } catch (err) {
+//       res.status(500).json({
+//         success: false,
+//         message: "Error fetching Location",
+//         error: err.message || err,
+//       });
+//     }
+//   };
+
+const locationDetail = async (req, res) => {
+  try {
+      const { CityID } = req.params;
+      const { latitude, longitude } = req.query;
+
+      console.log("CityID received:", CityID);
+      console.log("Latitude and Longitude received:", latitude, longitude);
+
+      // Validate input latitude and longitude
+      if (!latitude || !longitude || isNaN(latitude) || isNaN(longitude)) {
+          return res.status(400).json({
+              ErrorCode: "VALIDATION",
+              ErrorMessage: "Invalid latitude or longitude provided",
+          });
+      }
+
+      const lat1 = parseFloat(latitude);
+      const lon1 = parseFloat(longitude);
+
+      // Function to calculate distance using Haversine formula
+      const calculateDistance = (lat1, lon1, lat2, lon2) => {
+          const toRad = (value) => (value * Math.PI) / 180;
+          const R = 6371; // Earth's radius in kilometers
+          const dLat = toRad(lat2 - lat1);
+          const dLon = toRad(lon2 - lon1);
+          const a =
+              Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+          const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+          return R * c; // Distance in kilometers
+      };
+
+      // Function to estimate duration based on average speed
+      const estimateDuration = (distance, speed = 40) => {
+          // Default speed: 40 km/h (driving)
+          return (distance / speed) * 60; // Duration in minutes
+      };
+
+      // Fetch location details
+      const location = await db.location.findOne({
+          where: {
+              Cityid: CityID,
+          },
       });
-    }
-  };
+
+      if (location) {
+          console.log("Location found:", location);
+
+          const lat2 = parseFloat(location.Latitude);
+          const lon2 = parseFloat(location.Longitude);
+
+          // Calculate distance and duration
+          const distance = calculateDistance(lat1, lon1, lat2, lon2);
+          const duration = estimateDuration(distance);
+
+          return res.status(200).json({
+              message: 'Location details found successfully',
+              data: {
+                  ...location.dataValues,
+                  Distance: `${distance.toFixed(2)} km`,
+                  Duration: `${duration.toFixed(2)} minutes`,
+              },
+          });
+      } else {
+          console.log("No location found for CityID:", CityID);
+          return res.status(400).send({
+              ErrorCode: "VALIDATION",
+              ErrorMessage: 'Location details not found',
+          });
+      }
+  } catch (err) {
+      console.error("Error fetching location:", err);
+      res.status(500).json({
+          success: false,
+          message: "Error fetching Location",
+          error: err.message || err,
+      });
+  }
+};
+
 
   const citystores = async (req, res) => {
     try {
