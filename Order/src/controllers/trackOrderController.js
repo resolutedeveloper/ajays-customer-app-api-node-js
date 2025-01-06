@@ -1,7 +1,6 @@
 const db = require("../models/index.js");
 
 
-
 const orderList = async (req, res) => {
     try {
         const customerId = req.UserDetail.CustomerID;
@@ -64,7 +63,6 @@ const orderDetails = async (req, res) => {
 
         
         const orderDetails = orders.map(order => {
-            // Calculate the total amount for the order by multiplying quantity and finalRate
             const totalAmount = order.Quantity * parseFloat(order.MRP);
 
             return {

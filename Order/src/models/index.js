@@ -20,6 +20,9 @@ db.sequelize = sequelize;
 
 db.order = require('../models/orderModel')(sequelize, DataTypes);
 db.rating = require('../models/ratingModel')(sequelize, DataTypes);
+db.favoriteItem = require('../models/favoriteItemModel')(sequelize, DataTypes);
+db.rateAPP = require('../models/rateAppModel')(sequelize, DataTypes);
+db.feedback = require('../models/feedbackModel.js')(sequelize, DataTypes);
 
 
 

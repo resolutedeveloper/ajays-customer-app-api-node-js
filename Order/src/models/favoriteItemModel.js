@@ -1,13 +1,9 @@
 module.exports =(sequelize, DataTypes)=>{
-    const ratingModel = sequelize.define("Rating",{
-        RatingID: {
+    const favoriteItemModel = sequelize.define("FavoriteItem",{
+        FavoriteItemID: {
             type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
-        },
-        OrderID:{
-            type: DataTypes.UUID,
-            allowNull: false,
         },
         CustomerID:{
             type: DataTypes.UUID,
@@ -19,18 +15,8 @@ module.exports =(sequelize, DataTypes)=>{
         },
         ItemName:{
             type: DataTypes.STRING
-        },
-        Rating:{
-            type: DataTypes.FLOAT,
-            allowNull: false
-        },
-        Comment:{
-            type: DataTypes.STRING
-        },
-        AverageRatingItem:{
-                type: DataTypes.FLOAT,
         }
     },{timestamps: false});
 
-    return ratingModel;
+    return favoriteItemModel;
 }

@@ -10,7 +10,7 @@ const addToCart = async (req, res) => {
       return res.status(401).json({ message: "Unauthorized: CustomerID missing in token" });
     }
 
-    const { items } = req.body; // Expect an array of items in the request body
+    const { items } = req.body;
 
     if (!items || !Array.isArray(items) || items.length === 0) {
       return res.status(400).json({ message: "Invalid items array" });
@@ -47,10 +47,8 @@ const addToCart = async (req, res) => {
         return res.status(400).json({ message: `Missing essential details for item (ID: ${ItemID}) in catalog response` });
       }
 
-      // Use OrderStatus from the request body if provided
       const finalOrderStatus = OrderStatus || "Pending";
 
-      // Add the item to the cart
       const cartItem = await db.order.create({
         CustomerID: customerID,
         ItemID,

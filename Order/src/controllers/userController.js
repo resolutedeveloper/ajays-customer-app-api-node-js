@@ -1,5 +1,5 @@
 const { User } = require('../models/userModel');
-const logger = require('../utils/logger');  // Import the logger
+const logger = require('../utils/logger');
 
 // Create user function
 const createUser = async (req, res) => {
