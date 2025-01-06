@@ -72,6 +72,35 @@ const addToCart = async (req, res) => {
 };
 
 
+const clearCart = async (req, res) => {
+  try {
+    const customerID = req.UserDetail.CustomerID;
+
+    if (!customerID) {
+      return res.status(401).json({ message: "Unauthorized: CustomerID missing in token" });
+    }
+
+    // Find and delete all items with "Pending" status in the customer's cart
+    const deletedItems = await db.order.destroy({
+      where: {
+        CustomerID: customerID,
+        OrderStatus: 'Pending'
+      }
+    });
+
+    if (deletedItems === 0) {
+      return res.status(404).json({ message: "No pending items found in the cart to delete" });
+    }
+
+    return res.status(200).json({
+      message: "All pending items have been removed from the cart successfully"
+    });
+  } catch (error) {
+    console.error("🚀 Error in clearPendingItems:", error.response?.data || error.message);
+    return res.status(400).json({ message: "Internal server error", error: error.message });
+  }
+};
+
 
 const viewCart = async (req, res) => {
   try {
@@ -180,27 +209,14 @@ const waitingOrders = async (req, res) => {
 
 const updateOrderStatus = async (req, res) => {
   try {
-    const { orderID, action } = req.body;
+    const { orderIDs, action } = req.body;  // Expecting an array of orderIDs
     const customerID = req.UserDetail.CustomerID;
 
-    if (!orderID || !action) {
-      return res.status(400).json({ message: "OrderID and action are required" });
+    if (!orderIDs || !Array.isArray(orderIDs) || orderIDs.length === 0 || !action) {
+      return res.status(400).json({ message: "OrderIDs array and action are required" });
     }
 
-    // Find the order that needs to be updated
-    const order = await db.order.findOne({
-      where: {
-        OrderID: orderID,
-        CustomerID: customerID,
-        OrderStatus: "Pending"
-      },
-      attributes: ['OrderID', 'CustomerID', 'ItemID', 'ItemName', 'Quantity', 'MRP', 'OrderStatus'],
-    });
-
-    if (!order) {
-      return res.status(404).json({ message: "Order not found or already processed" });
-    }
-
+    // Validate the action
     let updatedStatus;
     if (action === 'approve') {
       updatedStatus = "Accepted";
@@ -210,17 +226,30 @@ const updateOrderStatus = async (req, res) => {
       return res.status(400).json({ message: "Invalid action. Use 'approve' or 'decline'." });
     }
 
-    
-    order.OrderStatus = updatedStatus;
-    await order.save(); // Save the updated status
+    // Find and update orders
+    const orders = await db.order.findAll({
+      where: {
+        OrderID: orderIDs,
+        CustomerID: customerID,
+        OrderStatus: "Pending"
+      },
+      attributes: ['OrderID', 'CustomerID', 'ItemID', 'ItemName', 'Quantity', 'MRP', 'OrderStatus'],
+    });
 
-    
-    const totalAmount = parseFloat(order.MRP) * parseInt(order.Quantity);
+    if (orders.length === 0) {
+      return res.status(404).json({ message: "No matching orders found or already processed" });
+    }
 
-    
-    return res.status(200).json({
-      message: `Order ${updatedStatus} successfully`,
-      order: {
+    // Process each order
+    for (let order of orders) {
+      order.OrderStatus = updatedStatus;
+      await order.save();  // Save the updated status
+    }
+
+    // Prepare the response with updated orders
+    const updatedOrders = orders.map(order => {
+      const totalAmount = parseFloat(order.MRP) * parseInt(order.Quantity);
+      return {
         OrderID: order.OrderID,
         CustomerID: order.CustomerID,
         ItemID: order.ItemID,
@@ -229,7 +258,12 @@ const updateOrderStatus = async (req, res) => {
         MRP: order.MRP,
         TotalAmount: totalAmount,
         OrderStatus: order.OrderStatus
-      }
+      };
+    });
+
+    return res.status(200).json({
+      message: `Orders have been ${updatedStatus} successfully`,
+      updatedOrders
     });
   } catch (error) {
     console.error(" ~ Error in updateOrderStatus:", error);
@@ -239,7 +273,5 @@ const updateOrderStatus = async (req, res) => {
 
 
 
-
-
-module.exports = { addToCart, viewCart,waitingOrders, updateOrderStatus};
+module.exports = { addToCart, clearCart, viewCart,waitingOrders, updateOrderStatus};
 

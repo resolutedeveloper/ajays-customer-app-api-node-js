@@ -38,20 +38,25 @@
 
 
 // module.exports = admin;
-
 const admin = require('firebase-admin');
 const fs = require('fs');
 require("dotenv").config();
 
-console.log("🚀 ~  process.env.FIREBASE_APNS_BUNDLE_ID,:",  process.env.FIREBASE_APNS_BUNDLE_ID,)
-console.log("🚀 ~ process.env.FIREBASE_APNS_TEAM_ID,:", process.env.FIREBASE_APNS_TEAM_ID,)
-console.log("🚀 ~ process.env.FIREBASE_APNS_KEY_ID,:", process.env.FIREBASE_APNS_KEY_ID,)
-console.log("🚀 ~ process.env.APNS_KEY_PATH:", process.env.APNS_KEY_PATH)
+// Log environment variables for APNs configuration
+console.log("🚀 ~  process.env.FIREBASE_APNS_BUNDLE_ID,:", process.env.FIREBASE_APNS_BUNDLE_ID);
+console.log("🚀 ~ process.env.FIREBASE_APNS_TEAM_ID,:", process.env.FIREBASE_APNS_TEAM_ID);
+console.log("🚀 ~ process.env.FIREBASE_APNS_KEY_ID,:", process.env.FIREBASE_APNS_KEY_ID);
+console.log("🚀 ~ process.env.APNS_KEY_PATH:", process.env.APNS_KEY_PATH);
 
 // Ensure Firebase is initialized only once
 if (admin.apps.length === 0) {
   try {
     console.log('Initializing Firebase Admin...');
+    
+    // Log the content of the .p8 file
+    const apnsKey = fs.readFileSync(process.env.APNS_KEY_PATH, 'utf8');
+    console.log("🚀 ~ APNs Key File Content:", apnsKey.slice(0, 100)); // Log first 100 characters for verification
+    
     admin.initializeApp({
       credential: admin.credential.cert({
         type: process.env.FIREBASE_TYPE,
@@ -66,7 +71,7 @@ if (admin.apps.length === 0) {
         client_x509_cert_url: process.env.FIREBASE_CLIENT_CERT_URL,
       }),
       apns: {
-        key: fs.readFileSync(process.env.APNS_KEY_PATH, 'utf8'),
+        key: apnsKey, // Use the read content of the .p8 file
         keyId: process.env.FIREBASE_APNS_KEY_ID,
         teamId: process.env.FIREBASE_APNS_TEAM_ID,
         bundleId: process.env.FIREBASE_APNS_BUNDLE_ID,
@@ -82,5 +87,6 @@ if (admin.apps.length === 0) {
 
 
 module.exports = admin;
+
 
 
