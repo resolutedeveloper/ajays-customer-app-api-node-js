@@ -4,6 +4,6 @@ const httpVerify = require('../middleware/httpRequest.js'); // Http check middle
 
 route.use("/locations", require("./locationRoutes.js"));
 route.use("/httpResponse",httpVerify, require("./httpResponseRoutes.js"));
-route.use("/item", require("./itemRoutes.js"));
+route.use("/items", require("./itemRoutes.js"));
 
 module.exports = route;
