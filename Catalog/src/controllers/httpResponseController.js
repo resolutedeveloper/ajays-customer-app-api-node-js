@@ -35,10 +35,10 @@ const itemlist = async (req, res) => {
 
 const locationDetail = async (req, res) => {
     try {
-      const { LocationID } = req.params;
+      const { CityID } = req.params;
       const location = await db.location.findOne({
         where: {
-          LocationID: LocationID,
+          Cityid: CityID,
         },
       });
   
