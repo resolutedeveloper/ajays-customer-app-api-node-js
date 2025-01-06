@@ -74,7 +74,7 @@ const email_generate_otp = async (req, res) => {
             OTP: generateOTP(),
             IsStatus: 0,
             CreatedOn: currentTimeIST,
-            UsedOn : '',
+            UsedOn : currentTimeIST,
             ExpiredOn: expirationTimeIST,
             IsDeleted:0
         });
@@ -186,7 +186,7 @@ const mobile_generate_otp = async (req, res) => {
             OTP: generateOTP(),
             IsStatus: 0,
             CreatedOn: currentTimeIST,
-            UsedOn : '',
+            UsedOn : currentTimeIST,
             ExpiredOn: expirationTimeIST
         });
         
