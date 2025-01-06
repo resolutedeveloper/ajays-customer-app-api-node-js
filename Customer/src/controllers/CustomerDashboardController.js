@@ -15,7 +15,8 @@ const name_update = async (req, res) => {
             CreatedOn:currentTimeIST,
             LastModifiedOn:currentTimeIST
             }, { where: { 
-                CustomerID: req.UserDetail.CustomerID 
+                CustomerID: req.UserDetail.CustomerID,
+                ProfileImage:req.body.ProfileImage
             } 
         });
         logger.info(`User created: ${req.UserDetail.CustomerID} - ${req.body.Name}`);
