@@ -47,7 +47,6 @@ const locationDetail = async (req, res) => {
         return res.status(200).json({
             message: 'Location details found successfully',
             data: location,
-            banner:'staticbanner.jpg'
         });
         }else{
             return res.status(400).send({
