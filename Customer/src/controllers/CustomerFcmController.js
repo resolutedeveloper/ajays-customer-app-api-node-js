@@ -20,12 +20,12 @@ const saveFCMKey = async (req, res) => {
             await db.customerFCM.create({ CustomerID, FCMKEY });
             return res.status(200).json({ message: 'FCM key saved successfully' });
         } else if(existingFCMKey){
-          
-          db.customerFCM.update({ 
+
+          await db.customerFCM.update({ 
             FCMKEY: FCMKEY},{ 
             where: {CustomerID: CustomerID }
           });
-            //return res.status(400).json({ message: 'FCM key already exists for this customer' });
+          return res.status(200).json({ message: 'FCM key updated successfully' });
         }
     } catch (error) {
         return res.status(400).json({
