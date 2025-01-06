@@ -76,7 +76,19 @@ jobs:
           export OTPDIGITS=4
           export UPLOADPATH=uploads/
           export CRYPTOJSKEY=9lkeFOhxt10
-          export OTPEXTRATIME=1       
+          export OTPEXTRATIME=1  
+          export FIREBASE_TYPE=service_account
+          export FIREBASE_PROJECT_ID=ajays-customer
+          export FIREBASE_PRIVATE_KEY_ID=887d16afe2057845ebb3f12d75803b89a02cc8d0
+          export FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDJNl+uC0cuJPY2\nAcfRJvjKUt4YNf+G1oC55eIVmDzY6v/UgAFd8hKVt1kq2S9N0++po5EboNfmR3HU\nu7RXQuAar+2rDh2RbxH72rz3unL+7ftumtw1j8LTOjH7amEiiN8L/sXXpRKqLtZw\n5gsKoPuaqYmEoHj5IRZIiDLUwFonPNo3D9ayFebZ+x8z+wfg8zN0cYWdFvqJeJA7\nYuZQI0lSazFL6PR89XmVKHS3BGObfmuRXhDQO9z0EeM9/kjBTtLhJaYBkCF9+eCI\nwLRYx2c/FMGYNmPO99k3KyLEQP4SxRegqXKQW6taJ/lq+B0idKf4AByRPBcTuxT/\nyo6by+fnAgMBAAECggEACqEKsOD7o55kOzog2hWa8uUpwlGn6/GM30UbilR+cl8H\noKwaZmIRRUNoPHE4pH3bnTR8x97ZSNrhUoGP50QrHn3Iqk6WlUYuxwUpElURGhJs\nQ81+cH3lps7eMQ/Pjcl5LuMIhHm94KuUvGYKk0cpw2PNVeo8Obzbtn0rYj2/BW+D\ngDKgccmhchKWwGVQgQbyzUB0pld8E77LvsioGzr/GZLzdqkv2B7QXpTY78cttJoT\nzWSomdVzN7m78I3XFm1bMkmpi8/3mush4izFHJ5GDJltcbx8VIQ0G1CGiSyfvS6r\nuiCnA6A2AMzmV0LVO8qqsWJnCADPFr1MWqmxLs4swQKBgQDaLmA5Y++bSq2su0uF\n/j0TitbNL+c1sU+uDyNc16aSTCdqtQUqRwc6s2IRowfSAwMMO5piD8oTNbnKxr9g\nj444Tmi4jRj5mrt2Rr9XWPez0R6BJ3xHL0voR+tzM3HNDscVsLgqKb7W2lweXbMw\nXliD2ww/7pWm78X86fClnl/VMQKBgQDsFwWjyCeI9Oa/5MoPsCxNcsEt8PKop3Ba\nSq8hEVNH6nUYQRCQSdjpvb9S6WKm6IHZiE8lB0fbZ1BINqIrK1w2n/wW50PhbQYo\nM5yN2UHS3aibAv8sFAXQI2hd86m1GNCJpH1mQRsCRU/8dqEGThmXURPGkc1mj5f9\nUeRGH+2olwKBgQDCQFoBnr1cyJ9aU6MJGHNua8WVB9pVzpj/gpDcf0/Znx3U/ngr\nzPNdywo8Y6d5zp6vDH4GYsJqWgIhzNPk98sKzJyl+1HKIX5X7uM6tIZNPZloKiyX\nAEAX/bheZ+YhSM/tutotB9/WULGFg60fGlC6jJMadKQe7gmbhPlxq1DtcQKBgG9Y\nqEtHcgXw4wdr4zSk9TANyDhfpEKQvbeH87LX1fxcAp/Ox/4VJh2PZTW4ZtOrYtpy\npEklduluf3mfcrqDd7k3mRBAQE6IOdgqB1MLPTUzX3rEXg6u3tL8cBOngMmti2Tv\nVEkuuYtHn2LFnEo5+W3ZSkdjqokNfjR2NAAyvMa/AoGADmg481JaTT4NBUQGbuU0\nuA8t587u8KLzSjzgJp9eljnGkPr/WstaUOLHU18d+U9njqPeYnrDc05D9SDtdncI\nA0VpwTtWa3Zqx/RmW+LovSymOE56vbFk3WnhlkKLBibdzOxncvChX4RfzBvVLTjU\nwT532xauOZvPf7maCszQnfw=\n-----END PRIVATE KEY-----"
+          export FIREBASE_CLIENT_EMAIL=firebase-adminsdk-krnem@ajays-customer.iam.gserviceaccount.com
+          export FIREBASE_CLIENT_ID=113010122948366032493
+          export FIREBASE_AUTH_URI=https://accounts.google.com/o/oauth2/auth
+          export FIREBASE_TOKEN_URI=https://oauth2.googleapis.com/token
+          export FIREBASE_AUTH_PROVIDER_CERT_URL=https://www.googleapis.com/oauth2/v1/certs
+          export FIREBASE_CLIENT_CERT_URL=https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-krnem%40ajays-customer.iam.gserviceaccount.com
+          export FIREBASE_UNIVERSE_DOMAIN=googleapis.com   
+
           # Copy the Catalog files to the target directory
           cp -r /var/www/repo/public_html/Catalog/* /var/www/Catalog/public_html
 
@@ -120,6 +132,17 @@ jobs:
           export UPLOADPATH=uploads/
           export CRYPTOJSKEY=9lkeFOhxt10
           export OTPEXTRATIME=1 
+          export FIREBASE_TYPE=service_account
+          export FIREBASE_PROJECT_ID=ajays-customer
+          export FIREBASE_PRIVATE_KEY_ID=887d16afe2057845ebb3f12d75803b89a02cc8d0
+          export FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDJNl+uC0cuJPY2\nAcfRJvjKUt4YNf+G1oC55eIVmDzY6v/UgAFd8hKVt1kq2S9N0++po5EboNfmR3HU\nu7RXQuAar+2rDh2RbxH72rz3unL+7ftumtw1j8LTOjH7amEiiN8L/sXXpRKqLtZw\n5gsKoPuaqYmEoHj5IRZIiDLUwFonPNo3D9ayFebZ+x8z+wfg8zN0cYWdFvqJeJA7\nYuZQI0lSazFL6PR89XmVKHS3BGObfmuRXhDQO9z0EeM9/kjBTtLhJaYBkCF9+eCI\nwLRYx2c/FMGYNmPO99k3KyLEQP4SxRegqXKQW6taJ/lq+B0idKf4AByRPBcTuxT/\nyo6by+fnAgMBAAECggEACqEKsOD7o55kOzog2hWa8uUpwlGn6/GM30UbilR+cl8H\noKwaZmIRRUNoPHE4pH3bnTR8x97ZSNrhUoGP50QrHn3Iqk6WlUYuxwUpElURGhJs\nQ81+cH3lps7eMQ/Pjcl5LuMIhHm94KuUvGYKk0cpw2PNVeo8Obzbtn0rYj2/BW+D\ngDKgccmhchKWwGVQgQbyzUB0pld8E77LvsioGzr/GZLzdqkv2B7QXpTY78cttJoT\nzWSomdVzN7m78I3XFm1bMkmpi8/3mush4izFHJ5GDJltcbx8VIQ0G1CGiSyfvS6r\nuiCnA6A2AMzmV0LVO8qqsWJnCADPFr1MWqmxLs4swQKBgQDaLmA5Y++bSq2su0uF\n/j0TitbNL+c1sU+uDyNc16aSTCdqtQUqRwc6s2IRowfSAwMMO5piD8oTNbnKxr9g\nj444Tmi4jRj5mrt2Rr9XWPez0R6BJ3xHL0voR+tzM3HNDscVsLgqKb7W2lweXbMw\nXliD2ww/7pWm78X86fClnl/VMQKBgQDsFwWjyCeI9Oa/5MoPsCxNcsEt8PKop3Ba\nSq8hEVNH6nUYQRCQSdjpvb9S6WKm6IHZiE8lB0fbZ1BINqIrK1w2n/wW50PhbQYo\nM5yN2UHS3aibAv8sFAXQI2hd86m1GNCJpH1mQRsCRU/8dqEGThmXURPGkc1mj5f9\nUeRGH+2olwKBgQDCQFoBnr1cyJ9aU6MJGHNua8WVB9pVzpj/gpDcf0/Znx3U/ngr\nzPNdywo8Y6d5zp6vDH4GYsJqWgIhzNPk98sKzJyl+1HKIX5X7uM6tIZNPZloKiyX\nAEAX/bheZ+YhSM/tutotB9/WULGFg60fGlC6jJMadKQe7gmbhPlxq1DtcQKBgG9Y\nqEtHcgXw4wdr4zSk9TANyDhfpEKQvbeH87LX1fxcAp/Ox/4VJh2PZTW4ZtOrYtpy\npEklduluf3mfcrqDd7k3mRBAQE6IOdgqB1MLPTUzX3rEXg6u3tL8cBOngMmti2Tv\nVEkuuYtHn2LFnEo5+W3ZSkdjqokNfjR2NAAyvMa/AoGADmg481JaTT4NBUQGbuU0\nuA8t587u8KLzSjzgJp9eljnGkPr/WstaUOLHU18d+U9njqPeYnrDc05D9SDtdncI\nA0VpwTtWa3Zqx/RmW+LovSymOE56vbFk3WnhlkKLBibdzOxncvChX4RfzBvVLTjU\nwT532xauOZvPf7maCszQnfw=\n-----END PRIVATE KEY-----"
+          export FIREBASE_CLIENT_EMAIL=firebase-adminsdk-krnem@ajays-customer.iam.gserviceaccount.com
+          export FIREBASE_CLIENT_ID=113010122948366032493
+          export FIREBASE_AUTH_URI=https://accounts.google.com/o/oauth2/auth
+          export FIREBASE_TOKEN_URI=https://oauth2.googleapis.com/token
+          export FIREBASE_AUTH_PROVIDER_CERT_URL=https://www.googleapis.com/oauth2/v1/certs
+          export FIREBASE_CLIENT_CERT_URL=https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-krnem%40ajays-customer.iam.gserviceaccount.com
+          export FIREBASE_UNIVERSE_DOMAIN=googleapis.com
           
           # Copy the Customer files to the target directory
           cp -r /var/www/repo/public_html/Customer/* /var/www/Customer/public_html
@@ -164,6 +187,17 @@ jobs:
           export UPLOADPATH=uploads/
           export CRYPTOJSKEY=9lkeFOhxt10
           export OTPEXTRATIME=1 
+          export FIREBASE_TYPE=service_account
+          export FIREBASE_PROJECT_ID=ajays-customer
+          export FIREBASE_PRIVATE_KEY_ID=887d16afe2057845ebb3f12d75803b89a02cc8d0
+          export FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDJNl+uC0cuJPY2\nAcfRJvjKUt4YNf+G1oC55eIVmDzY6v/UgAFd8hKVt1kq2S9N0++po5EboNfmR3HU\nu7RXQuAar+2rDh2RbxH72rz3unL+7ftumtw1j8LTOjH7amEiiN8L/sXXpRKqLtZw\n5gsKoPuaqYmEoHj5IRZIiDLUwFonPNo3D9ayFebZ+x8z+wfg8zN0cYWdFvqJeJA7\nYuZQI0lSazFL6PR89XmVKHS3BGObfmuRXhDQO9z0EeM9/kjBTtLhJaYBkCF9+eCI\nwLRYx2c/FMGYNmPO99k3KyLEQP4SxRegqXKQW6taJ/lq+B0idKf4AByRPBcTuxT/\nyo6by+fnAgMBAAECggEACqEKsOD7o55kOzog2hWa8uUpwlGn6/GM30UbilR+cl8H\noKwaZmIRRUNoPHE4pH3bnTR8x97ZSNrhUoGP50QrHn3Iqk6WlUYuxwUpElURGhJs\nQ81+cH3lps7eMQ/Pjcl5LuMIhHm94KuUvGYKk0cpw2PNVeo8Obzbtn0rYj2/BW+D\ngDKgccmhchKWwGVQgQbyzUB0pld8E77LvsioGzr/GZLzdqkv2B7QXpTY78cttJoT\nzWSomdVzN7m78I3XFm1bMkmpi8/3mush4izFHJ5GDJltcbx8VIQ0G1CGiSyfvS6r\nuiCnA6A2AMzmV0LVO8qqsWJnCADPFr1MWqmxLs4swQKBgQDaLmA5Y++bSq2su0uF\n/j0TitbNL+c1sU+uDyNc16aSTCdqtQUqRwc6s2IRowfSAwMMO5piD8oTNbnKxr9g\nj444Tmi4jRj5mrt2Rr9XWPez0R6BJ3xHL0voR+tzM3HNDscVsLgqKb7W2lweXbMw\nXliD2ww/7pWm78X86fClnl/VMQKBgQDsFwWjyCeI9Oa/5MoPsCxNcsEt8PKop3Ba\nSq8hEVNH6nUYQRCQSdjpvb9S6WKm6IHZiE8lB0fbZ1BINqIrK1w2n/wW50PhbQYo\nM5yN2UHS3aibAv8sFAXQI2hd86m1GNCJpH1mQRsCRU/8dqEGThmXURPGkc1mj5f9\nUeRGH+2olwKBgQDCQFoBnr1cyJ9aU6MJGHNua8WVB9pVzpj/gpDcf0/Znx3U/ngr\nzPNdywo8Y6d5zp6vDH4GYsJqWgIhzNPk98sKzJyl+1HKIX5X7uM6tIZNPZloKiyX\nAEAX/bheZ+YhSM/tutotB9/WULGFg60fGlC6jJMadKQe7gmbhPlxq1DtcQKBgG9Y\nqEtHcgXw4wdr4zSk9TANyDhfpEKQvbeH87LX1fxcAp/Ox/4VJh2PZTW4ZtOrYtpy\npEklduluf3mfcrqDd7k3mRBAQE6IOdgqB1MLPTUzX3rEXg6u3tL8cBOngMmti2Tv\nVEkuuYtHn2LFnEo5+W3ZSkdjqokNfjR2NAAyvMa/AoGADmg481JaTT4NBUQGbuU0\nuA8t587u8KLzSjzgJp9eljnGkPr/WstaUOLHU18d+U9njqPeYnrDc05D9SDtdncI\nA0VpwTtWa3Zqx/RmW+LovSymOE56vbFk3WnhlkKLBibdzOxncvChX4RfzBvVLTjU\nwT532xauOZvPf7maCszQnfw=\n-----END PRIVATE KEY-----"
+          export FIREBASE_CLIENT_EMAIL=firebase-adminsdk-krnem@ajays-customer.iam.gserviceaccount.com
+          export FIREBASE_CLIENT_ID=113010122948366032493
+          export FIREBASE_AUTH_URI=https://accounts.google.com/o/oauth2/auth
+          export FIREBASE_TOKEN_URI=https://oauth2.googleapis.com/token
+          export FIREBASE_AUTH_PROVIDER_CERT_URL=https://www.googleapis.com/oauth2/v1/certs
+          export FIREBASE_CLIENT_CERT_URL=https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-krnem%40ajays-customer.iam.gserviceaccount.com
+          export FIREBASE_UNIVERSE_DOMAIN=googleapis.com
           
           # Copy the Order files to the target directory
           cp -r /var/www/repo/public_html/Order/* /var/www/Order/public_html
