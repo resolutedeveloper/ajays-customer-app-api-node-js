@@ -1,12 +1,6 @@
 const admin = require('firebase-admin');
 const fs = require('fs');
 require("dotenv").config();
-
-
-
-console.log("🚀 ~  process.env.FIREBASE_APNS_BUNDLE_ID,:",  process.env.FIREBASE_APNS_BUNDLE_ID,)
-console.log("🚀 ~ process.env.FIREBASE_APNS_TEAM_ID,:", process.env.FIREBASE_APNS_TEAM_ID,)
-console.log("🚀 ~ process.env.FIREBASE_APNS_KEY_ID,:", process.env.FIREBASE_APNS_KEY_ID,)
 // Initialize Firebase Admin SDK
 try {
   admin.initializeApp({
@@ -33,8 +27,5 @@ try {
 } catch (error) {
   console.error('Error initializing Firebase Admin:', error.message);
 }
-
-
-
 module.exports = admin;
 
