@@ -80,6 +80,7 @@ if (admin.apps.length === 0) {
   console.log('Firebase Admin is already initialized');
 }
 
+
 module.exports = admin;
 
 

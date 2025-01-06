@@ -8,9 +8,6 @@ const saveFCMKey = async (req, res) => {
         const { FCMKEY } = req.body;
         const CustomerID = req.UserDetail.CustomerID;
 
-        console.log("🚀 ~ saveFCMKey ~ req.body:", req.body);
-        console.log("🚀 ~ saveFCMKey ~ CustomerID:", CustomerID);
-
         if (!FCMKEY || !CustomerID) {
             return res.status(400).json({ message: "FCM Key or CustomerID is missing in the request" });
         }
@@ -18,24 +15,19 @@ const saveFCMKey = async (req, res) => {
         if (FCMKEY.trim() === "") {
             return res.status(400).json({ message: "FCM Key cannot be an empty string" });
         }
-
-
         const existingFCMKey = await db.customerFCM.findOne({ where: { CustomerID } });
-
         if (!existingFCMKey) {
-
-            console.log("🚀 ~ No existing FCM Key found, creating new...");
             await db.customerFCM.create({ CustomerID, FCMKEY });
-            console.log("🚀 ~ FCM Key saved for customer:", CustomerID);
             return res.status(200).json({ message: 'FCM key saved successfully' });
-        } else {
-   
-            return res.status(400).json({ message: 'FCM key already exists for this customer' });
+        } else if(existingFCMKey){
+
+          await db.customerFCM.update({ 
+            FCMKEY: FCMKEY},{ 
+            where: {CustomerID: CustomerID }
+          });
+          return res.status(200).json({ message: 'FCM key updated successfully' });
         }
-
     } catch (error) {
-
-        console.error("~ Error saving FCM Key:", error);
         return res.status(400).json({
             message: 'Error saving FCM key',
             error: error.message || 'Internal Server Error',

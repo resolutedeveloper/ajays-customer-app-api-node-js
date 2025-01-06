@@ -10,7 +10,7 @@ const router = express.Router();
 // router.get("/search",searchLocations);
 
 router.get("/item-detail/:ItemID", itemlist);
-router.get("/location-detail/:LocationID", locationDetail);
+router.get("/location-detail/:CityID", locationDetail);
 router.get("/city-stores", citystores);
 router.get("/latlonglocation", latlonglocation);
 router.get("/latlonglocationItem", latlonglocationItem);

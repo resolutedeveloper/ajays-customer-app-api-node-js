@@ -11,11 +11,12 @@ const name_update = async (req, res) => {
 
         const NameUpdated = await db.customer.update({ 
             Name: req.body.Name,
+            ProfileImage:req.body.ProfileImage,
             LastLogin:currentTimeIST,
             CreatedOn:currentTimeIST,
             LastModifiedOn:currentTimeIST
             }, { where: { 
-                CustomerID: req.UserDetail.CustomerID 
+                CustomerID: req.UserDetail.CustomerID
             } 
         });
         logger.info(`User created: ${req.UserDetail.CustomerID} - ${req.body.Name}`);
@@ -74,7 +75,7 @@ const email_generate_otp = async (req, res) => {
             OTP: generateOTP(),
             IsStatus: 0,
             CreatedOn: currentTimeIST,
-            UsedOn : '',
+            UsedOn : currentTimeIST,
             ExpiredOn: expirationTimeIST,
             IsDeleted:0
         });
@@ -186,7 +187,7 @@ const mobile_generate_otp = async (req, res) => {
             OTP: generateOTP(),
             IsStatus: 0,
             CreatedOn: currentTimeIST,
-            UsedOn : '',
+            UsedOn : currentTimeIST,
             ExpiredOn: expirationTimeIST
         });
         

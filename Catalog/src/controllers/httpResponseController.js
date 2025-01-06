@@ -35,10 +35,10 @@ const itemlist = async (req, res) => {
 
 const locationDetail = async (req, res) => {
     try {
-      const { LocationID } = req.params;
+      const { CityID } = req.params;
       const location = await db.location.findOne({
         where: {
-          LocationID: LocationID,
+          Cityid: CityID,
         },
       });
   
@@ -47,7 +47,6 @@ const locationDetail = async (req, res) => {
         return res.status(200).json({
             message: 'Location details found successfully',
             data: location,
-            banner:'staticbanner.jpg'
         });
         }else{
             return res.status(400).send({
@@ -68,8 +67,8 @@ const locationDetail = async (req, res) => {
     try {
         const Cities = await db.sequelize.query(
             `SELECT DISTINCT c.*
-             FROM cities c
-             INNER JOIN locations l ON c.CityID = l.CityID`,
+             FROM Cities c
+             INNER JOIN Locations l ON c.CityID = l.Cityid`,
             {
                 type: db.Sequelize.QueryTypes.SELECT,
             }
@@ -123,7 +122,7 @@ const locationDetail = async (req, res) => {
             
             const locations = await db.location.findAll({
               where: {
-                CityID: LatLongcityID,
+                Cityid: LatLongcityID,
               },
             });
 
@@ -145,8 +144,6 @@ const locationDetail = async (req, res) => {
     }
     fetchCityData();
   };
-
-
 
   const latlonglocationItem = async (req, res) => {
     const axios = require('axios');
@@ -175,7 +172,7 @@ const locationDetail = async (req, res) => {
             
             const locations = await db.location.findOne({
               where: {
-                CityID: LatLongcityID,
+                Cityid: LatLongcityID,
               },
             });
 

@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(256),
 
         },
+        ProfileImage: {
+            type: DataTypes.STRING(500),
+
+        },
         PhoneNumber: {
             type: DataTypes.TEXT,
         },
