@@ -44,12 +44,13 @@ const emailOTPValidation = (req, res, next) => {
 
 const phoneNumberkey = (req, res, next) => {
     const schema = Joi.object({
-        PhoneNumber: Joi.string()
-            .pattern(/^\d{10}$/) // Ensures exactly 10 digits
-            .required()
-            .messages({
-                "string.pattern.base": "PhoneNumber must be a 10-digit number",
-            }),
+        // PhoneNumber: Joi.string()
+        //     .pattern(/^\d{10}$/) // Ensures exactly 10 digits
+        //     .required()
+        //     .messages({
+        //         "string.pattern.base": "PhoneNumber must be a 10-digit number",
+        //     }),
+        PhoneNumber: Joi.string().allow(''),
     });
     validateRequest(req, res, next, schema);
 }
