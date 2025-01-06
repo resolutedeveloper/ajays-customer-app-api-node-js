@@ -38,18 +38,17 @@
 
 
 // module.exports = admin;
-
 const admin = require('firebase-admin');
 const fs = require('fs');
 require("dotenv").config();
 
-console.log("🚀 ~  process.env.FIREBASE_APNS_BUNDLE_ID,:",  process.env.FIREBASE_APNS_BUNDLE_ID,)
-console.log("🚀 ~ process.env.FIREBASE_APNS_TEAM_ID,:", process.env.FIREBASE_APNS_TEAM_ID,)
-console.log("🚀 ~ process.env.FIREBASE_APNS_KEY_ID,:", process.env.FIREBASE_APNS_KEY_ID,)
-console.log("🚀 ~ process.env.APNS_KEY_PATH:", process.env.APNS_KEY_PATH)
+console.log("🚀 ~ process.env.FIREBASE_APNS_BUNDLE_ID:", process.env.FIREBASE_APNS_BUNDLE_ID);
+console.log("🚀 ~ process.env.FIREBASE_APNS_TEAM_ID:", process.env.FIREBASE_APNS_TEAM_ID);
+console.log("🚀 ~ process.env.FIREBASE_APNS_KEY_ID:", process.env.FIREBASE_APNS_KEY_ID);
+console.log("🚀 ~ process.env.APNS_KEY_PATH:", process.env.APNS_KEY_PATH);
 
 // Ensure Firebase is initialized only once
-if (admin.apps.length === 0) {
+if (!admin.apps.length) {
   try {
     console.log('Initializing Firebase Admin...');
     admin.initializeApp({
@@ -70,17 +69,18 @@ if (admin.apps.length === 0) {
         keyId: process.env.FIREBASE_APNS_KEY_ID,
         teamId: process.env.FIREBASE_APNS_TEAM_ID,
         bundleId: process.env.FIREBASE_APNS_BUNDLE_ID,
-      }
+      },
     });
     console.log('Firebase Admin initialized successfully');
   } catch (error) {
     console.error('Error initializing Firebase Admin:', error.message);
+    throw error; // Rethrow the error for visibility
   }
 } else {
   console.log('Firebase Admin is already initialized');
 }
 
-
 module.exports = admin;
+
 
 
