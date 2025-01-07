@@ -1,6 +1,6 @@
 module.exports =(sequelize, DataTypes)=>{
-    const ratingModel = sequelize.define("Rating",{
-        RatingID: {
+    const ratingItemModel = sequelize.define("RatingItem",{
+        RatingItemID: {
             type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
@@ -9,12 +9,21 @@ module.exports =(sequelize, DataTypes)=>{
             type: DataTypes.UUID,
             allowNull: false,
         },
+        OrderDetailsID:{
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
         CustomerID:{
             type: DataTypes.UUID,
             allowNull: false,
         },
         LocationID:{
             type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        ItemID:{
+            type: DataTypes.INTEGER,
+            allowNull: false,
         },
         Rating:{
             type: DataTypes.INTEGER,
@@ -29,5 +38,5 @@ module.exports =(sequelize, DataTypes)=>{
         },
     },{timestamps: false});
 
-    return ratingModel;
+    return ratingItemModel;
 }

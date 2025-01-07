@@ -9,25 +9,34 @@ module.exports =(sequelize, DataTypes)=>{
             type: DataTypes.UUID,
             allowNull: false,
         },
-        ItemID:{
-            type: DataTypes.INTEGER,
-            allowNull: false
-        },
-        ItemName:{
-            type: DataTypes.STRING
-        },
-        MRP:{
-            type: DataTypes.DECIMAL(8,4)
-        },
-        Quantity: {
+        LocationID:{
             type: DataTypes.INTEGER,
             allowNull: false,
-            // defaultValue: 1,
+        },
+          Total:{
+            type: DataTypes.INTEGER,
+            allowNull: false,
           },
           OrderStatus: {
             type: DataTypes.STRING,
             allowNull: false,
             defaultValue: 'Pending',
+          },
+          NoOfItem:{
+            type: DataTypes.INTEGER,
+            allowNull: false,
+          },
+          PaymentInfo:{
+            type: DataTypes.STRING(256),
+            allowNull: false,
+          },
+          CreatedOn: {
+            type: DataTypes.DATE,
+            allowNull: true,
+          },
+          UpdatedOn: {
+            type: DataTypes.DATE,
+            allowNull: true,
           },
     },{timestamps: false});
 
