@@ -4,7 +4,6 @@ const express = require('express');
 
 const { createLocation, getLocation, searchLocations,getAllLocation } = require('../controllers/locationController');
 
-// const { createLocation, getLocation, searchLocations ,getAllLocation} = require('../controllers/locationController');
 
 
 const router = express.Router();

@@ -29,7 +29,6 @@ db.customerVerManagement = require('../models/customerVerManagementModel')(seque
 db.historyCustomer = require('../models/historyCustomerModel')(sequelize,DataTypes);
 
 //version
-db.CustomerVersionManagment = require('../models/CustomerVersionManagementModel')(sequelize,DataTypes);
 db.VersionManagementSupport = require('../models/VersionManagementSupportModel')(sequelize,DataTypes);
 db.VersionManagement = require('../models/VersionManagementModel')(sequelize,DataTypes);
 
