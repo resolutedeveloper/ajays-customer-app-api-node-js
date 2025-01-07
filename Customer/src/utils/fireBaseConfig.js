@@ -37,26 +37,35 @@
 
 
 
-// module.exports = admin;
 const admin = require('firebase-admin');
 const fs = require('fs');
 require("dotenv").config();
 
-// Log environment variables for APNs configuration
-console.log("🚀 ~  process.env.FIREBASE_APNS_BUNDLE_ID,:", process.env.FIREBASE_APNS_BUNDLE_ID);
-console.log("🚀 ~ process.env.FIREBASE_APNS_TEAM_ID,:", process.env.FIREBASE_APNS_TEAM_ID);
-console.log("🚀 ~ process.env.FIREBASE_APNS_KEY_ID,:", process.env.FIREBASE_APNS_KEY_ID);
+// Debug environment variables
+console.log("🚀 ~ process.env.FIREBASE_APNS_BUNDLE_ID:", process.env.FIREBASE_APNS_BUNDLE_ID);
+console.log("🚀 ~ process.env.FIREBASE_APNS_TEAM_ID:", process.env.FIREBASE_APNS_TEAM_ID);
+console.log("🚀 ~ process.env.FIREBASE_APNS_KEY_ID:", process.env.FIREBASE_APNS_KEY_ID);
 console.log("🚀 ~ process.env.APNS_KEY_PATH:", process.env.APNS_KEY_PATH);
 
 // Ensure Firebase is initialized only once
 if (admin.apps.length === 0) {
   try {
     console.log('Initializing Firebase Admin...');
-    
-    // Log the content of the .p8 file
+
+    // Validate APNS_KEY_PATH
+    if (!process.env.APNS_KEY_PATH) {
+      throw new Error('APNS_KEY_PATH environment variable is not set.');
+    }
+
+    if (!fs.existsSync(process.env.APNS_KEY_PATH)) {
+      throw new Error(`APNs Key file not found at path: ${process.env.APNS_KEY_PATH}`);
+    }
+
+    // Read the .p8 file
     const apnsKey = fs.readFileSync(process.env.APNS_KEY_PATH, 'utf8');
-    console.log("🚀 ~ APNs Key File Content:", apnsKey.slice(0, 100)); // Log first 100 characters for verification
-    
+    console.log("🚀 ~ APNs Key File Loaded Successfully. First 100 chars:", apnsKey.slice(0, 100));
+
+    // Initialize Firebase Admin
     admin.initializeApp({
       credential: admin.credential.cert({
         type: process.env.FIREBASE_TYPE,
@@ -71,12 +80,13 @@ if (admin.apps.length === 0) {
         client_x509_cert_url: process.env.FIREBASE_CLIENT_CERT_URL,
       }),
       apns: {
-        key: apnsKey, // Use the read content of the .p8 file
+        key: apnsKey,
         keyId: process.env.FIREBASE_APNS_KEY_ID,
         teamId: process.env.FIREBASE_APNS_TEAM_ID,
         bundleId: process.env.FIREBASE_APNS_BUNDLE_ID,
       }
     });
+
     console.log('Firebase Admin initialized successfully');
   } catch (error) {
     console.error('Error initializing Firebase Admin:', error.message);
@@ -85,8 +95,4 @@ if (admin.apps.length === 0) {
   console.log('Firebase Admin is already initialized');
 }
 
-
 module.exports = admin;
-
-
-
