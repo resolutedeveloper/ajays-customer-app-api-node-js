@@ -43,7 +43,7 @@ app.use((err, req, res, next) => {
 // Start the server and connect to the database
 connectDB()
     .then(() => {
-        app.listen(PORT, () => {
+        server.listen(PORT, () => {
             logger.info(`Server running on http://localhost:${PORT}`);
         });
     })
