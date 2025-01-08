@@ -1,9 +1,10 @@
 {
   "name": "ajays-customer-app-api-node-js",
   "version": "1.0.0",
-  "main": "customer_order_app.js",
+  "main": "order.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node order.js",
+    "dev": "nodemon order.js"
   },
   "keywords": [],
   "author": "",
