@@ -10,8 +10,8 @@ module.exports =(sequelize, DataTypes)=>{
             allowNull: false,
         },
         OrderDetailsID:{
-            type: DataTypes.INTEGER,
-            allowNull: false,
+            type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
         },
         CustomerID:{
             type: DataTypes.UUID,
