@@ -1,12 +1,17 @@
 // Updated main file (index.js)
 require('dotenv').config();
 const express = require('express');
+const http = require('http');
 const { connectDB } = require('./src/config/sequelize');
 const morgan = require('morgan');
 const logger = require('./src/utils/logger'); // Import the Winston logger
 const routes = require('./src/routes'); // Import all routes from src/routes/index.js
 
+const setupSocket = require('./src/config/socket');  // socket.js ko import karein
+
 const app = express();
+const server = http.createServer(app);
+setupSocket(server);
 const PORT = process.env.PORT_ORDER || 300;
 
 // Middleware for parsing JSON requests
