@@ -150,7 +150,7 @@ const locationDetail = async (req, res) => {
         const Cities = await db.sequelize.query(
             `SELECT DISTINCT c.*
              FROM Cities c
-             INNER JOIN Locations l ON c.CityID = l.Cityid
+             INNER JOIN Locations l ON c.CityID = l.CityId
              ORDER BY c.CityName`,
             {
                 type: db.Sequelize.QueryTypes.SELECT,
