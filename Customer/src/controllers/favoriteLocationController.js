@@ -5,89 +5,95 @@ const logger = require("../utils/logger");
 
 const createFavoriteLocation = async (req, res) => {
     try {
-        const currentTimeUTC = new Date();
-        const currentTimeIST = new Date(currentTimeUTC.getTime() + (5.5 * 60 * 60 * 1000)); 
-
-        const { CustomerID } = req.UserDetail;
-        const { LocationID } = req.body;
-
-        if (!CustomerID || !LocationID) {
+        if (!Array.isArray(req.body.LocationID)) {
+            throw new Error("Invalid input format. Expected an array of locations.");
+        }
+    
+        // Extract the LocationIDs
+        const locationIds = req.body.LocationID.map(item => item.LocationID);
+    
+        // Check for duplicates by comparing the length of the array with a Set (which removes duplicates)
+        const uniqueLocationIds = [...new Set(locationIds)];
+    
+        // If the length of the array is different, it means there are duplicates
+        if (locationIds.length !== uniqueLocationIds.length) {
             return res.status(400).json({
                 success: false,
-                message: "CustomerID and LocationID are required",
+                message: "Duplicate LocationID found. Duplicate entries are not allowed.",
+                data: null,
             });
         }
-
-        const createLocation = await favoriteLocation.create({
-            CustomerID,
-            LocationID,
-            CreatedOn: currentTimeIST,
-            IsActive: true, // Set default value
-            IsDeleted: false, // Set default value
-
-        });
-
-        logger.info("Favorite Location created: ", JSON.stringify(createLocation));
-
-        res.status(200).json({
+    
+        // Create the locations array with unique LocationIDs
+        const locations = uniqueLocationIds.map(id => ({
+            CustomerID: req.UserDetail.CustomerID,
+            LocationID: id,
+        }));
+    
+        // Insert records
+        const createLocations = await favoriteLocation.bulkCreate(locations);
+    
+        res.status(201).json({
             success: true,
-            message: "Favorite location created successfully",
-            data: createLocation,
+            message: "Locations added successfully.",
+            data: createLocations,
         });
-    } catch (err) {
-        logger.error("Error creating favorite location: ", err);
+    } catch (error) {
         res.status(400).json({
             success: false,
+            message: error.message,
             data: null,
-            message: err.message,
         });
     }
+    
 };
 
 
 
 const updateFavoriteLocation = async (req, res) => {
     try {
-        // Extracting FavoriteLocationID from the request parameters
-        const { FavoriteLocationID } = req.params;
+        if (!Array.isArray(req.body.LocationID)) {
+            throw new Error("Invalid input format. Expected an array of locations.");
+        }
 
-        // Validating FavoriteLocationID
-        if (!FavoriteLocationID) {
+        await favoriteLocation.destroy({
+            where: { CustomerID: req.UserDetail.CustomerID, }, // Conditions to match the record
+        });
+    
+        // Extract the LocationIDs
+        const locationIds = req.body.LocationID.map(item => item.LocationID);
+    
+        // Check for duplicates by comparing the length of the array with a Set (which removes duplicates)
+        const uniqueLocationIds = [...new Set(locationIds)];
+    
+        // If the length of the array is different, it means there are duplicates
+        if (locationIds.length !== uniqueLocationIds.length) {
             return res.status(400).json({
                 success: false,
-                message: 'FavoriteLocationID is required in the URL parameters.'
+                message: "Duplicate LocationID found. Duplicate entries are not allowed.",
+                data: null,
             });
         }
-
-        // Extracting input data from the request body
-        const input = req.body;
-
-        // Updating the record in the database
-        const [updatedCount] = await favoriteLocation.update(input, {
-            where: { FavoriteLocationID },
-        });
-
-        // Checking if the record was found and updated
-        if (updatedCount === 0) {
-            return res.status(404).json({
-                success: false,
-                message: 'Favorite location not found or no changes were made.',
-            });
-        }
-
-        // Fetching the updated record
-        const updatedFavoriteLocation = await favoriteLocation.findByPk(FavoriteLocationID);
-
-        // Sending the response with the updated record
-        res.status(200).json({
+    
+        // Create the locations array with unique LocationIDs
+        const locations = uniqueLocationIds.map(id => ({
+            CustomerID: req.UserDetail.CustomerID,
+            LocationID: id,
+        }));
+    
+        // Insert records
+        const createLocations = await favoriteLocation.bulkCreate(locations);
+    
+        res.status(201).json({
             success: true,
-            message: 'Favorite location updated successfully.',
-            data: updatedFavoriteLocation
+            message: "Locations added successfully.",
+            data: createLocations,
         });
-    } catch (err) {
-   res.status(400).json({
+    } catch (error) {
+        res.status(400).json({
             success: false,
-            message: err.message
+            message: error.message,
+            data: null,
         });
     }
 };
