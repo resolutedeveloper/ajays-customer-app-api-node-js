@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes)=>{
         type: DataTypes.STRING(500),
     },
     CompanyLogo:{
-        type: DataTypes.STRING(500),
+        type: DataTypes.STRING(10000),
     },
     ContactNo1:{
         type: DataTypes.STRING(300),
