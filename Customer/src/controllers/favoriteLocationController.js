@@ -156,14 +156,14 @@ const viewAllFavoriteLocation = async (req,res)=>{
 const getFavoriteLocationById = async (req, res) => {
     try {
         const { id } = req.params;
-        const favoriteLocationData = await favoriteLocation.findByPk(id);
+        //const favoriteLocationData = await favoriteLocation.findByPk(id);
+        const favoriteLocationData = await db.favoriteLocation.findAll({ where: { FavoriteLocationID: id, IsDeleted: 0} });
         if (!favoriteLocationData) {
             return res.status(500).json({
                 message: "Favorite location not found",
                 data: null,
             });
         }
-
         res.status(200).json({
             message: "Favorite location by id retrieved successfully",
             data: favoriteLocationData,
