@@ -11,7 +11,7 @@ async function checKValidity(req, res, next) {
         }
         else {
             const token = req.headers.authorization.split(" ")[1];
-            // console.log(token);
+        
             if (!token) {
                 return res.status(404).json({
                     message: "Oops! There was an error while authentication! Login Again"
@@ -19,24 +19,7 @@ async function checKValidity(req, res, next) {
             }
             else {
                 try {
-                    const verified = await jwt.verify(token, 'AjaysToken');
-                    const FindUserDetails = await db.customer.findOne({ where: { CustomerID: verified.CustomerID } });
-                    var UserIsActive = FindUserDetails.dataValues.IsActive;
-                    var UserIsDeleted = FindUserDetails.dataValues.IsDeleted;
-
-                    if (UserIsDeleted == true) {
-                        return res.status(400).json({
-                            account_status: "Acc_Deleted",
-                            message: "Your account is deleted contact to admin"
-                        })
-                    }
-
-                    if (UserIsActive == false) {
-                        return res.status(400).json({
-                            account_status: "Acc_Deactive",
-                            message: "Your account is deactive contact to admin"
-                        })
-                    }
+                    const verified = jwt.verify(token, process.env.JWT_SECRET);
 
                     if (!verified) {
                         return res.status(404).json({
@@ -44,10 +27,27 @@ async function checKValidity(req, res, next) {
                         })
                     }
                     else {
-                        verified.Password = undefined;
-                        req.UserDetail = verified;
-                        req.token = token;
-                        next();
+                        const FindUserDetails = await db.customer.findOne({ where: { CustomerID: verified.CustomerID } });
+                        const UserIsActive = FindUserDetails?.dataValues?.IsActive;
+                        const UserIsDeleted = FindUserDetails?.dataValues?.IsDeleted;
+                        if (UserIsDeleted == true) {
+                            return res.status(400).json({
+                                account_status: "Acc_Deleted",
+                                message: "Your account is deleted contact to admin"
+                            })
+                        }
+                        else if (UserIsActive == false) {
+                            return res.status(400).json({
+                                account_status: "Acc_Deactive",
+                                message: "Your account is deactive contact to admin"
+                            })
+                        }
+                        else {
+                            verified.Password = undefined;
+                            req.UserDetail = verified;
+                            // req.token = token;
+                            next();
+                        }
                     }
                 } catch (error) {
                     return res.status(501).json({
