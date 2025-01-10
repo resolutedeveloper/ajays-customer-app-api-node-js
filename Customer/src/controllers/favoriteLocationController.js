@@ -139,14 +139,15 @@ const viewAllFavoriteLocation = async (req,res)=>{
                 ErrorMessage: "This location is not exist."
             });
         }else{
-            res.status(200).json({
+            return res.status(200).json({
                 message: "view all favorite location successfully",
                 data: FindLocation
             })
         }
     }
     catch(err){
-        res.status(400).json({
+        console.log(err);
+        return res.status(400).json({
             message: err.message
         })
     }
