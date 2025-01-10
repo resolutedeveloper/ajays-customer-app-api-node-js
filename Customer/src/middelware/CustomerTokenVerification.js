@@ -18,7 +18,6 @@ async function checKValidity(req, res, next) {
                 })
             }
             else {
-
                 try {
                     const verified = await jwt.verify(token, 'AjaysToken');
                     const FindUserDetails = await db.customer.findOne({ where: { CustomerID: verified.CustomerID } });

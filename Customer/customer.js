@@ -11,7 +11,7 @@ const app = express();
 const PORT = process.env.PORT_CUSTOMER || 301;
 const path = require('path');
 // Middleware for parsing JSON requests
-app.use(express.json());
+// app.use(express.json());
 app.use(bodyParser.json());
 
 
@@ -26,7 +26,7 @@ app.use((req, res, next) => {
 
 
 // Parse application/json
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 
 // Parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));

@@ -1,36 +1,24 @@
 require('dotenv').config();
 
-async function httpRequest(req,res,next){
+// Changed authorization method from headers to query
+
+async function httpRequest(req, res, next) {
     try {
         const httpSecret = process.env.HTTP_REQUEST_SECRET_KEY;
-        if (!req.headers.authorization) {
-            res.status(404).json({
-                message: "HTTP SECRET NOT FOUND"
+        const { httpToken } = req.query;
+
+        if (!httpToken || httpSecret !== httpToken) {
+            return res.status(400).json({
+                message: "THIS IS A PROTECTED ROUTE!",
+                errorCause: "Either http secret was not passed or http did not matched."
             })
-        }
-        else{
-            const token = req.headers.authorization.split(" ")[1];
-            // console.log(token);
-            if (!token) {
-                res.status(404).json({
-                    message: "HTTP SECRET IS NECCESSARY"
-                })
-            }
-            else{
-                if(httpSecret === token){
-                    next()
-                }
-                else{
-                    res.status(403).json({
-                        message:"THIS IS A PROTECTED ROUTE"
-                    })
-                }
-            }
+        } else {
+            next();
         }
     } catch (error) {
         console.log(error);
-        res.status(500).json({
-            message:"BYPASS ERROR - HTTP REQUEST"
+        return res.status(500).json({
+            message: "BYPASS ERROR - HTTP REQUEST"
         })
     }
 }
