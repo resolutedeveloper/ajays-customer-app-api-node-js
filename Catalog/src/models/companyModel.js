@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes)=>{
-    const companyModel = sequelize.define("Company",{
+    const companyModel = sequelize.define("Companies",{
         CompanyID:{
             type: DataTypes.INTEGER,
             primaryKey: true,

@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-const locationModel = sequelize.define("Location",{
+const locationModel = sequelize.define("Locations",{
     LocationID:{
         type: DataTypes.INTEGER,
         primaryKey: true,

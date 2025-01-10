@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-const categoryModel = sequelize.define("Category",{
+const categoryModel = sequelize.define("Categories",{
     CategoryID:{
         type: DataTypes.INTEGER,
         primaryKey: true,

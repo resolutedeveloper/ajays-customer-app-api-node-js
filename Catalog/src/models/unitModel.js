@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-const unitModel = sequelize.define("Unit",{
+const unitModel = sequelize.define("Units",{
     UnitID:{
         type: DataTypes.INTEGER,
         primaryKey: true,
