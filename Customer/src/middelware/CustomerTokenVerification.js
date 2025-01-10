@@ -30,13 +30,14 @@ async function checKValidity(req, res, next) {
                         const FindUserDetails = await db.customer.findOne({ where: { CustomerID: verified.CustomerID } });
                         const UserIsActive = FindUserDetails?.dataValues?.IsActive;
                         const UserIsDeleted = FindUserDetails?.dataValues?.IsDeleted;
-                        if (!UserIsDeleted || UserIsDeleted == true) {
+                       
+                        if (UserIsDeleted == undefined || UserIsDeleted == true) {
                             return res.status(400).json({
                                 account_status: "Acc_Deleted",
                                 message: "Your account is deleted contact to admin"
                             })
                         }
-                        else if (!UserIsActive || UserIsActive == false) {
+                        else if (UserIsActive == undefined || UserIsActive == false) {
                             return res.status(400).json({
                                 account_status: "Acc_Deactive",
                                 message: "Your account is deactive contact to admin"

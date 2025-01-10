@@ -40,8 +40,6 @@ const MobileNumberVerification = async (req, res) => {
                 IsActive:1,
                 IsDeleted:0
             });
-  
-
 
             await db.customerMobile.create({
                 CustomerID: NewCustomerCreate.CustomerID, 

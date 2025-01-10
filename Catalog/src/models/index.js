@@ -5,7 +5,8 @@ require('dotenv').config();
 const sequelize = new Sequelize(dbConfig.DB_NAME_CATALOG, dbConfig.DB_USER, dbConfig.DB_PASSWORD, {
     host: dbConfig.DB_HOST,
     dialect: 'mysql',
-    logging: false
+    logging: false,
+    alter: true
 });
 sequelize.authenticate()
     .then(() => {
