@@ -33,6 +33,20 @@ const getItemDetails = async (req, res) => {
   }
 };
 
+const getCatalogData = (req,res)=>{
+  try {
+    const customerDetails = req.UserDetail;
+    console.log("🚀 ~ getCatalogData ~ customerDetails:", customerDetails)
+    res.status(200).json({
+        message: "Catalog data retrieved successfully",
+        customerDetails
+    });
+} catch (error) {
+    console.error("Error fetching catalog data:", error);
+    res.status(500).json({ message: "Server-side error fetching catalog data" });
+}
+}
 
 
-module.exports = { getItemDetails };
+
+module.exports = { getItemDetails, getCatalogData };
