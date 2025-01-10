@@ -5,6 +5,7 @@ const { validateRequest } = require("../config/validate-request");
 
 
 
+
 const router = express.Router();
 
 const locationKey = (req,res,next)=>{
@@ -40,10 +41,8 @@ const getlocationKey = (req, res, next) => {
 
 
 router.post("/", createFavoriteLocation);
-
-router.put("/:FavoriteLocationID",locationKey, updateFavoriteLocation);
-
-router.delete("/:id",getlocationKey, deleteFavoriteLocation);
+// router.put("/", updateFavoriteLocation);
+router.delete("/:FavoriteLocationID", deleteFavoriteLocation);
 router.get("/", viewAllFavoriteLocation);
 router.get("/:id",getlocationKey, getFavoriteLocationById);
 

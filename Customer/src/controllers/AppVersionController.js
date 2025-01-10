@@ -58,7 +58,4 @@ const appversioncheck = async (req, res) => {
         res.status(500).send({ "Message": error.message });
     }
 };
-
-
-
 module.exports = ({ appversioncheck })

@@ -36,11 +36,14 @@ const check_existing_customer = async (req, res) => {
         if(FindCustomerExist.dataValues.Name){
             logger.info(`User created: ${req.UserDetail.CustomerID} - ${req.body.Name}`);
             return res.status(200).json({ 
-                message:'customer already exists.'
+                message:'customer already exists.',
+                Status:1
             });
         }else{
-            return res.status(400).json({ 
-                message:"It's a new customer. Please update the customer name."
+            return res.status(400).send({ 
+                "ErrorCode": "NEWCUSTOMER", 
+                Status:1,
+                "ErrorMessage": "It's a new customer. Please update the customer name." 
             });
         }
     } catch (error) {
@@ -48,6 +51,8 @@ const check_existing_customer = async (req, res) => {
         res.status(400).json({ error: error.message,success: false, message: 'Error creating user' });
     }
 };
+
+
 
 const email_generate_otp = async (req, res) => {
     try {

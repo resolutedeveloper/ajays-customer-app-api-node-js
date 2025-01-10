@@ -39,11 +39,14 @@ const ItemDetail = async (req, res) => {
 
 const LocationDetails = async (req, res) => {
     try {
+
         const { LocationID } = req.params;
         const url = process.env.CATALOG_LOCAL_URL;
         const token = process.env.HTTP_REQUEST_SECRET_KEY;
+        const { latitude,longitude } = req.query;
+
         //const respVideoCount = await axios.get(`${url}/courseVideoNumbers?courseId=${CourseId}`, {
-        const respVideoCount = await axios.get(`${url}/httpResponse/location-detail/${LocationID}`, {
+        const respVideoCount = await axios.get(`${url}/httpResponse/location-detail/${LocationID}?latitude=${latitude}&longitude=${longitude}`, {
             headers: { "Authorization": "Bearer " + token }
         });
         if(respVideoCount.data){

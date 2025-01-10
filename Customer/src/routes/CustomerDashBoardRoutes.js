@@ -8,7 +8,7 @@ const Joi = require("joi");
 const namekey = (req, res, next) => {
     const schema = Joi.object({
         Name: Joi.string().required(),
-        ProfileImage: Joi.string().required()
+        ProfileImage: Joi.string().allow('')
     });
     validateRequest(req, res, next, schema);
 }

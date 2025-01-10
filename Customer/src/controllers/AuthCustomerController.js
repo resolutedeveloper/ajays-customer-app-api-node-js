@@ -150,12 +150,7 @@ const MobileNumberVerification = async (req, res) => {
                                 otp += characters[randomIndex];
                             }
                             return otp;
-                            //return 123456;
                         }
-
-                        
-                        
-                        
                         db.mobileVerificationOTP.update({ 
                             IsStatus: true,
                             ExpiredOn: CurrentDateTime},{ 

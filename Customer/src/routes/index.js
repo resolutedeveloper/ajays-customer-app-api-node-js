@@ -18,7 +18,6 @@ const validateHTTP = require("../middelware/httpRequest.js");
 route.use("/Get-htpp",validateHTTP, require("./HttpsRoutes"));
 
 
-
 route.use('/Upload', require('./FileuploadRouter'));
 
 module.exports = route;
