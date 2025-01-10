@@ -6,6 +6,9 @@ const { connectDB } = require('./src/config/sequelize');
 const morgan = require('morgan');
 const logger = require('./src/utils/logger'); // Import the Winston logger
 const routes = require('./src/routes'); // Import all routes from src/routes/index.js
+const { redisConnection } = require("./src/cache/locations.js");
+
+redisConnection();
 
 const setupSocket = require('./src/config/socket');  // socket.js ko import karein
 
@@ -41,6 +44,7 @@ app.use((err, req, res, next) => {
 });
 
 // Start the server and connect to the database
+
 connectDB()
     .then(() => {
         server.listen(PORT, () => {

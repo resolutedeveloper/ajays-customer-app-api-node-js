@@ -1,69 +1,67 @@
 const jwt = require('jsonwebtoken');
 const db = require('../models/index');
+const { client } = require('../cache/locations'); // Redis client ko import karna
 require('dotenv').config();
-
+const moment = require('moment-timezone');
 async function checKValidity(req, res, next) {
-    next();
-    // try {
-    //     if (!req.headers.authorization) {
-    //         return res.status(404).json({
-    //             message: "token not found"
-    //         })
-    //     }
-    //     else {
-    //         const token = req.headers.authorization.split(" ")[1];
-    //         // console.log(token);
-    //         if (!token) {
-    //             return res.status(404).json({
-    //                 message: "Oops! There was an error while authentication! Login Again"
-    //             })
-    //         }
-    //         else {
+    try {
+        if (!req.headers.authorization) {
+            return res.status(404).json({
+                message: "Token not found"
+            });
+        }
 
-    //             try {
-    //                 const verified = await jwt.verify(token, 'AjaysToken');
-    //                 const FindUserDetails = await db.customer.findOne({ where: { CustomerID: verified.CustomerID } });
-    //                 var UserIsActive = FindUserDetails.dataValues.IsActive;
-    //                 var UserIsDeleted = FindUserDetails.dataValues.IsDeleted;
+        const token = req.headers.authorization.split(" ")[1];
+        if (!token) {
+            return res.status(404).json({
+                message: "Oops! There was an error while authentication! Login Again"
+            });
+        }
 
-    //                 if (UserIsDeleted == true) {
-    //                     return res.status(400).json({
-    //                         account_status: "Acc_Deleted",
-    //                         message: "Your account is deleted contact to admin"
-    //                     })
-    //                 }
+        const verified = await jwt.verify(token, 'AjaysToken');
+        console.log(verified)
+        if (!verified) {
+            return res.status(404).json({
+                message: "Invalid token"
+            });
+        }
 
-    //                 if (UserIsActive == false) {
-    //                     return res.status(400).json({
-    //                         account_status: "Acc_Deactive",
-    //                         message: "Your account is deactive contact to admin"
-    //                     })
-    //                 }
+        // Decode the token to check expiry time
+        const decoded = await jwt.decode(token);
+        if (!decoded) {
+            return res.status(404).json({
+                message: "Invalid token"
+            });
+        }
 
-    //                 if (!verified) {
-    //                     return res.status(404).json({
-    //                         message: "Invalid token"
-    //                     })
-    //                 }
-    //                 else {
-    //                     verified.Password = undefined;
-    //                     req.UserDetail = verified;
-    //                     req.token = token;
-    //                     next();
-    //                 }
-    //             } catch (error) {
-    //                 return res.status(501).json({
-    //                     message: "Invalid token"
-    //                 })
-    //             }
-    //         }
-    //     }
-    // } catch (error) {
-    //     console.log(error);
-    //     return res.status(500).json({
-    //         message: "Sorry! There was an server-side error"
-    //     })
-    // }
+        // const currentTime = Math.floor(Date.now() / 1000); // current time in seconds
+
+        // console.log('currentTime', currentTime)
+        var currentTime = new Date(moment.tz(new Date(), "Asia/Kolkata").format('YYYY-MM-DD HH:mm:ss'));
+        if (decoded.exp < currentTime) {
+            return res.status(401).json({
+                message: "Token has expired",
+                expiredTokenData: decoded // Send the expired token data
+            });
+        }
+
+        const user_status = await client.get("userauth:" + verified.CustomerID);
+        if (user_status) {
+            return res.status(400).json({
+                account_status: "Inactive",
+                message: "Your account is unauthorized. Please contact the administrator for further assistance."
+            });
+        }
+
+        next();
+
+    } catch (error) {
+        return res.status(500).json({
+            message: "Sorry! There was a server-side error",
+            error: error
+        });
+    }
 }
+
 
 module.exports = checKValidity;

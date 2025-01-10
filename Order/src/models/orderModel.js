@@ -1,44 +1,68 @@
-module.exports =(sequelize, DataTypes)=>{
-    const orderModel = sequelize.define("Order",{
+module.exports = (sequelize, DataTypes) => {
+    const orderModel = sequelize.define("Order", {
         OrderID: {
             type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
-        primaryKey: true,
+            defaultValue: DataTypes.UUIDV4,
+            primaryKey: true,
         },
-        CustomerID:{
+        CustomerID: {
             type: DataTypes.UUID,
             allowNull: false,
         },
-        LocationID:{
+        LocationID: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-          Total:{
+        TotalTax: {
             type: DataTypes.INTEGER,
             allowNull: false,
-          },
-          OrderStatus: {
+        },
+        Total: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        OrderStatus: {
             type: DataTypes.STRING,
             allowNull: false,
             defaultValue: 'Pending',
-          },
-          NoOfItem:{
+        },
+        NoOfItem: {
             type: DataTypes.INTEGER,
             allowNull: false,
-          },
-          PaymentInfo:{
+        },
+        PaymentInfo: {
             type: DataTypes.STRING(256),
             allowNull: false,
-          },
-          CreatedOn: {
+        },
+        DeviceModel: {
+            type: DataTypes.STRING(256),
+            allowNull: false,
+        },
+        OSVersion: {
+            type: DataTypes.STRING(256),
+            allowNull: false,
+        },
+        DeviceID: {
+            type: DataTypes.STRING(256),
+            allowNull: false,
+        },
+        IPAddress: {
+            type: DataTypes.STRING(256),
+            allowNull: false,
+        },
+        AppVersion: {
+            type: DataTypes.STRING(256),
+            allowNull: false,
+        },
+        CreatedOn: {
             type: DataTypes.DATE,
             allowNull: true,
-          },
-          UpdatedOn: {
+        },
+        UpdatedOn: {
             type: DataTypes.DATE,
             allowNull: true,
-          },
-    },{timestamps: false});
+        },
+    }, { timestamps: false });
 
     return orderModel;
 }

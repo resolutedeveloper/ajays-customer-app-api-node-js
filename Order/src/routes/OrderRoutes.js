@@ -2,15 +2,38 @@ const express = require('express');
 const router = express.Router();
 
 const { AddOrder } = require('../controllers/OrderController');
-// const { validateRequest } = require('../config/validate-request');
-// const Joi = require('joi');
+const { validateRequest } = require('../config/validate-request');
+const Joi = require('joi');
 
 
+const AddOrderRequest = (req, res, next) => {
+    const schema = Joi.object({
+        CustomerID: Joi.number().integer().required(),
+        LocationID: Joi.number().integer().required(),
+        Iteams: Joi.array()
+            .items(
+                Joi.object({
+                    ItemID: Joi.number().integer().required(),
+                    Qty: Joi.number().integer().min(1).required(),
+                })
+            )
+            .min(1)
+            .required(),
+        TotalTax: Joi.number().positive().optional(),
+        Total: Joi.number().positive().required(),
+        DeviceType: Joi.string().required(),
+        DeviceModel: Joi.string().required(),
+        OSVersion: Joi.string().required(),
+        DeviceID: Joi.string().required(),
+        IPAddress: Joi.string().ip({ version: ['ipv4', 'ipv6'] }).required(),
+        AppVersion: Joi.string().required(),
+        Version: Joi.string().max(20).required(),
+    });
 
-router.post("/", AddOrder);
-// router.post("/send-notification", sendCustomerNotification);
+    validateRequest(req, res, next, schema);
+};
 
-
+router.post("/", AddOrderRequest, AddOrder);
 
 
 module.exports = router;
