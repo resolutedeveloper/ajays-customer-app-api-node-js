@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "customer_order_app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon customer"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +25,7 @@
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "mysql2": "^3.11.5",
+    "nodemon": "^3.1.9",
     "path": "^0.12.7",
     "sequelize": "^6.37.5",
     "winston": "^3.17.0",
