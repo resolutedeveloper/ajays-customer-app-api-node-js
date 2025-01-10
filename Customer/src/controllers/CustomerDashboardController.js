@@ -1,7 +1,6 @@
 const logger = require('../utils/logger');
 const db = require("../models/index.js");
-const CryptoJS = require('crypto-js');
-const secretKey = process.env.CRYPTOJSKEY;
+const { encryption, decryption } = require("../helpers/services");
 
 const name_update = async (req, res) => {
     try {
@@ -100,16 +99,18 @@ const email_generate_otp = async (req, res) => {
 const email_otp_verification = async (req, res) => {
     try {
         const FindCustomer = await db.customer.findOne({ where: { CustomerID: req.UserDetail.CustomerID } });
-        const DecryptEmail = (encryptedField, secretKey) => {
-            const bytes = CryptoJS.AES.decrypt(encryptedField, secretKey);
-            return bytes.toString(CryptoJS.enc.Utf8);
-        };
-        var DecryptedEmailID = DecryptEmail(req.body.EmailID, secretKey);
+        var DecryptedEmailID = decryption(req.body.EmailID);
+        console.log("🚀 ~ constemail_otp_verification= ~ DecryptedEmailID:", DecryptedEmailID)
+        if(!DecryptedEmailID){
+            return  res.status(400).json({
+                message:"Error while decrypting"
+            });
+        }
         if (FindCustomer) {
             if (FindCustomer.IsActive) {
                 const CustomerUsedOTP = await db.emailVerificationOTP.findOne({ where: { OTP: req.body.OTP, IsStatus: '1' } });
                 if (CustomerUsedOTP) {
-                    return res.json( {ErrorCode: "VALIDATION", ErrorMessage: 'This OTP is already used..' });
+                    return res.json( {ErrorCode: "VALIDATION", Message: 'This OTP is already used..' });
                 }
                 const CustomerOTPVarification = await db.emailVerificationOTP.findOne({ where: { OTP: req.body.OTP, IsStatus: '0' } });
                 if (CustomerOTPVarification) {
@@ -149,13 +150,13 @@ const email_otp_verification = async (req, res) => {
                         message: 'Email Is updated successfully'
                     });   
                 } else {
-                    return res.status(400).json({ErrorCode: "VALIDATION", ErrorMessage: 'Invalid OTP..' });
+                    return res.status(400).json({ErrorCode: "VALIDATION", Message: 'Invalid OTP..' });
                 }
             } else {
-                return res.status(400).send( {ErrorCode: "VALIDATION", ErrorMessage: 'Your Account Is Deactive..' });
+                return res.status(400).send( {ErrorCode: "VALIDATION", Message: 'Your Account Is Deactive..' });
             }
         } else {
-            return res.status(400).send({ErrorCode: "VALIDATION", ErrorMessage: 'Invalid Customer ID or Mobile Number..' });
+            return res.status(400).send({ErrorCode: "VALIDATION", Message: 'Invalid Customer ID or Mobile Number..' });
         }
     } catch (error) {
         logger.error(`Error email: ${error.message}`); 
@@ -210,16 +211,17 @@ const mobile_generate_otp = async (req, res) => {
 const mobile_otp_verification = async (req, res) => {
     try {
         const FindCustomer = await db.customer.findOne({ where: { CustomerID: req.UserDetail.CustomerID } });
-        const DecryptMobile = (encryptedField, secretKey) => {
-            const bytes = CryptoJS.AES.decrypt(encryptedField, secretKey);
-            return bytes.toString(CryptoJS.enc.Utf8);
-        };
-        var DecryptedMobile = DecryptMobile(req.body.PhoneNumber, secretKey);
+        var DecryptedMobile = decryption(req.body.PhoneNumber);
+        if(!DecryptedMobile){
+            return  res.status(400).json({
+                message:"Error while decrypting"
+            });
+        }
         if (FindCustomer) {
             if (FindCustomer.IsActive) {
                 const CustomerUsedOTP = await db.mobileVerificationOTP.findOne({ where: { OTP: req.body.OTP, IsStatus: '1' } });
                 if (CustomerUsedOTP) {
-                    return res.json( {ErrorCode: "VALIDATION", ErrorMessage: 'This OTP is already used..' });
+                    return res.json( {ErrorCode: "VALIDATION", Message: 'This OTP is already used..' });
                 }
                 const CustomerOTPVarification = await db.mobileVerificationOTP.findOne({ where: { OTP: req.body.OTP, IsStatus: '0' } });
                 if (CustomerOTPVarification) {
@@ -259,13 +261,13 @@ const mobile_otp_verification = async (req, res) => {
                         message: 'Mobile Is updated successfully'
                     });   
                 } else {
-                    return res.status(400).json({ErrorCode: "VALIDATION", ErrorMessage: 'Invalid OTP..' });
+                    return res.status(400).json({ErrorCode: "VALIDATION", Message: 'Invalid OTP..' });
                 }
             } else {
-                return res.status(400).send( {ErrorCode: "VALIDATION", ErrorMessage: 'Your Account Is Deactive..' });
+                return res.status(400).send( {ErrorCode: "VALIDATION", Message: 'Your Account Is Deactive..' });
             }
         } else {
-            return res.status(400).send({ErrorCode: "VALIDATION", ErrorMessage: 'Invalid Customer ID or Mobile Number..' });
+            return res.status(400).send({ErrorCode: "VALIDATION", Message: 'Invalid Customer ID or Mobile Number..' });
         }
     } catch (error) {
         logger.error(`Error mobile: ${error.message}`); 
