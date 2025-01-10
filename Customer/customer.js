@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const logger = require('./src/utils/logger'); // Import the Winston logger
 const routes = require('./src/routes'); // Import all routes from src/routes/index.js
 const bodyParser = require('body-parser');
+const { redisConnection } = require("./src/cache/cache");
 
 const app = express();
 const PORT = process.env.PORT_CUSTOMER || 301;
@@ -13,6 +14,8 @@ const path = require('path');
 // Middleware for parsing JSON requests
 // app.use(express.json());
 app.use(bodyParser.json());
+
+redisConnection();
 
 
 // Use Morgan middleware for logging HTTP requests

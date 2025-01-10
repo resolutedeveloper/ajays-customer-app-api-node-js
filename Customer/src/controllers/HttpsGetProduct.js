@@ -148,4 +148,6 @@ const LatLongBaseLocationCatitem = async (req, res) => {
         res.status(500).send({ success: false, message: 'Product not found' });
     }
 };
+
+
 module.exports = { ItemDetail, LocationDetails, Storecitieslist, LatLongBaseLocation, LatLongBaseLocationCatitem};

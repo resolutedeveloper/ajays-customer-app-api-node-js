@@ -2,6 +2,7 @@ const db = require('../models');
 const favoriteLocation = db.favoriteLocation  // Import the db object from index.js
 const logger = require("../utils/logger");
 const moment = require('moment-timezone');
+const axios = require('axios');
 
 const createFavoriteLocation = async (req, res) => {
     try {
@@ -28,16 +29,16 @@ const createFavoriteLocation = async (req, res) => {
         // // Insert records
         // const createLocations = await favoriteLocation.bulkCreate(locations);
 
-        const FindLocation = await db.favoriteLocation.findOne({ where: { LocationID: req.body.LocationID, IsDeleted: 0} });
+        const FindLocation = await db.favoriteLocation.findOne({ where: { LocationID: req.body.LocationID, IsDeleted: 0 } });
         if (FindLocation) {
             return res.status(400).send({
                 ErrorCode: "USEDID",
                 ErrorMessage: "This location already used."
             });
-        }else{
+        } else {
             const LocationAdd = await db.favoriteLocation.create({
                 LocationID: req.body.LocationID,
-                CustomerID:req.UserDetail.CustomerID,
+                CustomerID: req.UserDetail.CustomerID,
                 CreatedOn: moment().tz('Asia/Kolkata').toDate(), // Converts to IST
             });
             logger.info(`created: ${req.UserDetail.CustomerID}`);
@@ -47,12 +48,12 @@ const createFavoriteLocation = async (req, res) => {
             });
         }
     } catch (error) {
-        logger.error(`Error creating user: ${error.message}`); 
+        logger.error(`Error creating user: ${error.message}`);
         return res.status(400).json({
             message: error.message
         });
     }
-    
+
 };
 
 // const updateFavoriteLocation = async (req, res) => {
@@ -96,12 +97,12 @@ const createFavoriteLocation = async (req, res) => {
 //     }
 // };
 
-const deleteFavoriteLocation = async (req,res)=>{
-    try{
+const deleteFavoriteLocation = async (req, res) => {
+    try {
         const FindData = await db.favoriteLocation.findOne({
             where: {
                 IsDeleted: 0,
-                FavoriteLocationID:req.params.FavoriteLocationID
+                FavoriteLocationID: req.params.FavoriteLocationID
             },
         });
         if (!FindData) {
@@ -109,43 +110,56 @@ const deleteFavoriteLocation = async (req,res)=>{
                 ErrorCode: "USEDID",
                 ErrorMessage: "This location is not exist."
             });
-        }else{
-            
+        } else {
+
             const LocationData = await db.favoriteLocation.update({
-                IsDeleted:1
+                IsDeleted: 1
             }, {
                 where: { FavoriteLocationID: req.params.FavoriteLocationID },
             });
 
             return res.status(200).json({
-                message:"Favorite location is deleted successfully.",
+                message: "Favorite location is deleted successfully.",
                 data: LocationData
             })
         }
     }
-    catch(err){
+    catch (err) {
         return res.status(400).json({
             message: err.message
         })
     }
 }
 
-const viewAllFavoriteLocation = async (req,res)=>{
-    try{
-        const FindLocation = await db.favoriteLocation.findAll({ where: { CustomerID: req.UserDetail.CustomerID, IsDeleted: 0} });
+const viewAllFavoriteLocation = async (req, res) => {
+    try {
+        const FindLocation = await db.favoriteLocation.findAll({ where: { CustomerID: req.UserDetail.CustomerID, IsDeleted: 0 } });
         if (!FindLocation) {
             return res.status(400).send({
                 ErrorCode: "LOCATION",
                 ErrorMessage: "This location is not exist."
             });
-        }else{
+        } else {
+            if (FindLocation.length > 0) {
+                const idArr = FindLocation.map((locate) => locate?.LocationID);
+                // console.log(idArr);
+                const axiosData = await axios.post(`${process?.env?.CATALOG_LOCAL_URL}/httpResponse/locationBulkGetId`, { allLocationsArr: JSON.stringify(idArr) }, {
+                    headers: { "Authorization": "Bearer " + process?.env?.HTTP_REQUEST_SECRET_KEY }
+                });
+                if (axiosData?.data?.locations) {
+                    return res.status(200).json({
+                        message: "view all favorite location successfully",
+                        data: axiosData.data.locations
+                    });
+                }
+            }
             return res.status(200).json({
                 message: "view all favorite location successfully",
                 data: FindLocation
-            })
+            });
         }
     }
-    catch(err){
+    catch (err) {
         console.log(err);
         return res.status(400).json({
             message: err.message
@@ -158,7 +172,7 @@ const getFavoriteLocationById = async (req, res) => {
     try {
         const { id } = req.params;
         //const favoriteLocationData = await favoriteLocation.findByPk(id);
-        const favoriteLocationData = await db.favoriteLocation.findAll({ where: { FavoriteLocationID: id, IsDeleted: 0} });
+        const favoriteLocationData = await db.favoriteLocation.findAll({ where: { FavoriteLocationID: id, IsDeleted: 0 } });
         if (!favoriteLocationData) {
             return res.status(500).json({
                 message: "Favorite location not found",
@@ -182,4 +196,4 @@ const getFavoriteLocationById = async (req, res) => {
 
 
 
-module.exports = {createFavoriteLocation, deleteFavoriteLocation, viewAllFavoriteLocation, getFavoriteLocationById}
+module.exports = { createFavoriteLocation, deleteFavoriteLocation, viewAllFavoriteLocation, getFavoriteLocationById }

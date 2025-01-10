@@ -1,7 +1,10 @@
 const express = require('express');
-const { itemlist, locationDetail, citystores, latlonglocation, latlonglocationItem} = require('../controllers/httpResponseController');
+const { itemlist, locationDetail, citystores, latlonglocation, latlonglocationItem, bulkfindLocationsHttp } = require('../controllers/httpResponseController');
 
 const router = express.Router();
+
+// Middlewares (if any)
+const httpRequest = require("../middleware/httpRequest");
 
 // router.post("/creates", createLocation);
 // router.get("/gets/:LocationID", getLocation);
@@ -14,5 +17,6 @@ router.get("/location-detail/:CityID", locationDetail);
 router.get("/city-stores", citystores);
 router.get("/latlonglocation", latlonglocation);
 router.get("/latlonglocationItem", latlonglocationItem);
+router.post("/locationBulkGetId", httpRequest, bulkfindLocationsHttp);
 
 module.exports = router;
