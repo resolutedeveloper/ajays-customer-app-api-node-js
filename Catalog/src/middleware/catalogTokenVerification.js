@@ -22,6 +22,11 @@ async function validateCatalogToken(req, res, next) {
 
                 const verified = await jwt.verify(token, 'AjaysToken');
                 console.log("🚀 ~ validateCatalogToken ~ verified:", verified)
+                if (!verified) {
+                    return res.status(404).json({
+                        message: "Invalid token"
+                    });
+                }
 
                 const customerData = await axios.get(`${process.env.CUSTOMER_LOCAL_URL}customers/${verified.CustomerID}`, {
                     headers: {
@@ -52,7 +57,7 @@ async function validateCatalogToken(req, res, next) {
 
             } catch (error) {
                 return res.status(400).json({
-                    message: "Invalid token or error fetching customer data from catalog"
+                    message: "error fetching customer data from customer"
                 });
             }
         }

@@ -3,13 +3,13 @@ const fs = require('fs');
 require("dotenv").config();
 
 
-console.log("🚀 ~ process.env.FIREBASE_PROJECT_ID:", process.env.FIREBASE_PROJECT_ID);
-console.log("🚀 ~ process.env.FIREBASE_CLIENT_EMAIL:", process.env.FIREBASE_CLIENT_EMAIL);
+// console.log("🚀 ~ process.env.FIREBASE_PROJECT_ID:", process.env.FIREBASE_PROJECT_ID);
+// console.log("🚀 ~ process.env.FIREBASE_CLIENT_EMAIL:", process.env.FIREBASE_CLIENT_EMAIL);
 
 
 if (admin.apps.length === 0) {
   try {
-    console.log('Initializing Firebase Admin...');
+    // console.log('Initializing Firebase Admin...');
 
     // Validate required Firebase environment variables
     if (!process.env.FIREBASE_PROJECT_ID || !process.env.FIREBASE_CLIENT_EMAIL) {
