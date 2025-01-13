@@ -1,13 +1,13 @@
 const logger = require('../utils/logger');
 const db = require("../models/index.js");
 const moment = require('moment-timezone');
-const LoginToken = "AjaysToken";
 const { encryption, decryption } = require("../helpers/services");
 const jwt = require("jsonwebtoken");
+const { generateOTP } = require("../middelware/Otp.js");
+require("dotenv").config();
 
 const MobileNumberVerification = async (req, res) => {
     try {
-
         var DecryptedMobile = decryption(req.body.PhoneNumber);
         if (!DecryptedMobile) {
             return res.status(400).json({
@@ -36,7 +36,6 @@ const MobileNumberVerification = async (req, res) => {
                 LastModifiedOn: CurrentDateTime,
                 CreatedBy: 'null',
                 LastModifiedBy: 'null',
-
                 IsActive: 1,
                 IsDeleted: 0
             });
@@ -72,18 +71,7 @@ const MobileNumberVerification = async (req, res) => {
 
             if (FindCustomer) {
                 if (FindCustomer.IsActive == true) {
-                    function generateOTP() {
-                        const length = process.env.OTPDIGITS; // Length of the OTP
-                        const characters = '0123456789'; // Characters to use for generating the OTP
-                        let otp = '';
-                        for (let i = 0; i < length; i++) {
-                            const randomIndex = Math.floor(Math.random() * characters.length);
-                            otp += characters[randomIndex];
-                        }
-                        return otp;
-                    }
-
-
+                    
                     db.mobileVerificationOTP.update({
                         IsStatus: true,
                         ExpiredOn: CurrentDateTime
@@ -142,16 +130,7 @@ const MobileNumberVerification = async (req, res) => {
 
             if (FindCustomer) {
                 if (FindCustomer.IsActive == true) {
-                    function generateOTP() {
-                        const length = process.env.OTPDIGITS; // Length of the OTP
-                        const characters = '0123456789'; // Characters to use for generating the OTP
-                        let otp = '';
-                        for (let i = 0; i < length; i++) {
-                            const randomIndex = Math.floor(Math.random() * characters.length);
-                            otp += characters[randomIndex];
-                        }
-                        return otp;
-                    }
+            
                     db.mobileVerificationOTP.update({
                         IsStatus: true,
                         ExpiredOn: CurrentDateTime
@@ -216,7 +195,6 @@ const OTPverification = async (req, res) => {
 
         if (FindCustomer) {
             if (FindCustomer.IsActive) {
-
                 const CustomerUsedOTP = await db.mobileVerificationOTP.findOne({ where: { CustomerID: CustomerDecDetails.dataValues.CustomerID, OTP: req.body.OTP, IsStatus: '1' } });
                 if (CustomerUsedOTP) {
                     return res.json({ ErrorCode: "VALIDATION", Message: 'This OTP is already used..' });
@@ -232,9 +210,9 @@ const OTPverification = async (req, res) => {
                         return res.status(400).send({ ErrorCode: "OTPTIME", Message: 'OTP time out..' });
                     }
 
-                    const token = jwt.sign(FindCustomer.toJSON(), LoginToken, { expiresIn: "7d" });
+                    const token = jwt.sign(FindCustomer.toJSON(), process.env.JWT_SECRET, { expiresIn: "2592000s" });
                     if (token) {
-                        db.mobileVerificationOTP.update({ IsStatus: true }, { where: { CustomerID: FindCustomer.CustomerID } });
+                        await db.mobileVerificationOTP.update({ IsStatus: true }, { where: { CustomerID: FindCustomer.CustomerID } });
                         return res.status(200).json({
                             data: FindCustomer,
                             token: token

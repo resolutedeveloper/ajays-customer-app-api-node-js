@@ -1,8 +1,9 @@
 const jwt = require('jsonwebtoken');
 const db = require('../models/index');
-const { client } = require('../cache/locations'); // Redis client ko import karna
+const { client } = require('../cache/redis'); // Redis client ko import karna
 require('dotenv').config();
 const moment = require('moment-timezone');
+
 async function checKValidity(req, res, next) {
     try {
         if (!req.headers.authorization) {
@@ -52,12 +53,14 @@ async function checKValidity(req, res, next) {
             });
         }
 
+        req.UserDetail = verified;
+
         next();
 
     } catch (error) {
+        console.log(error);
         return res.status(500).json({
             message: "Sorry! There was a server-side error",
-            error: error
         });
     }
 }

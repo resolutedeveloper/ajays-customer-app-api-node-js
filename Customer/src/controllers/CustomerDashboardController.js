@@ -1,6 +1,7 @@
 const logger = require('../utils/logger');
 const db = require("../models/index.js");
 const { encryption, decryption } = require("../helpers/services");
+const { generateOTP } = require("../middelware/Otp.js");
 
 const name_update = async (req, res) => {
     try {
@@ -55,16 +56,16 @@ const check_existing_customer = async (req, res) => {
 
 const email_generate_otp = async (req, res) => {
     try {
-        function generateOTP() {
-            const length = process.env.OTPDIGITS; // Length of the OTP
-            const characters = '0123456789'; // Characters to use for generating the OTP
-            let otp = '';
-            for (let i = 0; i < length; i++) {
-                const randomIndex = Math.floor(Math.random() * characters.length);
-                otp += characters[randomIndex];
-            }
-            return otp;
-        }
+        // function generateOTP() {
+        //     const length = process.env.OTPDIGITS; // Length of the OTP
+        //     const characters = '0123456789'; // Characters to use for generating the OTP
+        //     let otp = '';
+        //     for (let i = 0; i < length; i++) {
+        //         const randomIndex = Math.floor(Math.random() * characters.length);
+        //         otp += characters[randomIndex];
+        //     }
+        //     return otp;
+        // }
         
                             
         // const currentTime = new Date();
@@ -169,20 +170,19 @@ const email_otp_verification = async (req, res) => {
 
 const mobile_generate_otp = async (req, res) => {
     try {
-        function generateOTP() {
-            const length = process.env.OTPDIGITS; // Length of the OTP
-            const characters = '0123456789'; // Characters to use for generating the OTP
-            let otp = '';
-            for (let i = 0; i < length; i++) {
-                const randomIndex = Math.floor(Math.random() * characters.length);
-                otp += characters[randomIndex];
-            }
-            return otp;
-        }
-        
-                            
+        // function generateOTP() {
+        //     const length = process.env.OTPDIGITS; // Length of the OTP
+        //     const characters = '0123456789'; // Characters to use for generating the OTP
+        //     let otp = '';
+        //     for (let i = 0; i < length; i++) {
+        //         const randomIndex = Math.floor(Math.random() * characters.length);
+        //         otp += characters[randomIndex];
+        //     }
+        //     return otp;
+        // }
+                    
         // const currentTime = new Date();
-        // const expirationTime = new Date(currentTime.getTime() + 5 * 60000); // 5 mi
+        // const expirationTime = new Date(currentTime.getTime() + 5 * 60000); // 5 min
         const currentTimeUTC = new Date();
         const currentTimeIST = new Date(currentTimeUTC.getTime() + (5.5 * 60 * 60 * 1000)); // Add 5 hours 30 minutes
         const expirationTimeIST = new Date(currentTimeIST.getTime() + 5 * 60000); 

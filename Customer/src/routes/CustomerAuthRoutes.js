@@ -1,8 +1,9 @@
 const express = require('express');
-const { MobileNumberVerification, OTPverification} = require('../controllers/AuthCustomerController');
+const { MobileNumberVerification, OTPverification } = require('../controllers/AuthCustomerController');
 const router = express.Router();
 const { validateRequest } = require("../config/validate-request");
 const Joi = require("joi");
+
 const MobileNOValidation = (req, res, next) => {
     const schema = Joi.object({
         PhoneNumber: Joi.string().allow('')

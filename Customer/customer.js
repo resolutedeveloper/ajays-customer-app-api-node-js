@@ -6,7 +6,7 @@ const morgan = require('morgan');
 const logger = require('./src/utils/logger'); // Import the Winston logger
 const routes = require('./src/routes'); // Import all routes from src/routes/index.js
 const bodyParser = require('body-parser');
-const { redisConnection } = require("./src/cache/cache");
+const { redisConnection } = require("./src/cache/redis.js");
 
 const app = express();
 const PORT = process.env.PORT_CUSTOMER || 301;
