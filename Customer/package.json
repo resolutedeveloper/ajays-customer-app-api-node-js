@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "customer_order_app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "start": "nodemon customer"
   },
   "keywords": [],
@@ -31,5 +31,9 @@
     "sequelize": "^6.37.5",
     "winston": "^3.17.0",
     "winston-daily-rotate-file": "^5.0.0"
+  },
+  "devDependencies": {
+    "chai": "^5.1.2",
+    "mocha": "^11.0.1"
   }
 }

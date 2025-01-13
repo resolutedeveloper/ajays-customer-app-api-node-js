@@ -179,10 +179,9 @@ const mobile_generate_otp = async (req, res) => {
             }
             return otp;
         }
-        
-                            
+                    
         // const currentTime = new Date();
-        // const expirationTime = new Date(currentTime.getTime() + 5 * 60000); // 5 mi
+        // const expirationTime = new Date(currentTime.getTime() + 5 * 60000); // 5 min
         const currentTimeUTC = new Date();
         const currentTimeIST = new Date(currentTimeUTC.getTime() + (5.5 * 60 * 60 * 1000)); // Add 5 hours 30 minutes
         const expirationTimeIST = new Date(currentTimeIST.getTime() + 5 * 60000); 
