@@ -26,6 +26,7 @@ app.use(morgan('tiny', { stream: { write: (msg) => logger.info(msg.trim()) } }))
 // Middleware for logging all requests
 app.use((req, res, next) => {
     logger.info(`Incoming request: ${req.method} ${req.url}`);
+    req.io = io;
     next();
 });
 
