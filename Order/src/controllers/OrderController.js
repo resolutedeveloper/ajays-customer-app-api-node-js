@@ -22,7 +22,7 @@ const AddOrder = async (req, res, io) => {
 
 
         const room = `location_room_${LocationID}`; // Generate the room name
-        io.to(room).emit('OrderNotification', {
+        io.to(room).emit('message', {
             success: true,
             message: 'New order created!',
             // orderId: newOrder.OrderID,
