@@ -21,7 +21,7 @@ const redisConnection = async () => {
         });
         const test_catlog = await client.get("CatlogPing");
         const test_customer = await client.get("CustomerPing");
-        console.log(`${COLOR}${test_catlog}-${test_customer}${RESET}`);
+        console.log(`${COLOR}${test_catlog} ~ ${test_customer}${RESET}`);
     } catch (error) {
         console.log(error);
     }
