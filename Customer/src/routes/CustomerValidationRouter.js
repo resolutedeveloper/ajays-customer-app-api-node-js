@@ -14,7 +14,7 @@ const versionkey = (req, res, next) => {
     validateRequest(req, res, next, schema);
 }
 
-router.post("/version",versionkey, customerVersionHandler);
+router.post("/version", versionkey, customerVersionHandler);
 
 
 
