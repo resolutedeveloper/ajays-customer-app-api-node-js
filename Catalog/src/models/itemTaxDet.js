@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes)=>{
             type: DataTypes.INTEGER,
         },
         IsInclusive:{
-            type: DataTypes.INTEGER,
+            type: DataTypes.BOOLEAN,
         },
         CompanyID:{
             type: DataTypes.INTEGER,
