@@ -21,6 +21,7 @@ db.sequelize = sequelize;
 db.order = require('../models/orderModel')(sequelize, DataTypes);
 db.rating = require('../models/ratingModel')(sequelize, DataTypes);
 db.orderDetails = require('../models/orderDetailsModel.js')(sequelize, DataTypes);
+db.orderDetailsTax = require('../models/orderDetailsTaxModel.js')(sequelize, DataTypes);
 db.ratingItem = require('../models/ratingItemModel.js')(sequelize, DataTypes);
 db.feedback = require('../models/feedbackModel.js')(sequelize, DataTypes);
 

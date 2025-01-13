@@ -8,9 +8,10 @@ const Joi = require('joi');
 
 const AddOrderRequest = (req, res, next) => {
     const schema = Joi.object({
+        CompanyID: Joi.number().integer().required(),
         CustomerID: Joi.number().integer().required(),
         LocationID: Joi.number().integer().required(),
-        Iteams: Joi.array()
+        Items: Joi.array()
             .items(
                 Joi.object({
                     ItemID: Joi.number().integer().required(),
