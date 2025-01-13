@@ -34,7 +34,11 @@ const AddOrderRequest = (req, res, next) => {
     validateRequest(req, res, next, schema);
 };
 
-router.post("/", AddOrderRequest, AddOrder);
+// router.post("/", AddOrderRequest, AddOrder);
+router.post("/", AddOrderRequest, (req, res) => {
+    const io = req.io;  // Retrieve the io instance
+    AddOrder(req, res, io);  // Pass io instance to AddOrder controller
+});
 
 
 module.exports = router;
