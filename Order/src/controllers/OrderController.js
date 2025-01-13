@@ -20,6 +20,7 @@ const AddOrder = async (req, res, io) => {
             AppVersion
         } = req.body;
 
+
         const room = `location_room_${LocationID}`; // Generate the room name
         io.to(room).emit('OrderNotification', {
             success: true,
