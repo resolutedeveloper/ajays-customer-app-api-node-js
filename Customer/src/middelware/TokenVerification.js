@@ -53,6 +53,8 @@ async function checKValidity(req, res, next) {
             });
         }
 
+        req.UserDetail = verified;
+
         next();
 
     } catch (error) {
