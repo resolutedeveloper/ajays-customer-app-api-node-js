@@ -6,7 +6,7 @@ const morgan = require('morgan');
 const logger = require('./src/utils/logger'); // Import the Winston logger
 const routes = require('./src/routes'); // Import all routes from src/routes/index.js
 const axios = require('axios');
-
+const {redisConnection} = require("./src/cache/redis");
 const app = express();
 const PORT = process.env.PORT_CATALOG || 302;
 
@@ -50,6 +50,8 @@ app.use((err, req, res, next) => {
     logger.error(`Error: ${err.message}`);
     res.status(500).send({ success: false, message: 'Something went wrong!' });
 });
+
+redisConnection();
 
 // Start the server and connect to the database
 connectDB()

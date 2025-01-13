@@ -16,11 +16,12 @@ client.on("error", (err) => {
 const redisConnection = async () => {
     try {
         await client.connect();
-        await client.set("AdminPing", "Redis Admin Pong", {
+        await client.set("CatlogPing", "Redis Catlog Pong", {
             NX: true,
         });
-        const test = await client.get("ClientPing");
-        console.log(`${COLOR}${test}${RESET}`);
+        const test_customer = await client.get("CustomerPing");
+        const test_order = await client.get("OrderPing");
+        console.log(`${COLOR}${test_customer}-${test_order}${RESET}`);
     } catch (error) {
         console.log(error);
     }
