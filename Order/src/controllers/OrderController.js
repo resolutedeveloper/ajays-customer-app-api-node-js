@@ -24,7 +24,7 @@ const AddOrder = async (req, res, io) => {
         io.to(room).emit('OrderNotification', {
             success: true,
             message: 'New order created!',
-            orderId: newOrder.OrderID,
+            // orderId: newOrder.OrderID,
             locationId: LocationID,
         });
 
