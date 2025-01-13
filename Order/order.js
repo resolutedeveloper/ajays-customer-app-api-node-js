@@ -14,7 +14,7 @@ const setupSocket = require('./src/config/socket');  // socket.js ko import kare
 
 const app = express();
 const server = http.createServer(app);
-setupSocket(server);
+const io = setupSocket(server);
 const PORT = process.env.PORT_ORDER || 300;
 
 // Middleware for parsing JSON requests
