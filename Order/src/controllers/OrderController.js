@@ -20,6 +20,21 @@ const AddOrder = async (req, res, io) => {
             AppVersion
         } = req.body;
 
+        const room = `location_room_${LocationID}`; // Generate the room name
+        io.to(room).emit('OrderNotification', {
+            success: true,
+            message: 'New order created!',
+            orderId: newOrder.OrderID,
+            locationId: LocationID,
+        });
+
+        return res.status(201).send({
+            success: true,
+            message: "Order created successfully!",
+            // OrderID: newOrder.OrderID,
+        });
+        /*
+
         var new_items = [
             {
                 "ItemID": 1,
@@ -424,7 +439,7 @@ const AddOrder = async (req, res, io) => {
             success: true,
             message: "Order created successfully!",
             OrderID: newOrder.OrderID,
-        });
+        });*/
 
     } catch (error) {
         await db_transaction.rollback();
