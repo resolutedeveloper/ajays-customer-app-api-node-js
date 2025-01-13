@@ -420,7 +420,7 @@ const AddOrder = async (req, res, io) => {
             success: true,
             message: 'New order created!',
             OrderID: newOrder.OrderID,
-            locationId: req.body,
+            Data: req.body,
         });
 
         return res.status(201).send({
