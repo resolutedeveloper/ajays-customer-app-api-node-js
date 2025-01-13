@@ -31,6 +31,10 @@ db.state = require('../models/stateModel')(sequelize, DataTypes);
 db.city = require('../models/cityModel')(sequelize, DataTypes);
 db.itemLocationRate = require('./itemRateModel')(sequelize,DataTypes);
 db.itemHistory = require('./itemHistoryModel')(sequelize,DataTypes);
+db.tax = require('../models/Tax')(sequelize,DataTypes);
+db.taxDefinition = require('../models/taxDefinition')(sequelize,DataTypes);
+db.taxDefinitionDetails = require('../models/taxDefinitionDetails')(sequelize,DataTypes);
+db.itemTaxDet = require('../models/itemTaxDet')(sequelize,DataTypes);
 
 
 
