@@ -88,11 +88,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         ItemOrder: {
             type: DataTypes.INTEGER,
-        },
-        SubTotal: {
-            type: DataTypes.FLOAT,
-            allowNull: false,
-        },
+        }
     }, { timestamps: false });
 
     return OrderDetails;
