@@ -12,7 +12,6 @@ const itemlist = async (req, res) => {
             },
         });
 
-
         if (itemlist) {
             return res.status(200).json({
                 message: 'product details found successfully',
@@ -157,7 +156,6 @@ const citystores = async (req, res) => {
             }
         );
 
-
         if (Cities) {
             return res.status(200).json({
                 message: 'Cities details found successfully',
@@ -170,7 +168,7 @@ const citystores = async (req, res) => {
             });
         }
     } catch (err) {
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
             message: "Error fetching Cities",
             error: err.message || err,
@@ -230,8 +228,18 @@ const citystores = async (req, res) => {
 
 const latlonglocation = async (req, res) => {
     const axios = require('axios');
-    const lat1 = parseFloat(req.query.latitude);
-    const lon1 = parseFloat(req.query.longitude);
+
+    const { latitude, longitude } = req.query;
+    if (!latitude || !longitude) {
+        return res.status(400).send({
+            ErrorCode: "VALIDATION",
+            ErrorMessage: 'Latitude or Longitude not found'
+        });
+    }
+    
+    const lat1 = parseFloat(latitude);
+    const lon1 = parseFloat(longitude);
+
     const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat1}&lon=${lon1}`;
 
     const calculateDistance = (lat1, lon1, lat2, lon2) => {
