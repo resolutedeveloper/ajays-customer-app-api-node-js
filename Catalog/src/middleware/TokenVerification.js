@@ -19,7 +19,7 @@ async function checKValidity(req, res, next) {
             });
         }
 
-        const verified = await jwt.verify(token, 'AjaysToken');
+        const verified = await jwt.verify(token, process.env.JWT_SECRET);
         if (!verified) {
             return res.status(404).json({
                 message: "Invalid token"

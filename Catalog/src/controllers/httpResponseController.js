@@ -2,6 +2,7 @@ const db = require('../models');  // Import the db object from index.js
 const location = db.location;  // Get the location model from the db object
 const logger = require("../utils/logger");
 const { Op, where } = require('sequelize');
+const axios = require('axios');
 
 const itemlist = async (req, res) => {
     try {
@@ -11,7 +12,6 @@ const itemlist = async (req, res) => {
                 ItemID: ItemID,
             },
         });
-
 
         if (itemlist) {
             return res.status(200).json({
@@ -25,7 +25,7 @@ const itemlist = async (req, res) => {
             });
         }
     } catch (err) {
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
             message: "Error fetching product",
             error: err.message || err,
@@ -157,7 +157,6 @@ const citystores = async (req, res) => {
             }
         );
 
-
         if (Cities) {
             return res.status(200).json({
                 message: 'Cities details found successfully',
@@ -170,7 +169,7 @@ const citystores = async (req, res) => {
             });
         }
     } catch (err) {
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
             message: "Error fetching Cities",
             error: err.message || err,
@@ -229,9 +228,18 @@ const citystores = async (req, res) => {
 // };
 
 const latlonglocation = async (req, res) => {
-    const axios = require('axios');
-    const lat1 = parseFloat(req.query.latitude);
-    const lon1 = parseFloat(req.query.longitude);
+    
+    const { latitude, longitude } = req.query;
+    if (!latitude || !longitude) {
+        return res.status(400).send({
+            ErrorCode: "VALIDATION",
+            ErrorMessage: 'Latitude or Longitude not found'
+        });
+    }
+
+    const lat1 = parseFloat(latitude);
+    const lon1 = parseFloat(longitude);
+
     const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat1}&lon=${lon1}`;
 
     const calculateDistance = (lat1, lon1, lat2, lon2) => {
@@ -261,8 +269,6 @@ const latlonglocation = async (req, res) => {
                 throw new Error("State district not found in the response.");
             }
 
-            const { Op } = require('sequelize');
-
             const cityData = await db.city.findOne({
                 where: {
                     CityName: {
@@ -271,7 +277,7 @@ const latlonglocation = async (req, res) => {
                 }
             });
 
-            const LatLongcityID = cityData.dataValues.CityID;
+            const LatLongcityID = cityData?.dataValues?.CityID;
 
             const locations = await db.location.findAll({
                 where: {
@@ -281,13 +287,13 @@ const latlonglocation = async (req, res) => {
 
             if (locations) {
                 const results = locations.map((location) => {
-                    const lat2 = parseFloat(location.Latitude);
-                    const lon2 = parseFloat(location.Longitude);
+                    const lat2 = parseFloat(location?.Latitude);
+                    const lon2 = parseFloat(location?.Longitude);
                     const distance = calculateDistance(lat1, lon1, lat2, lon2);
                     const duration = estimateDuration(distance);
 
                     return {
-                        ...location.dataValues,
+                        ...location?.dataValues,
                         Distance: `${distance.toFixed(2)} km`,
                         Duration: `${duration.toFixed(2)} minutes`,
                     };

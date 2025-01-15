@@ -5,6 +5,8 @@ const router = express.Router();
 
 // Middlewares (if any)
 const httpRequest = require("../middleware/httpRequest");
+const checKValidity = require('../middleware/TokenVerification');
+
 
 // router.post("/creates", createLocation);
 // router.get("/gets/:LocationID", getLocation);
@@ -12,10 +14,10 @@ const httpRequest = require("../middleware/httpRequest");
 
 // router.get("/search",searchLocations);
 
-router.get("/item-detail/:ItemID", itemlist);
+// router.get("/item-detail/:ItemID", itemlist);
 router.get("/location-detail/:CityID", locationDetail);
-router.get("/city-stores", citystores);
-router.get("/latlonglocation", latlonglocation);
+// router.get("/city-stores", citystores);
+// router.get("/latlonglocation", latlonglocation);
 router.get("/latlonglocationItem", latlonglocationItem);
 router.post("/locationBulkGetId", httpRequest, bulkfindLocationsHttp);
 
