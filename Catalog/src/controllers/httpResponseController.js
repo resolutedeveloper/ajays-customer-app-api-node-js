@@ -3,6 +3,7 @@ const location = db.location;  // Get the location model from the db object
 const logger = require("../utils/logger");
 const { Op, where } = require('sequelize');
 const axios = require('axios');
+const { distanceCalculator, timeCalculator } = require("../utils/distanceCalculator");
 
 const itemlist = async (req, res) => {
     try {
@@ -228,7 +229,6 @@ const citystores = async (req, res) => {
 // };
 
 const latlonglocation = async (req, res) => {
-    
     const { latitude, longitude } = req.query;
     if (!latitude || !longitude) {
         return res.status(400).send({
@@ -278,6 +278,13 @@ const latlonglocation = async (req, res) => {
             });
 
             const LatLongcityID = cityData?.dataValues?.CityID;
+
+            if (!LatLongcityID) {
+                return res.status(400).send({
+                    ErrorCode: "VALIDATION",
+                    ErrorMessage: 'Location details not found'
+                });
+            }
 
             const locations = await db.location.findAll({
                 where: {
@@ -392,23 +399,38 @@ const latlonglocationItem = async (req, res) => {
 
 async function bulkfindLocationsHttp(req, res) {
     try {
-        const { allLocationsArr } = req.body;
-        if (!allLocationsArr) {
+        const { allLocationsArr, userLat, userLong } = req.body;
+        if (!allLocationsArr || !userLat || !userLong) {
             return res.status(404).json({
                 message: "No location was found"
             })
         }
         const parsedLocation = JSON.parse(allLocationsArr);
-        // console.log(parsedLocation);
 
         const dataForReqLocations = await db.location.findAll({
             where: {
                 LocationID: { [Op.in]: parsedLocation }
             }
         });
+
+        if (dataForReqLocations && dataForReqLocations.length == 0) {
+            return res.status(200).json({
+                message: 'fetched success',
+                locations: dataForReqLocations
+            });
+        }
+
+        const dataWithDistance = dataForReqLocations.map((locationDb) => {
+            const dist = distanceCalculator(userLat , userLong, locationDb.Latitude ? locationDb.Latitude : 0, locationDb.Longitude ? locationDb.Longitude : 0);
+            const t = timeCalculator(dist, 40); // 40 km / hrs
+
+            locationDb.dataValues.Distance = `${dist} km`;
+            locationDb.dataValues.Duration = `${t} minutes`;
+            return locationDb;
+        })
         return res.status(200).json({
             message: 'fetched success',
-            locations: dataForReqLocations
+            locations: dataWithDistance
         });
     } catch (error) {
         console.log(error);
@@ -417,4 +439,5 @@ async function bulkfindLocationsHttp(req, res) {
         });
     }
 }
+
 module.exports = { itemlist, locationDetail, citystores, latlonglocation, latlonglocationItem, bulkfindLocationsHttp };
