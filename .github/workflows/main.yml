@@ -73,6 +73,7 @@ jobs:
           export ORDER_LOCAL_URL=http://localhost:300/api/v1/
           export HTTP_REQUEST_SECRET_KEY=b4365ed7a1ed00f705f4bff7e7f4e977cdc14f4c3b967f0d38e57ab1552b1497
           export SECRET_KEY=9lkeFOhxt10
+          export JWT_SECRET="AjaysToken"
           export OTPDIGITS=4
           export UPLOADPATH=uploads/
           export CRYPTOJSKEY=9lkeFOhxt10
@@ -134,6 +135,7 @@ jobs:
           export ORDER_LOCAL_URL=http://localhost:300/api/v1/
           export HTTP_REQUEST_SECRET_KEY=b4365ed7a1ed00f705f4bff7e7f4e977cdc14f4c3b967f0d38e57ab1552b1497
           export SECRET_KEY=9lkeFOhxt10
+          export JWT_SECRET="AjaysToken"
           export OTPDIGITS=4
           export UPLOADPATH=uploads/
           export CRYPTOJSKEY=9lkeFOhxt10
@@ -195,6 +197,7 @@ jobs:
           export ORDER_LOCAL_URL=http://localhost:300/api/v1/
           export HTTP_REQUEST_SECRET_KEY=b4365ed7a1ed00f705f4bff7e7f4e977cdc14f4c3b967f0d38e57ab1552b1497
           export SECRET_KEY=9lkeFOhxt10
+          export JWT_SECRET="AjaysToken"
           export OTPDIGITS=4
           export UPLOADPATH=uploads/
           export CRYPTOJSKEY=9lkeFOhxt10
