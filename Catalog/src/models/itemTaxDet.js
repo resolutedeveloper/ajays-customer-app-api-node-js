@@ -1,23 +1,22 @@
-module.exports = (sequelize, DataTypes)=>{
-    const itemTaxDetModel = sequelize.define("ItemTaxDet",{
-        ItemID:{
-            type: DataTypes.INTEGER,
-            primaryKey: true,
+module.exports = (sequelize, DataTypes) => {
+    const itemTaxDetModel = sequelize.define("ItemTaxDet", {
+        ItemID: {
+            type: DataTypes.INTEGER
         },
-        BatchID:{
-            type: DataTypes.INTEGER,
-        },
-        TaxDefID:{
+        BatchID: {
             type: DataTypes.INTEGER,
         },
-        IsInclusive:{
+        TaxDefID: {
+            type: DataTypes.INTEGER,
+        },
+        IsInclusive: {
             type: DataTypes.BOOLEAN,
         },
-        CompanyID:{
+        CompanyID: {
             type: DataTypes.INTEGER,
         }
 
-    },{timestamps: false});
+    }, { timestamps: false });
 
 
     return itemTaxDetModel;
