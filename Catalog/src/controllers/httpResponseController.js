@@ -1,7 +1,7 @@
 const db = require('../models');  // Import the db object from index.js
 const location = db.location;  // Get the location model from the db object
 const logger = require("../utils/logger");
-const { Op, where } = require('sequelize');
+const { Op, where, QueryTypes } = require('sequelize');
 const axios = require('axios');
 const { distanceCalculator, timeCalculator } = require("../utils/distanceCalculator");
 
@@ -421,7 +421,7 @@ async function bulkfindLocationsHttp(req, res) {
         }
 
         const dataWithDistance = dataForReqLocations.map((locationDb) => {
-            const dist = distanceCalculator(userLat , userLong, locationDb.Latitude ? locationDb.Latitude : 0, locationDb.Longitude ? locationDb.Longitude : 0);
+            const dist = distanceCalculator(userLat, userLong, locationDb.Latitude ? locationDb.Latitude : 0, locationDb.Longitude ? locationDb.Longitude : 0);
             const t = timeCalculator(dist, 40); // 40 km / hrs
 
             locationDb.dataValues.Distance = `${dist} km`;
@@ -440,4 +440,38 @@ async function bulkfindLocationsHttp(req, res) {
     }
 }
 
-module.exports = { itemlist, locationDetail, citystores, latlonglocation, latlonglocationItem, bulkfindLocationsHttp };
+
+const checkoutItemsData = async (req, res) => {
+    try {
+        const itemJson = JSON.stringify(req.body.Items);
+        const locationID = req.body.LocationID;
+        const companyID = req.body.CompanyID;
+
+        const result = await db.sequelize.query(
+            "CALL SP_ItemList(:ItemJson, :LocationID, :CompanyID)", {
+            replacements: {
+                ItemJson: itemJson,
+                LocationID: locationID,
+                CompanyID: companyID,
+            },
+            type: QueryTypes.SELECT,
+            raw: false,
+        }
+        );
+
+        const cleanedResult = result.map(item => Object.values(item));
+        return res.status(200).json({
+            message: 'fetched success',
+            data: cleanedResult
+        });
+
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: "Error fetching product",
+            error: err.message || err,
+        });
+    }
+};
+
+module.exports = { itemlist, locationDetail, citystores, latlonglocation, latlonglocationItem, bulkfindLocationsHttp, checkoutItemsData };

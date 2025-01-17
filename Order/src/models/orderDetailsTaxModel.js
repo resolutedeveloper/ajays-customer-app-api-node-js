@@ -5,6 +5,10 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
         },
+        OrderID: {
+            type: DataTypes.UUID,
+            allowNull: false,
+        },
         ItemID: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -17,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        TaxPercentage: {
+        Percentage: {
             type: DataTypes.FLOAT,
             allowNull: false,
         },

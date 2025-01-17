@@ -5,8 +5,13 @@ require('dotenv').config();
 const sequelize = new Sequelize(dbConfig.DB_NAME_CATALOG, dbConfig.DB_USER, dbConfig.DB_PASSWORD, {
     host: dbConfig.DB_HOST,
     dialect: 'mysql',
+    dialectModule: require('mysql2'),
     logging: false,
-    alter: true
+    alter: true,
+    port: 3306,                // MySQL port (default is 3306)
+    dialectOptions: {
+        multipleStatements: true,
+    },
 });
 sequelize.authenticate()
     .then(() => {

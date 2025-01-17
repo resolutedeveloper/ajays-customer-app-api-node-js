@@ -9,6 +9,10 @@ const sequelize = new Sequelize(
         dialect: 'mysql',
         timezone: '+05:30', // Set your timezone here (e.g., '+00:00' for UTC)
         logging: false, // Disable SQL query logging (optional)
+        port: process.env.DB_PORT || 3306, // Set the MySQL port (default 3306)
+        dialectOptions: {
+            multipleStatements: true, // Yeh zaroori hai
+        },
     }
 );
 

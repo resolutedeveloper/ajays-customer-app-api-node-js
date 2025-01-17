@@ -9,6 +9,9 @@ const sequelize = new Sequelize(
         dialect: 'mysql',
         timezone: '+05:30', // Set your timezone here (e.g., '+00:00' for UTC)
         logging: false, // Disable SQL query logging (optional)
+        dialectOptions: {
+            multipleStatements: true, // Yeh zaroori hai
+        },
     }
 );
 
