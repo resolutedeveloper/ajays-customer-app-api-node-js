@@ -189,6 +189,7 @@ const AddOrder = async (req, res, io) => {
             success: true,
             message: "Order created successfully!",
             OrderID: newOrder.OrderID,
+            socket_data: socket_data
         });
 
     } catch (error) {
