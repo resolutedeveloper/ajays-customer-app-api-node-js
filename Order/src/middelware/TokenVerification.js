@@ -51,9 +51,10 @@ async function checKValidity(req, res, next) {
                 message: "Your account is unauthorized. Please contact the administrator for further assistance."
             });
         }
+        req.body.CustomerID = decoded.CustomerID;
+
 
         next();
-
     } catch (error) {
         return res.status(500).json({
             message: "Sorry! There was a server-side error",

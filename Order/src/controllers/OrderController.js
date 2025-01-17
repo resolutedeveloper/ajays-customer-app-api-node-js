@@ -38,7 +38,6 @@ const AddOrder = async (req, res, io) => {
 
         var http_item_data = axiosData?.data?.data;
 
-        console.log('http_item_data', http_item_data)
         if (http_item_data[0]?.SUCCESS == 0) {
             return res.status(400).json({
                 message: "Outlets currently offline",
@@ -156,40 +155,39 @@ const AddOrder = async (req, res, io) => {
 
         await db_transaction.commit();
 
-        req.body.Items = orderDetailTaxEntries
-        req.body.Itemtax = orderDetailTaxEntries
+        /*
+        var socket_order = await db.order.findAll({
+            where: {
+                OrderID: newOrder.OrderID,
+            },
+        });
 
+        var socket_items = await db.orderDetails.findAll({
+            where: {
+                OrderID: newOrder.OrderID,
+            },
+        });
+        var socket_taxs = await db.orderDetails.findAll({
+            where: {
+                OrderID: newOrder.OrderID,
+            },
+        });
+        var payment_info = [];
 
-        var socket_data = [];
-        socket_data.order = await db.order.findAll({
-            where: {
-                OrderID: newOrder.OrderID,
-            },
-        });
-        socket_data.items = await db.orderDetails.findAll({
-            where: {
-                OrderID: newOrder.OrderID,
-            },
-        });
-        socket_data.taxs = await db.orderDetails.findAll({
-            where: {
-                OrderID: newOrder.OrderID,
-            },
-        });
-        socket_data.payment_info = [];
-        // Room-specific notification broadcast
         const room = `location_room_${LocationID}`; // Generate the room name
         io.to(room).emit('NewOrder', {
             success: true,
             message: 'New order created!',
-            data: socket_data
-        });
+            order: socket_order,
+            items: socket_items,
+            taxs: socket_taxs,
+            payment_info: payment_info
+        });*/
 
         return res.status(201).send({
             success: true,
             message: "Order created successfully!",
             OrderID: newOrder.OrderID,
-            socket_data: socket_data
         });
 
     } catch (error) {
