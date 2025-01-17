@@ -192,7 +192,7 @@ const AddOrder = async (req, res, io) => {
         });
 
     } catch (error) {
-        await db_transaction.rollback();
+        // await db_transaction.rollback();
         return res.status(500).send({
             success: false,
             message: "Failed to create order!",
