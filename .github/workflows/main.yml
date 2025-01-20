@@ -42,7 +42,7 @@ jobs:
           cd /var/www/repo/public_html
 
           echo "Cloning the repository using SSH..."
-          git clone git@github.com:resolutedeveloper/ajays-customer-app-api-node-js.git .
+          git clone git@github.com:resolutedeveloper/ajays-customer-app-api-node-js.git
 
     - name: Deploy Catelog using SSH
       if: ${{ github.event.inputs.deploy_service1 == 'true' }}
