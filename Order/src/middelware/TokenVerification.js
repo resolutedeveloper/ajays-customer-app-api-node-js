@@ -53,7 +53,6 @@ async function checKValidity(req, res, next) {
         }
         req.body.CustomerID = decoded.CustomerID;
 
-
         next();
     } catch (error) {
         return res.status(500).json({

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { AddOrder } = require('../controllers/OrderController');
+const { AddOrder, getOrderListUser, getOrderDetail } = require('../controllers/OrderController');
 const { validateRequest } = require('../config/validate-request');
 const Joi = require('joi');
 
@@ -39,6 +39,9 @@ router.post("/", AddOrderRequest, (req, res) => {
     const io = req.io;  // Retrieve the io instance
     AddOrder(req, res, io);  // Pass io instance to AddOrder controller
 });
+
+router.get("/list", getOrderListUser);
+router.get("/detail", getOrderDetail);
 
 
 module.exports = router;

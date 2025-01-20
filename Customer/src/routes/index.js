@@ -6,9 +6,9 @@ route.use("/auth", require("./CustomerAuthRoutes.js"));
 route.use("/customer", CustomerToken, require("./CustomerDashBoardRoutes.js"));
 route.use("/customers", require("./customerRoutes.js"));
 route.use("/favoriteLocation", CustomerToken, require("./favoriteLocationRoutes.js"));
-route.use("/customefcm", CustomerToken, require("./CustomerFcmRoutes.js"))
-route.use("/customeVersion", CustomerToken, require("./CustomerValidationRouter.js"))
-route.use("/customerHistory", CustomerToken, require("./historyCustomerRoutes.js"))
+route.use("/customefcm", CustomerToken, require("./CustomerFcmRoutes.js"));
+route.use("/customeVersion", CustomerToken, require("./CustomerValidationRouter.js"));
+route.use("/customerHistory", CustomerToken, require("./historyCustomerRoutes.js"));
 
 route.use('/app-version', require('./AppversionMaintananceRouter')); // currently not use
 
