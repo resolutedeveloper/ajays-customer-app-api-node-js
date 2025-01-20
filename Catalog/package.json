@@ -17,8 +17,12 @@
     "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
+<<<<<<< HEAD
     "mysql2": "^3.11.5",
     "node-cron": "^3.0.3",
+=======
+    "mysql2": "^3.12.0",
+>>>>>>> cf59e4e18c3e5d73111f7a2a7b8197f41b177659
     "nodemon": "^3.1.9",
     "path": "^0.12.7",
     "radis": "^2.0.0",

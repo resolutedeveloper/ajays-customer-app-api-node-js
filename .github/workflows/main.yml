@@ -73,6 +73,7 @@ jobs:
           export ORDER_LOCAL_URL=http://localhost:300/api/v1/
           export HTTP_REQUEST_SECRET_KEY=b4365ed7a1ed00f705f4bff7e7f4e977cdc14f4c3b967f0d38e57ab1552b1497
           export SECRET_KEY=9lkeFOhxt10
+          export JWT_SECRET="AjaysToken"
           export OTPDIGITS=4
           export UPLOADPATH=uploads/
           export CRYPTOJSKEY=9lkeFOhxt10
@@ -92,6 +93,8 @@ jobs:
           export FIREBASE_AUTH_PROVIDER_CERT_URL=https://www.googleapis.com/oauth2/v1/certs
           export FIREBASE_CLIENT_CERT_URL=https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-krnem%40ajays-customer.iam.gserviceaccount.com
           export FIREBASE_UNIVERSE_DOMAIN=googleapis.com   
+          export REDIS_URL_INTERNAL=127.0.0.1
+          export REDIS_PORT=6379
 
           # Copy the Catalog files to the target directory
           cp -r /var/www/repo/public_html/Catalog/* /var/www/Catalog/public_html
@@ -132,6 +135,7 @@ jobs:
           export ORDER_LOCAL_URL=http://localhost:300/api/v1/
           export HTTP_REQUEST_SECRET_KEY=b4365ed7a1ed00f705f4bff7e7f4e977cdc14f4c3b967f0d38e57ab1552b1497
           export SECRET_KEY=9lkeFOhxt10
+          export JWT_SECRET="AjaysToken"
           export OTPDIGITS=4
           export UPLOADPATH=uploads/
           export CRYPTOJSKEY=9lkeFOhxt10
@@ -151,6 +155,8 @@ jobs:
           export FIREBASE_AUTH_PROVIDER_CERT_URL=https://www.googleapis.com/oauth2/v1/certs
           export FIREBASE_CLIENT_CERT_URL=https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-krnem%40ajays-customer.iam.gserviceaccount.com
           export FIREBASE_UNIVERSE_DOMAIN=googleapis.com
+          export REDIS_URL_INTERNAL=127.0.0.1
+          export REDIS_PORT=6379
           
           # Copy the Customer files to the target directory
           cp -r /var/www/repo/public_html/Customer/* /var/www/Customer/public_html
@@ -191,6 +197,7 @@ jobs:
           export ORDER_LOCAL_URL=http://localhost:300/api/v1/
           export HTTP_REQUEST_SECRET_KEY=b4365ed7a1ed00f705f4bff7e7f4e977cdc14f4c3b967f0d38e57ab1552b1497
           export SECRET_KEY=9lkeFOhxt10
+          export JWT_SECRET="AjaysToken"
           export OTPDIGITS=4
           export UPLOADPATH=uploads/
           export CRYPTOJSKEY=9lkeFOhxt10
@@ -210,6 +217,8 @@ jobs:
           export FIREBASE_AUTH_PROVIDER_CERT_URL=https://www.googleapis.com/oauth2/v1/certs
           export FIREBASE_CLIENT_CERT_URL=https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-krnem%40ajays-customer.iam.gserviceaccount.com
           export FIREBASE_UNIVERSE_DOMAIN=googleapis.com
+          export REDIS_URL_INTERNAL=127.0.0.1
+          export REDIS_PORT=6379
           
           # Copy the Order files to the target directory
           cp -r /var/www/repo/public_html/Order/* /var/www/Order/public_html

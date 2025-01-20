@@ -41,34 +41,34 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
         },
         BigUnitValue: {
-            type: DataTypes.FLOAT,
+            type: DataTypes.STRING,
         },
         SmallUnit: {
             type: DataTypes.STRING,
         },
         SmallUnitValue: {
-            type: DataTypes.FLOAT,
+            type: DataTypes.STRING,
         },
         OperationalUnit: {
             type: DataTypes.STRING,
         },
         OperationalUnitValue: {
-            type: DataTypes.FLOAT,
+            type: DataTypes.STRING,
         },
         CostingUnit: {
             type: DataTypes.STRING,
         },
         CostingUnitValue: {
-            type: DataTypes.FLOAT,
+            type: DataTypes.STRING,
         },
         SellingUnit: {
             type: DataTypes.STRING,
         },
         SellingUnitValue: {
-            type: DataTypes.FLOAT,
+            type: DataTypes.STRING,
         },
         ConversionRatio: {
-            type: DataTypes.FLOAT,
+            type: DataTypes.STRING,
         },
         RateWithoutTax: {
             type: DataTypes.FLOAT,
@@ -88,11 +88,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         ItemOrder: {
             type: DataTypes.INTEGER,
-        },
-        SubTotal: {
-            type: DataTypes.FLOAT,
-            allowNull: false,
-        },
+        }
     }, { timestamps: false });
 
     return OrderDetails;

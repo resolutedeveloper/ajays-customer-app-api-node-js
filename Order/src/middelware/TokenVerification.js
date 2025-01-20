@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const db = require('../models/index');
-const { client } = require('../cache/locations'); // Redis client ko import karna
+const { client } = require('../cache/redis'); // Redis client ko import karna
 require('dotenv').config();
 const moment = require('moment-timezone');
 async function checKValidity(req, res, next) {
@@ -51,9 +51,10 @@ async function checKValidity(req, res, next) {
                 message: "Your account is unauthorized. Please contact the administrator for further assistance."
             });
         }
+        req.body.CustomerID = decoded.CustomerID;
+
 
         next();
-
     } catch (error) {
         return res.status(500).json({
             message: "Sorry! There was a server-side error",

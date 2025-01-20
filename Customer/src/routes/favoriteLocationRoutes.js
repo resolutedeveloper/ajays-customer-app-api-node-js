@@ -42,7 +42,7 @@ const getlocationKey = (req, res, next) => {
 
 router.post("/", createFavoriteLocation);
 // router.put("/", updateFavoriteLocation);
-router.delete("/:FavoriteLocationID", deleteFavoriteLocation);
+router.delete("/:LocationID", deleteFavoriteLocation);
 router.get("/", viewAllFavoriteLocation);
 router.get("/:id",getlocationKey, getFavoriteLocationById);
 

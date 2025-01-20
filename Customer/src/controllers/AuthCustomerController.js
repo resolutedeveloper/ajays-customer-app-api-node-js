@@ -230,7 +230,7 @@ const OTPverification = async (req, res) => {
             return res.status(400).send({ ErrorCode: "VALIDATION", Message: 'Invalid OTP..' });
         }
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        return res.status(400).json({ error: error.message });
     }
 }
 

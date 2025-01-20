@@ -99,30 +99,44 @@ const createFavoriteLocation = async (req, res) => {
 
 const deleteFavoriteLocation = async (req, res) => {
     try {
-        const FindData = await db.favoriteLocation.findOne({
-            where: {
-                IsDeleted: 0,
-                FavoriteLocationID: req.params.FavoriteLocationID
-            },
-        });
-        if (!FindData) {
+        const { UserDetail } = req;
+        if (!UserDetail || !UserDetail?.CustomerID) {
             return res.status(400).send({
-                ErrorCode: "USEDID",
-                ErrorMessage: "This location is not exist."
+                ErrorCode: "LOCATION",
+                ErrorMessage: "Invalid token! Login again"
             });
-        } else {
-
-            const LocationData = await db.favoriteLocation.update({
-                IsDeleted: 1
-            }, {
-                where: { FavoriteLocationID: req.params.FavoriteLocationID },
-            });
-
-            return res.status(200).json({
-                message: "Favorite location is deleted successfully.",
-                data: LocationData
-            })
         }
+
+        const { LocationID } = req.params;
+
+        if (!LocationID) {
+            return res.status(400).send({
+                ErrorMessage: "Location id not found."
+            });
+        }
+
+        const whereCondition = {};
+        whereCondition["IsDeleted"] = 0;
+        whereCondition["LocationID"] = LocationID;
+        whereCondition["CustomerID"] = UserDetail.CustomerID;
+
+        const FindData = await db.favoriteLocation.update({
+            IsDeleted: 1
+        }, {
+            where: whereCondition,
+        });
+
+        if (FindData[0] == 0) {
+            return res.status(400).send({
+                "ErrorCode": "USEDID",
+                "ErrorMessage": "This location does not exist."
+            });
+        }
+
+        return res.status(200).json({
+            message: "Location removed from favorites."
+        })
+
     }
     catch (err) {
         return res.status(400).json({
@@ -133,6 +147,22 @@ const deleteFavoriteLocation = async (req, res) => {
 
 const viewAllFavoriteLocation = async (req, res) => {
     try {
+        const { UserDetail } = req;
+        if (!UserDetail || !UserDetail?.CustomerID) {
+            return res.status(400).send({
+                ErrorCode: "LOCATION",
+                ErrorMessage: "Invalid token! Login again"
+            });
+        }
+
+        const { latitude, longitude } = req.query;
+        if (!latitude || !longitude) {
+            return res.status(400).send({
+                ErrorCode: "LOCATION",
+                ErrorMessage: "Location is not enabled."
+            });
+        }
+        // console.log(UserDetail?.CustomerID);
         const FindLocation = await db.favoriteLocation.findAll({ where: { CustomerID: req.UserDetail.CustomerID, IsDeleted: 0 } });
         if (!FindLocation) {
             return res.status(400).send({
@@ -143,7 +173,11 @@ const viewAllFavoriteLocation = async (req, res) => {
             if (FindLocation.length > 0) {
                 const idArr = FindLocation.map((locate) => locate?.LocationID);
                 // console.log(idArr);
-                const axiosData = await axios.post(`${process?.env?.CATALOG_LOCAL_URL}/httpResponse/locationBulkGetId`, { allLocationsArr: JSON.stringify(idArr) }, {
+                const axiosData = await axios.post(`${process?.env?.CATALOG_LOCAL_URL}/httpResponse/locationBulkGetId`, {
+                    allLocationsArr: JSON.stringify(idArr),
+                    userLat: latitude,
+                    userLong: longitude
+                }, {
                     headers: { "Authorization": "Bearer " + process?.env?.HTTP_REQUEST_SECRET_KEY }
                 });
                 if (axiosData?.data?.locations) {
@@ -191,9 +225,6 @@ const getFavoriteLocationById = async (req, res) => {
         });
     }
 };
-
-
-
 
 
 module.exports = { createFavoriteLocation, deleteFavoriteLocation, viewAllFavoriteLocation, getFavoriteLocationById }

@@ -3,6 +3,7 @@ const db = require('../models/index');
 const { client } = require('../cache/redis'); // Redis client ko import karna
 require('dotenv').config();
 const moment = require('moment-timezone');
+
 async function checKValidity(req, res, next) {
     try {
         if (!req.headers.authorization) {
@@ -18,7 +19,7 @@ async function checKValidity(req, res, next) {
             });
         }
 
-        const verified = await jwt.verify(token, 'AjaysToken');
+        const verified = await jwt.verify(token, process.env.JWT_SECRET);
         if (!verified) {
             return res.status(404).json({
                 message: "Invalid token"

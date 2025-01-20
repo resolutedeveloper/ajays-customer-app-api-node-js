@@ -5,19 +5,21 @@ function setupSocket(server) {
     const io = socketIo(server);
 
     io.on('connection', (socket) => {
-        console.log('A user connected: ', socket.id);
-
-        // Room join karna
         socket.on('joinRoom', (room) => {
-            console.log(`User joined room: ${room}`);
-            socket.join(room);  // Join the room
+            socket.join(room);
 
-            // Room me message bhejna
-            socket.on('chatMessage', (msg) => {
-                io.to(room).emit('message', msg);  // Broadcast to room
+            socket.on('OrderApprove', (msg) => {
+                msg = {
+                    OrderID: 'fed69341-cd2f-4417-b7a3-507252a68d8c',
+                    Data: {
+                        CounterID: 1,
+                        OperatorID: 2
+                    }
+                }
+                const LocationID = room.replace("location_room_", "");
+                msg.LocationID = LocationID;
             });
 
-            // User disconnect hone par
             socket.on('disconnect', () => {
                 console.log('User disconnected');
             });

@@ -5,7 +5,10 @@ require('dotenv').config();
 const sequelize = new Sequelize(dbConfig.DB_NAME_ORDER, dbConfig.DB_USER, dbConfig.DB_PASSWORD, {
     host: dbConfig.DB_HOST,
     dialect: 'mysql',
-    logging: false
+    logging: false,
+    dialectOptions: {
+        multipleStatements: true, // Yeh zaroori hai
+    },
 });
 sequelize.authenticate()
     .then(() => {

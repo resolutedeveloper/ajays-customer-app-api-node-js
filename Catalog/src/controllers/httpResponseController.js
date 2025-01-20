@@ -1,7 +1,9 @@
 const db = require('../models');  // Import the db object from index.js
 const location = db.location;  // Get the location model from the db object
 const logger = require("../utils/logger");
-const { Op, where } = require('sequelize');
+const { Op, where, QueryTypes } = require('sequelize');
+const axios = require('axios');
+const { distanceCalculator, timeCalculator } = require("../utils/distanceCalculator");
 
 const itemlist = async (req, res) => {
     try {
@@ -11,7 +13,6 @@ const itemlist = async (req, res) => {
                 ItemID: ItemID,
             },
         });
-
 
         if (itemlist) {
             return res.status(200).json({
@@ -25,7 +26,7 @@ const itemlist = async (req, res) => {
             });
         }
     } catch (err) {
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
             message: "Error fetching product",
             error: err.message || err,
@@ -157,7 +158,6 @@ const citystores = async (req, res) => {
             }
         );
 
-
         if (Cities) {
             return res.status(200).json({
                 message: 'Cities details found successfully',
@@ -170,7 +170,7 @@ const citystores = async (req, res) => {
             });
         }
     } catch (err) {
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
             message: "Error fetching Cities",
             error: err.message || err,
@@ -229,9 +229,17 @@ const citystores = async (req, res) => {
 // };
 
 const latlonglocation = async (req, res) => {
-    const axios = require('axios');
-    const lat1 = parseFloat(req.query.latitude);
-    const lon1 = parseFloat(req.query.longitude);
+    const { latitude, longitude } = req.query;
+    if (!latitude || !longitude) {
+        return res.status(400).send({
+            ErrorCode: "VALIDATION",
+            ErrorMessage: 'Latitude or Longitude not found'
+        });
+    }
+
+    const lat1 = parseFloat(latitude);
+    const lon1 = parseFloat(longitude);
+
     const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat1}&lon=${lon1}`;
 
     const calculateDistance = (lat1, lon1, lat2, lon2) => {
@@ -261,8 +269,6 @@ const latlonglocation = async (req, res) => {
                 throw new Error("State district not found in the response.");
             }
 
-            const { Op } = require('sequelize');
-
             const cityData = await db.city.findOne({
                 where: {
                     CityName: {
@@ -271,7 +277,14 @@ const latlonglocation = async (req, res) => {
                 }
             });
 
-            const LatLongcityID = cityData.dataValues.CityID;
+            const LatLongcityID = cityData?.dataValues?.CityID;
+
+            if (!LatLongcityID) {
+                return res.status(400).send({
+                    ErrorCode: "VALIDATION",
+                    ErrorMessage: 'Location details not found'
+                });
+            }
 
             const locations = await db.location.findAll({
                 where: {
@@ -281,13 +294,13 @@ const latlonglocation = async (req, res) => {
 
             if (locations) {
                 const results = locations.map((location) => {
-                    const lat2 = parseFloat(location.Latitude);
-                    const lon2 = parseFloat(location.Longitude);
+                    const lat2 = parseFloat(location?.Latitude);
+                    const lon2 = parseFloat(location?.Longitude);
                     const distance = calculateDistance(lat1, lon1, lat2, lon2);
                     const duration = estimateDuration(distance);
 
                     return {
-                        ...location.dataValues,
+                        ...location?.dataValues,
                         Distance: `${distance.toFixed(2)} km`,
                         Duration: `${duration.toFixed(2)} minutes`,
                     };
@@ -386,23 +399,38 @@ const latlonglocationItem = async (req, res) => {
 
 async function bulkfindLocationsHttp(req, res) {
     try {
-        const { allLocationsArr } = req.body;
-        if (!allLocationsArr) {
+        const { allLocationsArr, userLat, userLong } = req.body;
+        if (!allLocationsArr || !userLat || !userLong) {
             return res.status(404).json({
                 message: "No location was found"
             })
         }
         const parsedLocation = JSON.parse(allLocationsArr);
-        // console.log(parsedLocation);
 
         const dataForReqLocations = await db.location.findAll({
             where: {
                 LocationID: { [Op.in]: parsedLocation }
             }
         });
+
+        if (dataForReqLocations && dataForReqLocations.length == 0) {
+            return res.status(200).json({
+                message: 'fetched success',
+                locations: dataForReqLocations
+            });
+        }
+
+        const dataWithDistance = dataForReqLocations.map((locationDb) => {
+            const dist = distanceCalculator(userLat, userLong, locationDb.Latitude ? locationDb.Latitude : 0, locationDb.Longitude ? locationDb.Longitude : 0);
+            const t = timeCalculator(dist, 40); // 40 km / hrs
+
+            locationDb.dataValues.Distance = `${dist} km`;
+            locationDb.dataValues.Duration = `${t} minutes`;
+            return locationDb;
+        })
         return res.status(200).json({
             message: 'fetched success',
-            locations: dataForReqLocations
+            locations: dataWithDistance
         });
     } catch (error) {
         console.log(error);
@@ -411,4 +439,39 @@ async function bulkfindLocationsHttp(req, res) {
         });
     }
 }
-module.exports = { itemlist, locationDetail, citystores, latlonglocation, latlonglocationItem, bulkfindLocationsHttp };
+
+
+const checkoutItemsData = async (req, res) => {
+    try {
+        const itemJson = JSON.stringify(req.body.Items);
+        const locationID = req.body.LocationID;
+        const companyID = req.body.CompanyID;
+
+        const result = await db.sequelize.query(
+            "CALL SP_ItemList(:ItemJson, :LocationID, :CompanyID)", {
+            replacements: {
+                ItemJson: itemJson,
+                LocationID: locationID,
+                CompanyID: companyID,
+            },
+            type: QueryTypes.SELECT,
+            raw: false,
+        }
+        );
+
+        const cleanedResult = result.map(item => Object.values(item));
+        return res.status(200).json({
+            message: 'fetched success',
+            data: cleanedResult
+        });
+
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: "Error fetching product",
+            error: err.message || err,
+        });
+    }
+};
+
+module.exports = { itemlist, locationDetail, citystores, latlonglocation, latlonglocationItem, bulkfindLocationsHttp, checkoutItemsData };

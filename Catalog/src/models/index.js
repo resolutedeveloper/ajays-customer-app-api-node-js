@@ -5,8 +5,13 @@ require('dotenv').config();
 const sequelize = new Sequelize(dbConfig.DB_NAME_CATALOG, dbConfig.DB_USER, dbConfig.DB_PASSWORD, {
     host: dbConfig.DB_HOST,
     dialect: 'mysql',
+    dialectModule: require('mysql2'),
     logging: false,
-    alter: true
+    alter: true,
+    port: 3306,                // MySQL port (default is 3306)
+    dialectOptions: {
+        multipleStatements: true,
+    },
 });
 sequelize.authenticate()
     .then(() => {
@@ -29,12 +34,12 @@ db.categoryAllocation = require('../models/categoryAllocationModel')(sequelize, 
 db.country = require('../models/countryModel')(sequelize, DataTypes);
 db.state = require('../models/stateModel')(sequelize, DataTypes);
 db.city = require('../models/cityModel')(sequelize, DataTypes);
-db.itemLocationRate = require('./itemRateModel')(sequelize,DataTypes);
-db.itemHistory = require('./itemHistoryModel')(sequelize,DataTypes);
-db.tax = require('../models/Tax')(sequelize,DataTypes);
-db.taxDefinition = require('../models/taxDefinition')(sequelize,DataTypes);
-db.taxDefinitionDetails = require('../models/taxDefinitionDetails')(sequelize,DataTypes);
-db.itemTaxDet = require('../models/itemTaxDet')(sequelize,DataTypes);
+db.itemLocationRate = require('./itemRateModel')(sequelize, DataTypes);
+db.itemHistory = require('./itemHistoryModel')(sequelize, DataTypes);
+db.tax = require('../models/Tax')(sequelize, DataTypes);
+db.taxDefinition = require('../models/taxDefinition')(sequelize, DataTypes);
+db.taxDefinitionDetails = require('../models/taxDefinitionDetails')(sequelize, DataTypes);
+db.itemTaxDet = require('../models/itemTaxDet')(sequelize, DataTypes);
 
 
 

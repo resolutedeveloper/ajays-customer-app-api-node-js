@@ -6,7 +6,7 @@ const { connectDB } = require('./src/config/sequelize');
 const morgan = require('morgan');
 const logger = require('./src/utils/logger'); // Import the Winston logger
 const routes = require('./src/routes'); // Import all routes from src/routes/index.js
-const { redisConnection } = require("./src/cache/locations.js");
+const { redisConnection } = require("./src/cache/redis.js");
 
 redisConnection();
 
@@ -14,7 +14,7 @@ const setupSocket = require('./src/config/socket');  // socket.js ko import kare
 
 const app = express();
 const server = http.createServer(app);
-setupSocket(server);
+const io = setupSocket(server);
 const PORT = process.env.PORT_ORDER || 300;
 
 // Middleware for parsing JSON requests
@@ -26,6 +26,7 @@ app.use(morgan('tiny', { stream: { write: (msg) => logger.info(msg.trim()) } }))
 // Middleware for logging all requests
 app.use((req, res, next) => {
     logger.info(`Incoming request: ${req.method} ${req.url}`);
+    req.io = io;
     next();
 });
 
