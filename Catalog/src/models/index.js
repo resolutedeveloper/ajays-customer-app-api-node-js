@@ -41,7 +41,9 @@ db.taxDefinition = require('../models/taxDefinition')(sequelize, DataTypes);
 db.taxDefinitionDetails = require('../models/taxDefinitionDetails')(sequelize, DataTypes);
 db.itemTaxDet = require('../models/itemTaxDet')(sequelize, DataTypes);
 
-
+// Association of tables
+db.categoryAllocation.hasOne(db.category, { foreignKey: 'CategoryID' });
+db.category.belongsTo(db.categoryAllocation, { foreignKey: 'CategoryID' });
 
 db.sequelize.sync({ force: false, alter: true })
     .then(() => {

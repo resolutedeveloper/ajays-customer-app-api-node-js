@@ -9,5 +9,6 @@ route.use("/items", require("./itemRoutes.js"));
 route.use("/item", checKValidity, require("./items.js"));
 route.use("/cities", checKValidity, require("./cities.js"));
 route.use("/location", checKValidity, require("./location.js"));
+route.use("/dashboard", checKValidity, require("./dashboard.js"));
 
 module.exports = route;

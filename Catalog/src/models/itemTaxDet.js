@@ -1,5 +1,9 @@
 module.exports = (sequelize, DataTypes) => {
     const itemTaxDetModel = sequelize.define("ItemTaxDet", {
+        ItemTaxDetID:{
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+        },
         ItemID: {
             type: DataTypes.INTEGER
         },

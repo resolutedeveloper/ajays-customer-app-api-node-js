@@ -200,6 +200,7 @@ const AddOrder = async (req, res, io) => {
     }
 };
 
+<<<<<<< HEAD
 
 const OrderApprove = async (req) => {
     try {
@@ -357,3 +358,72 @@ const OrderPending = async (LocationID) => {
     }
 };
 module.exports = { AddOrder, OrderApprove, OrderReject, OrderPending };
+=======
+async function getOrderListUser(req, res) {
+    try {
+        const { UserDetail } = req;
+
+        if (!UserDetail || !UserDetail.CustomerID) {
+            return res.status(400).json({
+                message: "Invalid Token! Login again"
+            })
+        }
+
+        const { page, size } = req.query;
+        const limit = size ? Number(size) : 5;
+        const offset = (Number(page) - 1) * limit;
+        const orderList = await db.order.findAll({
+            where: { CustomerID: UserDetail.CustomerID },
+            limit: limit,
+            offset: offset
+        });
+
+        return res.status(200).json({
+            message: 'Success',
+            orders: orderList
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message: 'Sorry! There was an server-side error',
+            error: error
+        });
+    }
+}
+
+async function getOrderDetail(req, res) {
+    try {
+        const { UserDetail } = req;
+
+        if (!UserDetail || !UserDetail.CustomerID) {
+            return res.status(400).json({
+                message: "Invalid Token! Login again"
+            })
+        }
+        const { orderId } = req.query;
+        if (!orderId) {
+            return res.status(404).json({
+                message: "Order not found"
+            })
+        }
+
+        const whereCondition = {};
+        whereCondition.OrderID = orderId;
+
+        const orderDetailed = await db.orderDetails.findOne({
+            where: whereCondition
+        })
+        return res.status(200).json({
+            message: 'Success',
+            orderDetail: orderDetailed
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message: 'Sorry! There was an server-side error',
+            error: error
+        });
+    }
+}
+module.exports = { AddOrder, getOrderListUser, getOrderDetail };
+>>>>>>> 4d3eb34635e752570be38d1c4c51d7b9a4f7d48e
