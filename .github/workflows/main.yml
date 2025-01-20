@@ -39,7 +39,7 @@ jobs:
         key: ${{ secrets.PRIVATE_KEY }}
         port: 22
         script: |
-          cd /var/www/repo/public_html
+          cd /var/www/repo/public_html/ajays-customer-app-api-node-js
 
           if [ ! -d ".git" ]; then
             echo "Cloning the repository using SSH..."
@@ -97,7 +97,7 @@ jobs:
           export REDIS_PORT=6379
 
           # Copy the Catalog files to the target directory
-          cp -r /var/www/repo/public_html/Catalog/* /var/www/Catalog/public_html
+          cp -r /var/www/repo/public_html/ajays-customer-app-api-node-js/Catalog/* /var/www/Catalog/public_html
 
           echo "move to Catalog service .."
           cd /var/www/Catalog/public_html
@@ -159,7 +159,7 @@ jobs:
           export REDIS_PORT=6379
           
           # Copy the Customer files to the target directory
-          cp -r /var/www/repo/public_html/Customer/* /var/www/Customer/public_html
+          cp -r /var/www/repo/public_html/ajays-customer-app-api-node-js/Customer/* /var/www/Customer/public_html
 
           echo "move to Customer service .."
           cd /var/www/Customer/public_html
@@ -221,7 +221,7 @@ jobs:
           export REDIS_PORT=6379
           
           # Copy the Order files to the target directory
-          cp -r /var/www/repo/public_html/Order/* /var/www/Order/public_html
+          cp -r /var/www/repo/public_html/ajays-customer-app-api-node-js/Order/* /var/www/Order/public_html
 
           echo "move to Order service .."
           cd /var/www/Order/public_html
@@ -234,4 +234,16 @@ jobs:
 
           # Start or restart the app for Order
           pm2 start order.js --name order
-
+    
+    - name: Clear cache
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.PRIVATE_KEY }}
+        port: 22
+        script: |
+          echo "File Cache Clear"
+          
+          cd /var/www/repo/public_html/
+          rm -rf ajays-customer-app-api-node-js
