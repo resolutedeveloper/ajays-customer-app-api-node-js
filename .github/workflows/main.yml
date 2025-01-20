@@ -39,7 +39,7 @@ jobs:
         key: ${{ secrets.PRIVATE_KEY }}
         port: 22
         script: |
-          cd /var/www/repo/public_html/ajays-customer-app-api-node-js
+          cd /var/www/repo/public_html
 
           if [ ! -d ".git" ]; then
             echo "Cloning the repository using SSH..."
