@@ -17,6 +17,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
+        OrderMode: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
         TotalTax: {
             type: DataTypes.INTEGER,
             allowNull: false,

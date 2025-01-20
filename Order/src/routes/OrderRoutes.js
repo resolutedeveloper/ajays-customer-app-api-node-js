@@ -11,6 +11,7 @@ const AddOrderRequest = (req, res, next) => {
         CustomerID: Joi.string().required(),
         CompanyID: Joi.number().integer().required(),
         LocationID: Joi.number().integer().required(),
+        OrderMode: Joi.string().valid('ONLINE TAKE-AWAY', 'ONLINE PRE-ORDER').required(),
         Items: Joi.array()
             .items(
                 Joi.object({

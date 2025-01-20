@@ -4,13 +4,13 @@ const moment = require('moment-timezone');
 const axios = require('axios');
 
 const AddOrder = async (req, res, io) => {
-
-    const db_transaction = await db.sequelize.transaction(); // Start a transaction
     try {
+        const db_transaction = await db.sequelize.transaction(); // Start a transaction
         var {
             CompanyID,
             CustomerID,
             LocationID,
+            OrderMode,
             Items,
             TotalTax,
             Total,
@@ -80,6 +80,7 @@ const AddOrder = async (req, res, io) => {
                 CompanyID: CompanyID,
                 CustomerID: CustomerID,
                 LocationID: LocationID,
+                OrderMode: OrderMode,
                 TotalTax: TotalTax,
                 Total: Total,
                 DeviceType: DeviceType,
@@ -191,17 +192,168 @@ const AddOrder = async (req, res, io) => {
         });
 
     } catch (error) {
-        // await db_transaction.rollback();
         return res.status(500).send({
             success: false,
             message: "Failed to create order!",
             error: error.message,
         });
     }
-
-
-
-
-    // return res.status(201).send({ body: req.body });
 };
-module.exports = { AddOrder };
+
+
+const OrderApprove = async (req) => {
+    try {
+        req = req.message;
+
+        const db_transaction = await db.sequelize.transaction();
+        const OrderList = await db.order.findOne({
+            where: {
+                OrderID: req.OrderID,
+                LocationID: req.LocationID,
+            },
+        });
+        if (OrderList) {
+            if (OrderList.dataValues.OrderStatus == 'Pending') {
+                const CurrentDateTime = moment.tz(new Date(), "Asia/Kolkata").format('YYYY-MM-DD HH:mm:ss');
+                await db.order.update({
+                    OrderStatus: 'Confirmed',
+                    UpdatedOn: CurrentDateTime
+                }, {
+                    where: {
+                        OrderID: req.OrderID,
+                        LocationID: req.LocationID,
+                    },
+                }, {
+                    transaction: db_transaction, // Use the transaction
+                });
+
+                await db.orderHistory.create(
+                    {
+                        OrderID: req.OrderID,
+                        OrderStatus: 'Confirmed',
+                        Data: req.Data,
+                        CreatedOn: CurrentDateTime
+                    },
+                    {
+                        transaction: db_transaction, // Use the transaction
+                    }
+                );
+
+                await db_transaction.commit();
+
+                return {
+                    status: 1,
+                    message: 'Order has been confirmed'
+                }
+
+            } else {
+                return {
+                    status: 0,
+                    message: "This order has already been updated to " + OrderList.dataValues.OrderStatus + " status."
+                }
+            }
+        } else {
+            return {
+                status: 0,
+                message: 'Permission denied'
+            }
+        }
+    } catch (error) {
+        return {
+            status: 0,
+            message: error.message
+        }
+    }
+};
+
+const OrderReject = async (req) => {
+    try {
+        req = req.message;
+
+        const db_transaction = await db.sequelize.transaction();
+        const OrderList = await db.order.findOne({
+            where: {
+                OrderID: req.OrderID,
+                LocationID: req.LocationID,
+            },
+        });
+        if (OrderList) {
+            if (OrderList.dataValues.OrderStatus == 'Pending') {
+                req.Data.Reason = req.Reason;
+                req.Data.Remark = req.Remark;
+
+                const CurrentDateTime = moment.tz(new Date(), "Asia/Kolkata").format('YYYY-MM-DD HH:mm:ss');
+                await db.order.update({
+                    OrderStatus: 'Cancelled',
+                    UpdatedOn: CurrentDateTime,
+                    Reason: req.Reason,
+                    Remark: req.Remark
+                }, {
+                    where: {
+                        OrderID: req.OrderID,
+                        LocationID: req.LocationID,
+                    },
+                }, {
+                    transaction: db_transaction, // Use the transaction
+                });
+
+                await db.orderHistory.create(
+                    {
+                        OrderID: req.OrderID,
+                        OrderStatus: 'Cancelled',
+                        Data: req.Data,
+                        CreatedOn: CurrentDateTime
+                    },
+                    {
+                        transaction: db_transaction, // Use the transaction
+                    }
+                );
+
+                await db_transaction.commit();
+
+                return {
+                    status: 1,
+                    message: 'Order has been Cancelled'
+                }
+
+            } else {
+                return {
+                    status: 0,
+                    message: "This order has already been updated to " + OrderList.dataValues.OrderStatus + " status."
+                }
+            }
+        } else {
+            return {
+                status: 0,
+                message: 'Permission denied'
+            }
+        }
+    } catch (error) {
+        return {
+            status: 0,
+            message: error.message
+        }
+    }
+};
+
+
+const OrderPending = async (LocationID) => {
+    try {
+        const OrderList = await db.order.findAll({
+            where: {
+                OrderStatus: 'Pending',
+                LocationID: LocationID,
+            },
+        });
+        return {
+            status: 1,
+            data: OrderList
+        }
+    } catch (error) {
+        return {
+            status: 0,
+            message: error.message
+        }
+    }
+};
+module.exports = { AddOrder, OrderApprove, OrderReject, OrderPending };

@@ -1,23 +1,40 @@
-// src/config/socket.js
 const socketIo = require('socket.io');
+const { OrderApprove, OrderReject, OrderPending } = require('../controllers/OrderController');
 
-function setupSocket(server) {
+async function setupSocket(server) {
     const io = socketIo(server);
 
+    async function sendDataToFrontend(socket, room) {
+        var LocationID = room.replace("location_room_", "");
+        const OrderApprove_list = await OrderPending(LocationID);
+        console.log(OrderApprove_list)
+        if (OrderApprove_list.status == 1) {
+            io.to(room).emit('PendingOrder', OrderApprove_list.data);
+        }
+    }
+
     io.on('connection', (socket) => {
-        socket.on('joinRoom', (room) => {
+        socket.on('joinRoom', async (room) => {
             socket.join(room);
 
-            socket.on('OrderApprove', (msg) => {
-                msg = {
-                    OrderID: 'fed69341-cd2f-4417-b7a3-507252a68d8c',
-                    Data: {
-                        CounterID: 1,
-                        OperatorID: 2
-                    }
-                }
+            sendDataToFrontend(socket, room);
+
+            socket.on('OrderApprove', async (msg, callback) => {
+                /* { OrderID: 'f17a5045-0ab5-4112-a985-75596e761091', Data: { CounterID: 1, OperatorID: 2 } } */
                 const LocationID = room.replace("location_room_", "");
-                msg.LocationID = LocationID;
+                msg.message.LocationID = LocationID;
+                const result = await OrderApprove(body);
+                callback({ success: result.status == 1 ? true : false, message: result.message });
+            });
+
+            socket.on('OrderRejected', async (msg, callback) => {
+
+                /* { OrderID: 'f17a5045-0ab5-4112-a985-75596e761091', Data: { CounterID: 1, OperatorID: 2 }, Reason: "", Remark: "" } */
+                const LocationID = room.replace("location_room_", "");
+                msg.message.LocationID = LocationID;
+
+                const result = await OrderReject(msg);
+                callback({ success: result.status == 1 ? true : false, message: result.message });
             });
 
             socket.on('disconnect', () => {

@@ -27,7 +27,7 @@ db.orderDetails = require('../models/orderDetailsModel.js')(sequelize, DataTypes
 db.orderDetailsTax = require('../models/orderDetailsTaxModel.js')(sequelize, DataTypes);
 db.ratingItem = require('../models/ratingItemModel.js')(sequelize, DataTypes);
 db.feedback = require('../models/feedbackModel.js')(sequelize, DataTypes);
-
+db.orderHistory = require('../models/orderHistoryModel.js')(sequelize, DataTypes);
 
 
 db.sequelize.sync({ force: false, alter: true })
