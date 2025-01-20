@@ -52,6 +52,7 @@ async function checKValidity(req, res, next) {
             });
         }
         req.body.CustomerID = decoded.CustomerID;
+        req.UserDetail = verified;
 
         next();
     } catch (error) {

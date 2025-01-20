@@ -202,9 +202,9 @@ const AddOrder = async (req, res, io) => {
 
 async function getOrderListUser(req, res) {
     try {
-        const { CustomerID } = req.body;
+        const { UserDetail } = req;
 
-        if (!CustomerID) {
+        if (!UserDetail || !UserDetail.CustomerID) {
             return res.status(400).json({
                 message: "Invalid Token! Login again"
             })
@@ -214,7 +214,7 @@ async function getOrderListUser(req, res) {
         const limit = size ? Number(size) : 5;
         const offset = (Number(page) - 1) * limit;
         const orderList = await db.order.findAll({
-            where: { CustomerID: CustomerID },
+            where: { CustomerID: UserDetail.CustomerID },
             limit: limit,
             offset: offset
         });
@@ -233,9 +233,9 @@ async function getOrderListUser(req, res) {
 
 async function getOrderDetail(req, res) {
     try {
-        const { CustomerID } = req.body;
+        const { UserDetail } = req;
 
-        if (!CustomerID) {
+        if (!UserDetail || !UserDetail.CustomerID) {
             return res.status(400).json({
                 message: "Invalid Token! Login again"
             })
