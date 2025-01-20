@@ -200,7 +200,6 @@ const AddOrder = async (req, res, io) => {
     }
 };
 
-<<<<<<< HEAD
 
 const OrderApprove = async (req) => {
     try {
@@ -357,8 +356,7 @@ const OrderPending = async (LocationID) => {
         }
     }
 };
-module.exports = { AddOrder, OrderApprove, OrderReject, OrderPending };
-=======
+
 async function getOrderListUser(req, res) {
     try {
         const { UserDetail } = req;
@@ -425,5 +423,5 @@ async function getOrderDetail(req, res) {
         });
     }
 }
-module.exports = { AddOrder, getOrderListUser, getOrderDetail };
->>>>>>> 4d3eb34635e752570be38d1c4c51d7b9a4f7d48e
+
+module.exports = { AddOrder, OrderApprove, OrderReject, OrderPending, getOrderDetail, getOrderListUser };
