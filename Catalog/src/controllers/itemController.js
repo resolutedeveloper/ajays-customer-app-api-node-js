@@ -1,5 +1,6 @@
 const logger = require('../utils/logger');
 const db = require("../models/index.js");
+const { convertAndSaveImage } = require('../services/imageServices.js');
 
 
 
@@ -48,5 +49,45 @@ const getCatalogData = (req,res)=>{
 }
 
 
+const saveImage = async (req, res) => {
+  try {
+    const { baseImage, ItemID } = req.body;
 
-module.exports = { getItemDetails, getCatalogData };
+    if (!baseImage) {
+      return res.status(400).json({ success: false, message: 'No image provided' });
+    }
+
+    if (!ItemID) {
+      return res.status(400).json({ success: false, message: 'No ItemID provided' });
+    }
+
+    const fileName = await convertAndSaveImage(baseImage, 200, 200, 80);
+
+    const updatedItem = await db.item.update(
+      { Image: fileName },
+      { where: { ItemID } }
+    );
+
+    if (updatedItem[0] === 0) {
+      return res.status(400).json({
+        success: false,
+        message: `Item with ID ${ItemID} not found.`,
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Image updated successfully.",
+    });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
+
+
+module.exports = { getItemDetails, getCatalogData, saveImage };

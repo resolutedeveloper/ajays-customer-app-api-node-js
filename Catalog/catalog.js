@@ -9,9 +9,13 @@ const axios = require('axios');
 const {redisConnection} = require("./src/cache/redis");
 const app = express();
 const PORT = process.env.PORT_CATALOG || 302;
+const path = require('path');
+require('./src/jobs/processImage');
 
 // Middleware for parsing JSON requests
 app.use(express.json());
+
+app.use('/images', express.static(path.join(__dirname, 'Catalog', 'public', 'images')));
 
 // Use Morgan middleware for logging HTTP requests
 app.use(morgan('tiny', { stream: { write: (msg) => logger.info(msg.trim()) } }));
