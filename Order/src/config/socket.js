@@ -7,7 +7,6 @@ async function setupSocket(server) {
     async function sendDataToFrontend(socket, room) {
         var LocationID = room.replace("location_room_", "");
         const OrderApprove_list = await OrderPending(LocationID);
-        console.log(OrderApprove_list)
         if (OrderApprove_list.status == 1) {
             io.to(room).emit('PendingOrder', OrderApprove_list.data);
         }
