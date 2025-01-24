@@ -1,9 +1,10 @@
 const axios = require("axios");
+const cityData = require("../data/city.json");
 
 // helper function to calcuate distance in km
 function distanceCalculator(lat1, lon1, lat2, lon2) {
     // lat1 & lon1 -> Users latitude and longitude | Lat2 & lon2 -> Outlet latitude and longitude
-    
+
     const toRad = (value) => (value * Math.PI) / 180;
     const R = 6371; // Earth's radius in kilometers
     const dLat = toRad(parseFloat(lat2) - parseFloat(lat1));
@@ -24,22 +25,40 @@ function timeCalculator(distance, speed) {
 
 
 // helper function to get city name
-async function getCityName(lat, long) {
-    try {
-        const lat1 = parseFloat(lat);
-        const lon1 = parseFloat(long);
-        const cityDesc = await axios.get(`https://nominatim.openstreetmap.org/reverse?lat=${lat1}&lon=${lon1}&format=json`);
-        const cityName = cityDesc?.address?.city ? cityDesc?.address?.city : cityDesc?.address?.town ? cityDesc?.address?.town : cityDesc?.address?.village ? cityDesc?.address?.village : null;
-        if (!cityName) {
-            return { status: false };
-        }
-        return {
-            status: true,
-            city: cityName
-        }
-    } catch (error) {
-        console.log(error);
+// async function getCityName(lat, long) {
+//     try {
+//         const lat1 = parseFloat(lat);
+//         const lon1 = parseFloat(long);
+//         const cityDesc = await axios.get(`https://nominatim.openstreetmap.org/reverse?lat=${lat1}&lon=${lon1}&format=json`);
+//         const cityName = cityDesc?.address?.city ? cityDesc?.address?.city : cityDesc?.address?.town ? cityDesc?.address?.town : cityDesc?.address?.village ? cityDesc?.address?.village : null;
+//         if (!cityName) {
+//             return { status: false };
+//         }
+//         return {
+//             status: true,
+//             city: cityName
+//         }
+//     } catch (error) {
+//         console.log(error);
+//         return { status: false };
+//     }
+// }
+
+function getCityName(lat, long) {
+    const lat1 = parseFloat(lat);
+    const lon1 = parseFloat(long);
+
+    const cityDesc = cityData.find(
+        (city) => parseFloat(city.latitude) == lat1 && parseFloat(city.longitude) == lon1
+    );
+    const cityName = cityDesc?.name;
+
+    if (!cityName) {
         return { status: false };
+    }
+    return {
+        status: true,
+        city: cityName
     }
 }
 

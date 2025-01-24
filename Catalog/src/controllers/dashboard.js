@@ -29,7 +29,7 @@ async function DashboardData(req, res) {
         // });
         
 
-        // GET DATA FOR ITEM & CATEGORIES IN COMBINED DIFFERENT ARRAYS
+        // GET DATA FOR ITEM & CATEGORIES IN DIFFERENT ARRAYS
 
         const catAllocation = await db.sequelize.query(`
             SELECT 
