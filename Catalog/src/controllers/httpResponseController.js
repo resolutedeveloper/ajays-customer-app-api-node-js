@@ -1,9 +1,9 @@
-const db = require('../models');  // Import the db object from index.js
-const location = db.location;  // Get the location model from the db object
+const db = require('../models');
+const location = db.location;
 const logger = require("../utils/logger");
 const { Op, where, QueryTypes } = require('sequelize');
 const axios = require('axios');
-const { distanceCalculator, timeCalculator } = require("../utils/distanceCalculator");
+const { distanceCalculator, timeCalculator, getCityName } = require("../utils/distanceCalculator");
 
 const itemlist = async (req, res) => {
     try {
@@ -34,7 +34,6 @@ const itemlist = async (req, res) => {
     }
 };
 
-// const locationDetail = async (req, res) => {
 //     try {
 //       const { CityID } = req.params;
 //       const location = await db.location.findOne({
@@ -178,7 +177,6 @@ const citystores = async (req, res) => {
     }
 };
 
-// const latlonglocation = async (req, res) => {
 //   const axios = require('axios');
 //   const lat = req.query.latitude;
 //   const lon = req.query.longitude;
@@ -237,10 +235,6 @@ const latlonglocation = async (req, res) => {
         });
     }
 
-    const lat1 = parseFloat(latitude);
-    const lon1 = parseFloat(longitude);
-
-    const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat1}&lon=${lon1}`;
 
     const calculateDistance = (lat1, lon1, lat2, lon2) => {
         const toRad = (value) => (value * Math.PI) / 180;
@@ -262,8 +256,8 @@ const latlonglocation = async (req, res) => {
 
     async function fetchCityData() {
         try {
-            const response = await axios.get(url);
-            const stateDistrict = response.data?.address?.state_district;
+            const response = getCityName(latitude, longitude);
+            const stateDistrict = response?.city;
 
             if (!stateDistrict) {
                 throw new Error("State district not found in the response.");
@@ -322,7 +316,7 @@ const latlonglocation = async (req, res) => {
 
         } catch (error) {
             console.error('Error fetching data:', error);
-            return res.status(500).send({ ErrorMessage: "Internal server error" });
+            return res.status(500).send({ ErrorMessage: "Internal server error", Error: error });
         }
     }
     fetchCityData();
