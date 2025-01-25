@@ -214,6 +214,7 @@ jobs:
           export FIREBASE_UNIVERSE_DOMAIN=googleapis.com
           export REDIS_URL_INTERNAL=127.0.0.1
           export REDIS_PORT=6379
+          export OTPDIGITS=4          
           
           # Copy the Order files to the target directory
           cp -r /var/www/repo/public_html/ajays-customer-app-api-node-js/Order/* /var/www/Order/public_html

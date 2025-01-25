@@ -1,5 +1,5 @@
 const socketIo = require('socket.io');
-const { OrderApprove, OrderReject, OrderPending } = require('../controllers/OrderController');
+const { OrderApprove, OrderReject, OrderPending, OrderMarkAsRead, OrderCompleted } = require('../controllers/OrderController');
 
 async function setupSocket(server) {
     const io = socketIo(server);
@@ -27,12 +27,29 @@ async function setupSocket(server) {
             });
 
             socket.on('OrderRejected', async (msg, callback) => {
-
                 /* { OrderID: 'f17a5045-0ab5-4112-a985-75596e761091', Data: { CounterID: 1, OperatorID: 2 }, Reason: "", Remark: "" } */
                 const LocationID = room.replace("location_room_", "");
                 msg.message.LocationID = LocationID;
 
                 const result = await OrderReject(msg);
+                callback({ success: result.status == 1 ? true : false, message: result.message });
+            });
+
+            socket.on('OrderMarkAsRead', async (msg, callback) => {
+                /* { OrderID: 'f17a5045-0ab5-4112-a985-75596e761091', Data: { CounterID: 1, OperatorID: 2 } } */
+                const LocationID = room.replace("location_room_", "");
+                msg.message.LocationID = LocationID;
+
+                const result = await OrderMarkAsRead(msg);
+                callback({ success: result.status == 1 ? true : false, message: result.message });
+            });
+
+            socket.on('OrderCompleted', async (msg, callback) => {
+                /* { OrderID: 'f17a5045-0ab5-4112-a985-75596e761091', Data: { CounterID: 1, OperatorID: 2 }, OTP: "1111" } */
+                const LocationID = room.replace("location_room_", "");
+                msg.message.LocationID = LocationID;
+
+                const result = await OrderCompleted(msg);
                 callback({ success: result.status == 1 ? true : false, message: result.message });
             });
 

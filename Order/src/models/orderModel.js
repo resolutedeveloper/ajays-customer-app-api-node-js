@@ -66,6 +66,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: true,
         },
+        OTP: {
+            type: DataTypes.STRING(4), // Stores a 4-digit OTP
+            allowNull: false,
+        },
         CreatedOn: {
             type: DataTypes.DATE,
             allowNull: true,

@@ -3,6 +3,13 @@ const db = require("../models/index.js");
 const moment = require('moment-timezone');
 const axios = require('axios');
 
+
+function generateOTP(length) {
+    const min = Math.pow(10, length - 1); // Smallest number with the given length
+    const max = Math.pow(10, length) - 1; // Largest number with the given length
+    return Math.floor(min + Math.random() * (max - min + 1)).toString();
+}
+
 const AddOrder = async (req, res, io) => {
     try {
         const db_transaction = await db.sequelize.transaction(); // Start a transaction
@@ -22,6 +29,7 @@ const AddOrder = async (req, res, io) => {
             AppVersion,
             Remark
         } = req.body;
+        var OTP = await generateOTP(process?.env?.OTPDIGITS);
 
         const axiosData = await axios.post(`${process?.env?.CATALOG_LOCAL_URL}/httpResponse/checkoutItemsData`, {
             Items: Items,
@@ -94,7 +102,8 @@ const AddOrder = async (req, res, io) => {
                 UpdatedOn: new Date(),
                 NoOfItem: Items.length,
                 PaymentInfo: '',
-                Remark: Remark
+                Remark: Remark,
+                OTP: OTP
             },
             {
                 transaction: db_transaction, // Use the transaction
@@ -216,51 +225,50 @@ const OrderApprove = async (req) => {
                 LocationID: req.LocationID,
             },
         });
-        if (OrderList) {
-            if (OrderList.dataValues.OrderStatus == 'Pending') {
-                const CurrentDateTime = moment.tz(new Date(), "Asia/Kolkata").format('YYYY-MM-DD HH:mm:ss');
-                await db.order.update({
-                    OrderStatus: 'Confirmed',
-                    UpdatedOn: CurrentDateTime
-                }, {
-                    where: {
-                        OrderID: req.OrderID,
-                        LocationID: req.LocationID,
-                    },
-                }, {
-                    transaction: db_transaction, // Use the transaction
-                });
 
-                await db.orderHistory.create(
-                    {
-                        OrderID: req.OrderID,
-                        OrderStatus: 'Confirmed',
-                        Data: req.Data,
-                        CreatedOn: CurrentDateTime
-                    },
-                    {
-                        transaction: db_transaction, // Use the transaction
-                    }
-                );
-
-                await db_transaction.commit();
-
-                return {
-                    status: 1,
-                    message: 'Order has been confirmed'
-                }
-
-            } else {
-                return {
-                    status: 0,
-                    message: "This order has already been updated to " + OrderList.dataValues.OrderStatus + " status."
-                }
-            }
-        } else {
+        if (!OrderList) {
             return {
                 status: 0,
                 message: 'Permission denied'
             }
+        }
+        if (OrderList.dataValues.OrderStatus != 'Pending') {
+            return {
+                status: 0,
+                message: "This order has already been updated to " + OrderList.dataValues.OrderStatus + " status."
+            }
+        }
+
+        const CurrentDateTime = moment.tz(new Date(), "Asia/Kolkata").format('YYYY-MM-DD HH:mm:ss');
+        await db.order.update({
+            OrderStatus: 'Confirmed',
+            UpdatedOn: CurrentDateTime
+        }, {
+            where: {
+                OrderID: req.OrderID,
+                LocationID: req.LocationID,
+            },
+        }, {
+            transaction: db_transaction, // Use the transaction
+        });
+
+        await db.orderHistory.create(
+            {
+                OrderID: req.OrderID,
+                OrderStatus: 'Confirmed',
+                Data: req.Data,
+                CreatedOn: CurrentDateTime
+            },
+            {
+                transaction: db_transaction, // Use the transaction
+            }
+        );
+
+        await db_transaction.commit();
+
+        return {
+            status: 1,
+            message: 'Order has been confirmed'
         }
     } catch (error) {
         return {
@@ -281,57 +289,59 @@ const OrderReject = async (req) => {
                 LocationID: req.LocationID,
             },
         });
-        if (OrderList) {
-            if (OrderList.dataValues.OrderStatus == 'Pending') {
-                req.Data.Reason = req.Reason;
-                req.Data.Remark = req.Remark;
 
-                const CurrentDateTime = moment.tz(new Date(), "Asia/Kolkata").format('YYYY-MM-DD HH:mm:ss');
-                await db.order.update({
-                    OrderStatus: 'Cancelled',
-                    UpdatedOn: CurrentDateTime,
-                    Reason: req.Reason,
-                    Remark: req.Remark
-                }, {
-                    where: {
-                        OrderID: req.OrderID,
-                        LocationID: req.LocationID,
-                    },
-                }, {
-                    transaction: db_transaction, // Use the transaction
-                });
 
-                await db.orderHistory.create(
-                    {
-                        OrderID: req.OrderID,
-                        OrderStatus: 'Cancelled',
-                        Data: req.Data,
-                        CreatedOn: CurrentDateTime
-                    },
-                    {
-                        transaction: db_transaction, // Use the transaction
-                    }
-                );
-
-                await db_transaction.commit();
-
-                return {
-                    status: 1,
-                    message: 'Order has been Cancelled'
-                }
-
-            } else {
-                return {
-                    status: 0,
-                    message: "This order has already been updated to " + OrderList.dataValues.OrderStatus + " status."
-                }
-            }
-        } else {
+        if (!OrderList) {
             return {
                 status: 0,
                 message: 'Permission denied'
             }
         }
+        if (OrderList.dataValues.OrderStatus != 'Pending') {
+            return {
+                status: 0,
+                message: "This order has already been updated to " + OrderList.dataValues.OrderStatus + " status."
+            }
+        }
+
+        req.Data.Reason = req.Reason;
+        req.Data.Remark = req.Remark;
+
+        const CurrentDateTime = moment.tz(new Date(), "Asia/Kolkata").format('YYYY-MM-DD HH:mm:ss');
+        await db.order.update({
+            OrderStatus: 'Cancelled',
+            UpdatedOn: CurrentDateTime,
+            Reason: req.Reason,
+            Remark: req.Remark
+        }, {
+            where: {
+                OrderID: req.OrderID,
+                LocationID: req.LocationID,
+            },
+        }, {
+            transaction: db_transaction, // Use the transaction
+        });
+
+        await db.orderHistory.create(
+            {
+                OrderID: req.OrderID,
+                OrderStatus: 'Cancelled',
+                Data: req.Data,
+                CreatedOn: CurrentDateTime
+            },
+            {
+                transaction: db_transaction, // Use the transaction
+            }
+        );
+
+        await db_transaction.commit();
+
+        return {
+            status: 1,
+            message: 'Order has been Cancelled'
+        }
+
+
     } catch (error) {
         return {
             status: 0,
@@ -353,6 +363,141 @@ const OrderPending = async (LocationID) => {
             status: 1,
             data: OrderList
         }
+    } catch (error) {
+        return {
+            status: 0,
+            message: error.message
+        }
+    }
+};
+
+const OrderMarkAsRead = async (LocationID) => {
+    try {
+        req = req.message;
+
+        const db_transaction = await db.sequelize.transaction();
+        const OrderList = await db.order.findOne({
+            where: {
+                OrderID: req.OrderID,
+                LocationID: req.LocationID,
+            },
+        });
+
+        if (!OrderList) {
+            return {
+                status: 0,
+                message: 'Permission denied'
+            }
+        }
+        if (OrderList.dataValues.OrderStatus != 'Confirmed') {
+            return {
+                status: 0,
+                message: "This order has already been updated to " + OrderList.dataValues.OrderStatus + " status."
+            }
+        }
+
+        const CurrentDateTime = moment.tz(new Date(), "Asia/Kolkata").format('YYYY-MM-DD HH:mm:ss');
+        await db.order.update({
+            OrderStatus: 'Ready',
+            UpdatedOn: CurrentDateTime
+        }, {
+            where: {
+                OrderID: req.OrderID,
+                LocationID: req.LocationID,
+            },
+        }, {
+            transaction: db_transaction, // Use the transaction
+        });
+
+        await db.orderHistory.create(
+            {
+                OrderID: req.OrderID,
+                OrderStatus: 'Ready',
+                Data: req.Data,
+                CreatedOn: CurrentDateTime
+            },
+            {
+                transaction: db_transaction, // Use the transaction
+            }
+        );
+
+        await db_transaction.commit();
+
+        return {
+            status: 1,
+            message: 'Order has been Mark As Read'
+        }
+    } catch (error) {
+        return {
+            status: 0,
+            message: error.message
+        }
+    }
+};
+
+
+const OrderCompleted = async (LocationID) => {
+    try {
+        req = req.message;
+
+        const db_transaction = await db.sequelize.transaction();
+        const OrderList = await db.order.findOne({
+            where: {
+                OrderID: req.OrderID,
+                LocationID: req.LocationID,
+            },
+        });
+        if (!OrderList) {
+            return {
+                status: 0,
+                message: 'Permission denied'
+            }
+        }
+        if (OrderList.dataValues.OrderStatus != 'Ready') {
+            return {
+                status: 0,
+                message: "This order has already been updated to " + OrderList.dataValues.OrderStatus + " status."
+            }
+        }
+
+        if (OrderList.dataValues.OTP != req.OTP) {
+            return {
+                status: 0,
+                message: "Invalid OTP provided, please try again."
+            }
+        }
+        const CurrentDateTime = moment.tz(new Date(), "Asia/Kolkata").format('YYYY-MM-DD HH:mm:ss');
+        await db.order.update({
+            OrderStatus: 'Completed ',
+            UpdatedOn: CurrentDateTime
+        }, {
+            where: {
+                OrderID: req.OrderID,
+                LocationID: req.LocationID,
+            },
+        }, {
+            transaction: db_transaction, // Use the transaction
+        });
+
+        await db.orderHistory.create(
+            {
+                OrderID: req.OrderID,
+                OrderStatus: 'Completed',
+                Data: req.Data,
+                CreatedOn: CurrentDateTime
+            },
+            {
+                transaction: db_transaction, // Use the transaction
+            }
+        );
+
+        await db_transaction.commit();
+
+        return {
+            status: 1,
+            message: 'Order has been Completed'
+        }
+
     } catch (error) {
         return {
             status: 0,
@@ -428,4 +573,4 @@ async function getOrderDetail(req, res) {
     }
 }
 
-module.exports = { AddOrder, OrderApprove, OrderReject, OrderPending, getOrderDetail, getOrderListUser };
+module.exports = { AddOrder, OrderApprove, OrderReject, OrderPending, OrderCompleted, OrderMarkAsRead, getOrderDetail, getOrderListUser };
