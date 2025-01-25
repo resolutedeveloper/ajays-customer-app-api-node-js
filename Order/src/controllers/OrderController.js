@@ -169,7 +169,7 @@ const AddOrder = async (req, res, io) => {
 
         await db_transaction.commit();
 
-
+        // Notification send to pos machine
         var socket_order = await db.order.findAll({
             where: {
                 OrderID: newOrder.OrderID,
@@ -181,7 +181,7 @@ const AddOrder = async (req, res, io) => {
                 OrderID: newOrder.OrderID,
             },
         });
-        var socket_taxs = await db.orderDetails.findAll({
+        var socket_taxs = await db.orderDetailsTax.findAll({
             where: {
                 OrderID: newOrder.OrderID,
             },
