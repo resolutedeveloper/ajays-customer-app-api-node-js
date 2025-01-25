@@ -23,27 +23,7 @@ function timeCalculator(distance, speed) {
     return (distance / speed) * 60;
 }
 
-
-// helper function to get city name
-// async function getCityName(lat, long) {
-//     try {
-//         const lat1 = parseFloat(lat);
-//         const lon1 = parseFloat(long);
-//         const cityDesc = await axios.get(`https://nominatim.openstreetmap.org/reverse?lat=${lat1}&lon=${lon1}&format=json`);
-//         const cityName = cityDesc?.address?.city ? cityDesc?.address?.city : cityDesc?.address?.town ? cityDesc?.address?.town : cityDesc?.address?.village ? cityDesc?.address?.village : null;
-//         if (!cityName) {
-//             return { status: false };
-//         }
-//         return {
-//             status: true,
-//             city: cityName
-//         }
-//     } catch (error) {
-//         console.log(error);
-//         return { status: false };
-//     }
-// }
-
+// helper function to get city name based on latitude and longitude
 function getCityName(lat, long) {
     const lat1 = parseFloat(lat);
     const lon1 = parseFloat(long);
