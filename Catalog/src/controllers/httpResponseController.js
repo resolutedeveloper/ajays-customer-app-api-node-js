@@ -322,7 +322,7 @@ const latlonglocation = async (req, res) => {
 
         } catch (error) {
             console.error('Error fetching data:', error);
-            return res.status(500).send({ ErrorMessage: "Internal server error" });
+            return res.status(500).send({ ErrorMessage: "Internal server error", Error: error });
         }
     }
     fetchCityData();
