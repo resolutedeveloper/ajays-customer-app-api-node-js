@@ -88,7 +88,11 @@ module.exports = (sequelize, DataTypes) => {
         },
         ItemOrder: {
             type: DataTypes.INTEGER,
-        }
+        },
+        Remark: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
     }, { timestamps: false });
 
     return OrderDetails;

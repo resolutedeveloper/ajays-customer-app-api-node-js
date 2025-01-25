@@ -62,6 +62,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(256),
             allowNull: false,
         },
+        Remark: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
         CreatedOn: {
             type: DataTypes.DATE,
             allowNull: true,

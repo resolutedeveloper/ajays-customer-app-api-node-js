@@ -19,7 +19,8 @@ const AddOrder = async (req, res, io) => {
             OSVersion,
             DeviceID,
             IPAddress,
-            AppVersion
+            AppVersion,
+            Remark
         } = req.body;
 
         const axiosData = await axios.post(`${process?.env?.CATALOG_LOCAL_URL}/httpResponse/checkoutItemsData`, {
@@ -93,6 +94,7 @@ const AddOrder = async (req, res, io) => {
                 UpdatedOn: new Date(),
                 NoOfItem: Items.length,
                 PaymentInfo: '',
+                Remark: Remark
             },
             {
                 transaction: db_transaction, // Use the transaction
@@ -104,6 +106,7 @@ const AddOrder = async (req, res, io) => {
         const orderDetailsEntries = new_items.map((detail) => {
             const item = Items.find((i) => i.ItemID === detail.ItemID);
             const qty = item ? item.Qty : 0;
+            const ItemRemark = item ? item.Remark : 0;
 
             // Return the order details entry
             return {
@@ -132,7 +135,8 @@ const AddOrder = async (req, res, io) => {
                 IsVisible: detail.IsVisible,
                 Image: detail.ItemIImageD,
                 Remarks: detail.Remarks,
-                ItemOrder: detail.ItemOrder
+                ItemOrder: detail.ItemOrder,
+                Remark: ItemRemark
             };
         });
 
@@ -156,7 +160,7 @@ const AddOrder = async (req, res, io) => {
 
         await db_transaction.commit();
 
-        /*
+
         var socket_order = await db.order.findAll({
             where: {
                 OrderID: newOrder.OrderID,
@@ -183,7 +187,7 @@ const AddOrder = async (req, res, io) => {
             items: socket_items,
             taxs: socket_taxs,
             payment_info: payment_info
-        });*/
+        });
 
         return res.status(201).send({
             success: true,
