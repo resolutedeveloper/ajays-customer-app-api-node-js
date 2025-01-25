@@ -40,10 +40,14 @@ db.tax = require('../models/Tax')(sequelize, DataTypes);
 db.taxDefinition = require('../models/taxDefinition')(sequelize, DataTypes);
 db.taxDefinitionDetails = require('../models/taxDefinitionDetails')(sequelize, DataTypes);
 db.itemTaxDet = require('../models/itemTaxDet')(sequelize, DataTypes);
+db.LocationCompanyMapping = require('./locationCompanyMapping')(sequelize, DataTypes);
 
 // Association of tables
 db.categoryAllocation.hasOne(db.category, { foreignKey: 'CategoryID' });
 db.category.belongsTo(db.categoryAllocation, { foreignKey: 'CategoryID' });
+
+db.location.hasOne(db.LocationCompanyMapping, { foreignKey: 'LocationID' });
+db.LocationCompanyMapping.belongsTo(db.location);
 
 db.sequelize.sync({ force: false, alter: true })
     .then(() => {

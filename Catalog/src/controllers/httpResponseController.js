@@ -290,6 +290,9 @@ const latlonglocation = async (req, res) => {
                 where: {
                     Cityid: LatLongcityID,
                 },
+                include: [
+                    { model: db.LocationCompanyMapping, attributes: ['CompanyID'], }
+                ]
             });
 
             if (locations) {

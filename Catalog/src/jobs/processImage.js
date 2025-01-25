@@ -39,38 +39,42 @@ cron.schedule('*/2 * * * *', async () => {
       limit: limit,
     });
 
-    for (const item of items) {
-      try {
-        const fileName = `ITEM_${item.ItemID}.jpg`;
+    if (items && items.length > 0) {
+      for (const item of items) {
+        try {
+          const fileName = `ITEM_${item.ItemID}.jpg`;
 
-        const fullFilePath = await convertAndSaveImage(item.Image, fileName);
+          const fullFilePath = await convertAndSaveImage(item.Image, fileName);
 
-        // const fileName = path.basename(fullFilePath, path.extname(fullFilePath)).match(/^image-\d+/)[0];
+          // const fileName = path.basename(fullFilePath, path.extname(fullFilePath)).match(/^image-\d+/)[0];
 
-        const [updatedCount] = await db.item.update({ Image: fileName }, { where: { ItemID: item.ItemID } });
-        // await client.set("categoryOffset", updatedCount);
+          const [updatedCount] = await db.item.update({ Image: fileName }, { where: { ItemID: item.ItemID } });
+          // await client.set("categoryOffset", updatedCount);
 
-        // console.log(`Processed ItemID ${item.ItemID}: ${fileName}`);
-      } catch (error) {
-        console.error(`Error processing ItemID ${item.ItemID}:`, error.message);
-        console.error(`Base64/String/URL/JSON: ${item.Image}`);
+          // console.log(`Processed ItemID ${item.ItemID}: ${fileName}`);
+        } catch (error) {
+          console.error(`Error processing ItemID ${item.ItemID}:`, error.message);
+          console.error(`Base64/String/URL/JSON: ${item.Image}`);
+        }
       }
     }
 
-    for (const item of categories) {
-      try {
-        const fileName = `CATEGORY_${item.CategoryID}.jpg`;
-        const fullFilePath = await convertAndSaveImage(item.CategoryImage, fileName);
+    if (categories && categories.length > 0) {
+      for (const item of categories) {
+        try {
+          const fileName = `CATEGORY_${item.CategoryID}.jpg`;
+          const fullFilePath = await convertAndSaveImage(item.CategoryImage, fileName);
 
-        // const fileName = path.basename(fullFilePath, path.extname(fullFilePath)).match(/^image-\d+/)[0];
+          // const fileName = path.basename(fullFilePath, path.extname(fullFilePath)).match(/^image-\d+/)[0];
 
-        const [updatedCount] = await db.item.update({ Image: fileName }, { where: { ItemID: item.ItemID } });
-        // await client.set("itemOffester", updatedCount);
+          const [updatedCount] = await db.item.update({ Image: fileName }, { where: { ItemID: item.ItemID } });
+          // await client.set("itemOffester", updatedCount);
 
-       // console.log(`Processed ItemID ${item.ItemID}: ${fileName}`);
-      } catch (error) {
-        console.error(`Error processing ItemID ${item.ItemID}:`, error.message);
-        console.error(`Base64/String/URL/JSON: ${item.Image}`);
+          // console.log(`Processed ItemID ${item.ItemID}: ${fileName}`);
+        } catch (error) {
+          console.error(`Error processing ItemID ${item.ItemID}:`, error.message);
+          console.error(`Base64/String/URL/JSON: ${item.Image}`);
+        }
       }
     }
   } catch (error) {
