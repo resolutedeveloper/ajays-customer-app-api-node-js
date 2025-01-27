@@ -30,8 +30,11 @@ db.feedback = require('../models/feedbackModel.js')(sequelize, DataTypes);
 db.orderHistory = require('../models/orderHistoryModel.js')(sequelize, DataTypes);
 
 //Associatiom
+db.order.hasMany(db.orderDetails, { foreignKey: 'OrderID' });
+db.orderDetails.belongsTo(db.order);
 
-
+db.order.hasMany(db.orderDetailsTax, { foreignKey: 'OrderID' });
+db.orderDetailsTax.belongsTo(db.order);
 
 db.sequelize.sync({ force: false, alter: true })
     .then(() => {

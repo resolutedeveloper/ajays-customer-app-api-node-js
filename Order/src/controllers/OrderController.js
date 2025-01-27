@@ -528,6 +528,7 @@ async function getOrderListUser(req, res) {
         const offset = (Number(page) - 1) * limit;
         const orderList = await db.order.findAll({
             where: { CustomerID: UserDetail.CustomerID },
+            include: [{model: db.orderDetails}],
             limit: limit,
             offset: offset
         });
