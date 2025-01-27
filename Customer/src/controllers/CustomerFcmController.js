@@ -65,7 +65,28 @@ const sendCustomerNotification = async (req, res) => {
   }
 };
 
+const sendCustomerNotificationHttp = async (req, res) => {
+  try {
+    // const CustomerID = req?.UserDetail?.CustomerID;
+    const { title, body, customData, CustomerID } = req.body;
+
+    if (!CustomerID || !title || !body) {
+      return res.status(400).json({ message: 'CustomerID, title, and body are required.' });
+    }
+    const result = await sendNotification(CustomerID, title, body, customData || {});
+
+    if (result.success) {
+      return res.status(200).json({ message: 'Notification sent successfully' });
+    } else {
+      return res.status(400).json({ message: 'Error sending notification', error: result.error });
+    }
+  } catch (error) {
+    console.error('Error sending notification:', error.message);
+    return res.status(400).json({ message: 'Error sending notification', error: error.message });
+  }
+};
 
 
 
-module.exports = { saveFCMKey, sendCustomerNotification };
+
+module.exports = { saveFCMKey, sendCustomerNotification, sendCustomerNotificationHttp };

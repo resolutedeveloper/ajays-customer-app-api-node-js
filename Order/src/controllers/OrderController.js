@@ -2,6 +2,7 @@ const logger = require('../utils/logger');
 const db = require("../models/index.js");
 const moment = require('moment-timezone');
 const axios = require('axios');
+const { sendNotification } = require("../utils/notification.js");
 
 
 function generateOTP(length) {
@@ -264,6 +265,8 @@ const OrderApprove = async (req) => {
             }
         );
 
+        await sendNotification(OrderList.CustomerID, `Order is Approved 😊`, `Your order is approved`);
+
         await db_transaction.commit();
 
         return {
@@ -333,6 +336,8 @@ const OrderReject = async (req) => {
                 transaction: db_transaction, // Use the transaction
             }
         );
+
+        await sendNotification(OrderList.CustomerID, `Order is Rejected ❌`, `Your order is rejected`);
 
         await db_transaction.commit();
 
@@ -491,6 +496,8 @@ const OrderCompleted = async (LocationID) => {
             }
         );
 
+        await sendNotification(OrderList.CustomerID, `Order is Completed 😊`, `Your order is marked completed`);
+
         await db_transaction.commit();
 
         return {
@@ -563,7 +570,7 @@ async function getOrderDetail(req, res) {
 
         let toReturnTotal = 0;
 
-        orderDetailed.map((ordersMrp)=>{
+        orderDetailed.map((ordersMrp) => {
             toReturnTotal += ordersMrp.MRP
         });
 
