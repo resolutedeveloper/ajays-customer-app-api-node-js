@@ -5,5 +5,6 @@ const route = express.Router();
 const VerifyToken = require("../middelware/TokenVerification.js");
 
 route.use("/order", VerifyToken, require("./OrderRoutes.js"));
+route.use("/feedback", VerifyToken, require("./Feedback.js"));
 
 module.exports = route;

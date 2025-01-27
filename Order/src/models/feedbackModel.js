@@ -1,25 +1,32 @@
-module.exports =(sequelize, DataTypes)=>{
-    const feedbackModel = sequelize.define("Feedback",{
+module.exports = (sequelize, DataTypes) => {
+    const feedbackModel = sequelize.define("Feedback", {
         FeedbackID: {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4,
-            primaryKey: true,
-            allowNull: false,
+            primaryKey: true
         },
         CustomerID: {
             type: DataTypes.UUID,
-            allowNull: false,
+            allowNull: false
         },
-        OrderID:{
-            type: DataTypes.UUID,
-            defaultValue: DataTypes.UUIDV4,
+        ItemID: {
+            type: DataTypes.STRING(256),
         },
-        Feedback: {
-            type: DataTypes.TEXT,
-            allowNull: false,
+        OrderID: {
+            type: DataTypes.STRING(256),
         },
-          
-    },{timestamps: false});
+        feedBackStars: {
+            type: DataTypes.INTEGER,
+            defaultValue: 1
+        },
+        feedBackComment: {
+            type: DataTypes.STRING(256),
+        },
+        IsDeleted: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false
+        },
+    }, { timestamps: false });
 
     return feedbackModel;
 }
