@@ -1,6 +1,7 @@
 const express = require('express');
 const {check_existing_customer, name_update, email_generate_otp,email_otp_verification, mobile_generate_otp, mobile_otp_verification} = require('../controllers/CustomerDashboardController');
 const router = express.Router();
+const { getCustomerDetails } = require('../controllers/customerController');
 
 const { validateRequest } = require("../config/validate-request");
 const Joi = require("joi");
@@ -90,6 +91,8 @@ router.post('/email-update-verification',emailOTPValidation, email_otp_verificat
 
 router.post('/mobile-update-otp',phoneNumberkey, mobile_generate_otp); // Create a user
 router.post('/mobile-update-verification',phoneOTPValidation, mobile_otp_verification); // Create a user
+
+router.get("/details/user", getCustomerDetails);
 
 // Module exports
 module.exports = router;
