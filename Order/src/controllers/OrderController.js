@@ -572,9 +572,11 @@ async function getOrderDetail(req, res) {
 
         let toReturnTotal = 0;
 
-        orderDetailed.map((ordersMrp) => {
-            toReturnTotal += ordersMrp.MRP
-        });
+        if(orderDetailed?.OrderDetails && orderDetailed.OrderDetails.length > 0){
+            orderDetailed.OrderDetails.map((ordersMrp) => {
+                toReturnTotal += ordersMrp.MRP
+            });
+        }
 
         // console.log(toReturnTotal);
 
