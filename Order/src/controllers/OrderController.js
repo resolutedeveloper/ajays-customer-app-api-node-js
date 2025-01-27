@@ -190,14 +190,14 @@ const AddOrder = async (req, res, io) => {
         var payment_info = [];
 
         const room = `location_room_${LocationID}`; // Generate the room name
-        io.to(room).emit('NewOrder', {
-            success: true,
-            message: 'New order created!',
-            order: socket_order,
-            items: socket_items,
-            taxs: socket_taxs,
-            payment_info: payment_info
-        });
+        // io.to(room).emit('NewOrder', {
+        //     success: true,
+        //     message: 'New order created!',
+        //     order: socket_order,
+        //     items: socket_items,
+        //     taxs: socket_taxs,
+        //     payment_info: payment_info
+        // });
 
         return res.status(201).send({
             success: true,
