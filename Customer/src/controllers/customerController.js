@@ -32,7 +32,14 @@ async function getCustomerDetails(req, res) {
                 message: "Invalid token! Login again"
             })
         }
-        const customerDetails = await db.customer.findByPK(UserDetail.CustomerID);
+        const customerDetails = await db.customer.findOne({
+            where: { CustomerID: UserDetail.CustomerID }
+        });
+        if (!customerDetails) {
+            return res.status(404).json({
+                message: "User not found"
+            })
+        }
         return res.status(200).json({
             message: 'Success',
             customerDetails: customerDetails
