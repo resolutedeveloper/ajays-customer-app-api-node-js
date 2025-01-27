@@ -557,12 +557,18 @@ async function getOrderDetail(req, res) {
         const whereCondition = {};
         whereCondition.OrderID = orderId;
 
-        const orderDetailed = await db.orderDetails.findOne({
+        const orderDetailed = await db.orderDetails.findAll({
             where: whereCondition
+        });
+
+        const orderIdArr = orderDetailed.map((ordersID) => (ordersID.ItemID));
+        const respOrder = await axios.post(`${process.env.CATALOG_LOCAL_URL}/httpResponse/itemsBulkGetId`, { itemIdArr: orderIdArr }, {
+            headers: { "Authorization": `Bearer ${process.env.HTTP_REQUEST_SECRET_KEY}` }
         })
         return res.status(200).json({
             message: 'Success',
-            orderDetail: orderDetailed
+            orderDetail: orderDetailed,
+            orderItemDetails: respOrder?.data?.itemsData
         });
     } catch (error) {
         console.log(error);

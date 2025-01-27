@@ -471,4 +471,29 @@ const checkoutItemsData = async (req, res) => {
     }
 };
 
-module.exports = { itemlist, locationDetail, citystores, latlonglocation, latlonglocationItem, bulkfindLocationsHttp, checkoutItemsData };
+async function bulkFindItems(req, res) {
+    try {
+        const { itemIdArr } = req.body;
+        if (!itemIdArr) {
+            return res.status(400).json({
+                message: "Items not found"
+            })
+        }
+        // console.log(itemIdArr);
+        // const parsedItemArr = JSON.parse(itemIdArr);
+        const allItemsData = await db.item.findAll({
+            where: { ItemID: { [Op.in]: itemIdArr } }
+        })
+        return res.status(200).json({
+            message: 'Success',
+            itemsData: allItemsData
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message: 'Sorry! There was an server-side error'
+        });
+    }
+}
+
+module.exports = { itemlist, locationDetail, citystores, latlonglocation, latlonglocationItem, bulkfindLocationsHttp, checkoutItemsData, bulkFindItems };

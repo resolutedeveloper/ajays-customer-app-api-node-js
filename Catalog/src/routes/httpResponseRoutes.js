@@ -1,5 +1,5 @@
 const express = require('express');
-const { itemlist, locationDetail, citystores, latlonglocation, latlonglocationItem, bulkfindLocationsHttp, checkoutItemsData } = require('../controllers/httpResponseController');
+const { itemlist, locationDetail, citystores, latlonglocation, latlonglocationItem, bulkfindLocationsHttp, checkoutItemsData, bulkFindItems } = require('../controllers/httpResponseController');
 
 const router = express.Router();
 
@@ -21,5 +21,6 @@ router.get("/location-detail/:CityID", locationDetail);
 router.get("/latlonglocationItem", latlonglocationItem);
 router.post("/locationBulkGetId", httpRequest, bulkfindLocationsHttp);
 router.post("/checkoutItemsData", checkoutItemsData);
+router.post("/itemsBulkGetId", httpRequest, bulkFindItems);
 
 module.exports = router;
