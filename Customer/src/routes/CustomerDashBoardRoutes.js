@@ -90,4 +90,6 @@ router.post('/email-update-verification',emailOTPValidation, email_otp_verificat
 
 router.post('/mobile-update-otp',phoneNumberkey, mobile_generate_otp); // Create a user
 router.post('/mobile-update-verification',phoneOTPValidation, mobile_otp_verification); // Create a user
+
+// Module exports
 module.exports = router;
