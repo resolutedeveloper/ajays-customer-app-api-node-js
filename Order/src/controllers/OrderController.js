@@ -561,6 +561,14 @@ async function getOrderDetail(req, res) {
             where: whereCondition
         });
 
+        let toReturnTotal = 0;
+
+        orderDetailed.map((ordersMrp)=>{
+            toReturnTotal += ordersMrp.MRP
+        });
+
+        // console.log(toReturnTotal);
+
         // const orderIdArr = orderDetailed.map((ordersID) => (ordersID.ItemID));
         // const respOrder = await axios.post(`${process.env.CATALOG_LOCAL_URL}/httpResponse/itemsBulkGetId`, { itemIdArr: orderIdArr }, {
         //     headers: { "Authorization": `Bearer ${process.env.HTTP_REQUEST_SECRET_KEY}` }
@@ -568,6 +576,7 @@ async function getOrderDetail(req, res) {
         return res.status(200).json({
             message: 'Success',
             orderDetail: orderDetailed,
+            orderTotal: toReturnTotal
             // orderItemDetails: respOrder?.data?.itemsData
         });
     } catch (error) {
