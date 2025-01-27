@@ -1,33 +1,37 @@
-module.exports =(sequelize, DataTypes)=>{
-    const ratingModel = sequelize.define("Rating",{
+module.exports = (sequelize, DataTypes) => {
+    const ratingModel = sequelize.define("Rating", {
         RatingID: {
             type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
-        primaryKey: true,
+            defaultValue: DataTypes.UUIDV4,
+            primaryKey: true,
         },
-        OrderID:{
+        OrderID: {
             type: DataTypes.UUID,
             allowNull: false,
         },
-        CustomerID:{
+        ItemID: {
             type: DataTypes.UUID,
             allowNull: false,
         },
-        LocationID:{
+        CustomerID: {
+            type: DataTypes.UUID,
+            allowNull: false,
+        },
+        LocationID: {
             type: DataTypes.INTEGER,
         },
-        Rating:{
+        Rating: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            defaultValue: 1
         },
-        Remark:{
+        Remark: {
             type: DataTypes.STRING,
         },
         CreatedOn: {
             type: DataTypes.DATE,
             allowNull: true,
         },
-    },{timestamps: false});
+    }, { timestamps: false });
 
     return ratingModel;
 }

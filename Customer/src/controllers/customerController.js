@@ -24,6 +24,27 @@ const getCustomer = async (req, res) => {
     }
 };
 
+async function getCustomerDetails(req, res) {
+    try {
+        const { UserDetail } = req;
+        if (!UserDetail || !UserDetail.CustomerID) {
+            return res.status(400).json({
+                message: "Invalid token! Login again"
+            })
+        }
+        const customerDetails = await db.customer.findByPK(UserDetail.CustomerID);
+        return res.status(200).json({
+            message: 'Success',
+            customerDetails: customerDetails
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message: 'Sorry! There was an server-side error'
+        });
+    }
+}
 
 
-module.exports = {getCustomer}
+
+module.exports = { getCustomer, getCustomerDetails }
