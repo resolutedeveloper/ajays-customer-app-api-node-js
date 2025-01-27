@@ -6,7 +6,7 @@ const router = express.Router();
 
 
 router.get("/:customerId",getCustomer);
-router.get("/details/", getCustomerDetails);
+router.get("/details/user", getCustomerDetails);
 
 
 module.exports = router;
