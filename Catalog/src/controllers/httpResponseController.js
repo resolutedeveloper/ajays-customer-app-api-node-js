@@ -177,149 +177,83 @@ const citystores = async (req, res) => {
     }
 };
 
-//   const axios = require('axios');
-//   const lat = req.query.latitude;
-//   const lon = req.query.longitude;
-//   const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`;
-//   async function fetchCityData() {
-//       try {
-//           const response = await axios.get(url);
-//           const stateDistrict = response.data?.address?.state_district;
-
-//           if (!stateDistrict) {
-//               throw new Error("State district not found in the response.");
-//           }
-
-//           const { Op } = require('sequelize');
-
-//           const cityData = await db.city.findOne({
-//               where: {
-//                   CityName: {
-//                       [Op.like]: stateDistrict
-//                   }
-//               }
-//           });
-//           const LatLongcityID = cityData.dataValues.CityID;
-
-//           const locations = await db.location.findAll({
-//             where: {
-//               Cityid: LatLongcityID,
-//             },
-//           });
-
-//           if(locations){
-//             return res.status(200).json({
-//                 message: 'Location details found successfully',
-//                 data: locations
-//             });
-//             }else{
-//                 return res.status(400).send({
-//                     ErrorCode: "VALIDATION", 
-//                     ErrorMessage: 'Location details not found' 
-//                 });
-//             }
-
-//       } catch (error) {
-//           console.error('Error fetching data:', error);
-//       }
-//   }
-//   fetchCityData();
-// };
 
 const latlonglocation = async (req, res) => {
-    const { latitude, longitude } = req.query;
-    if (!latitude || !longitude) {
-        return res.status(400).send({
-            ErrorCode: "VALIDATION",
-            ErrorMessage: 'Latitude or Longitude not found'
-        });
-    }
-
-
-    const calculateDistance = (lat1, lon1, lat2, lon2) => {
-        const toRad = (value) => (value * Math.PI) / 180;
-        const R = 6371; // Earth's radius in kilometers
-        const dLat = toRad(lat2 - lat1);
-        const dLon = toRad(lon2 - lon1);
-        const a =
-            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-            Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return R * c; // Distance in kilometers
-    };
-
-    const estimateDuration = (distance, speed = 40) => {
-        // Default speed: 40 km/h (driving)
-        return (distance / speed) * 60; // Duration in minutes
-    };
-
-    async function fetchCityData() {
-        try {
-            const response = getCityName(latitude, longitude);
-            const stateDistrict = response?.city;
-
-            if (!stateDistrict) {
-                throw new Error("State district not found in the response.");
-            }
-
-            const cityData = await db.city.findOne({
-                where: {
-                    CityName: {
-                        [Op.like]: stateDistrict
-                    }
-                }
+    try {
+        const { latitude, longitude } = req.query;
+        if (!latitude || !longitude) {
+            return res.status(400).send({
+                message: 'Latitude or Longitude not found'
             });
-
-            const LatLongcityID = cityData?.dataValues?.CityID;
-
-            if (!LatLongcityID) {
-                return res.status(400).send({
-                    ErrorCode: "VALIDATION",
-                    ErrorMessage: 'Location details not found'
-                });
-            }
-
-            const locations = await db.location.findAll({
-                where: {
-                    Cityid: LatLongcityID,
-                },
-                include: [
-                    { model: db.LocationCompanyMapping, attributes: ['CompanyID'], }
-                ]
-            });
-
-            if (locations) {
-                const results = locations.map((location) => {
-                    const lat2 = parseFloat(location?.Latitude);
-                    const lon2 = parseFloat(location?.Longitude);
-                    const distance = calculateDistance(lat1, lon1, lat2, lon2);
-                    const duration = estimateDuration(distance);
-
-                    return {
-                        ...location?.dataValues,
-                        Distance: `${distance.toFixed(2)} km`,
-                        Duration: `${duration.toFixed(2)} minutes`,
-                    };
-                });
-
-                return res.status(200).json({
-                    message: 'Location details found successfully',
-                    data: results,
-                });
-            } else {
-                return res.status(400).send({
-                    ErrorCode: "VALIDATION",
-                    ErrorMessage: 'Location details not found'
-                });
-            }
-
-        } catch (error) {
-            console.error('Error fetching data:', error);
-            return res.status(500).send({ ErrorMessage: "Internal server error", Error: error });
         }
+
+
+        const response = getCityName(latitude, longitude);
+        const stateDistrict = response?.city;
+
+        if (!stateDistrict) {
+            return res.status(201).json({
+                message: "Currently we are not in this location",
+                status: 0
+            })
+        }
+
+        const cityData = await db.city.findOne({
+            where: {
+                CityName: {
+                    [Op.like]: stateDistrict
+                }
+            }
+        });
+
+        const LatLongcityID = cityData?.dataValues?.CityID;
+
+        if (!LatLongcityID) {
+            return res.status(400).send({
+                message: 'Location details not found'
+            });
+        }
+
+        const locations = await db.location.findAll({
+            where: {
+                Cityid: LatLongcityID,
+            },
+            include: [
+                { model: db.LocationCompanyMapping, attributes: ['CompanyID'], }
+            ]
+        });
+        if (!locations || locations.length <= 0) {
+            return res.status(400).send({
+                message: 'Location details not found'
+            });
+        }
+
+        const results = locations.map((location) => {
+            const lat2 = parseFloat(location?.Latitude);
+            const lon2 = parseFloat(location?.Longitude);
+            const distance = distanceCalculator(lat1, lon1, lat2, lon2);
+            const duration = timeCalculator(distance, 40);
+
+            return {
+                ...location?.dataValues,
+                Distance: `${distance.toFixed(2)} km`,
+                Duration: `${duration.toFixed(2)} minutes`,
+            };
+        });
+
+        return res.status(200).json({
+            message: 'Location details found successfully',
+            data: results,
+        });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message: "Sorry! There was an server-side error",
+            error: error
+        })
     }
-    fetchCityData();
+
 };
 
 
