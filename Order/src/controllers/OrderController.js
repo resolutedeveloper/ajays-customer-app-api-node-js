@@ -225,6 +225,10 @@ const OrderApprove = async (req) => {
                 OrderID: req.OrderID,
                 LocationID: req.LocationID,
             },
+            include: [
+                { model: db.orderDetails },
+                { model: db.orderDetailsTax },
+            ]
         });
 
         if (!OrderList) {
@@ -291,6 +295,10 @@ const OrderReject = async (req) => {
                 OrderID: req.OrderID,
                 LocationID: req.LocationID,
             },
+            include: [
+                { model: db.orderDetails },
+                { model: db.orderDetailsTax },
+            ]
         });
 
 
@@ -363,6 +371,10 @@ const OrderPending = async (LocationID) => {
                 OrderStatus: 'Pending',
                 LocationID: LocationID,
             },
+            include: [
+                { model: db.orderDetails },
+                { model: db.orderDetailsTax },
+            ]
         });
         return {
             status: 1,
@@ -386,6 +398,10 @@ const OrderMarkAsRead = async (LocationID) => {
                 OrderID: req.OrderID,
                 LocationID: req.LocationID,
             },
+            include: [
+                { model: db.orderDetails },
+                { model: db.orderDetailsTax },
+            ]
         });
 
         if (!OrderList) {
@@ -451,6 +467,10 @@ const OrderCompleted = async (LocationID) => {
                 OrderID: req.OrderID,
                 LocationID: req.LocationID,
             },
+            include: [
+                { model: db.orderDetails },
+                { model: db.orderDetailsTax },
+            ]
         });
         if (!OrderList) {
             return {
@@ -572,7 +592,7 @@ async function getOrderDetail(req, res) {
 
         let toReturnTotal = 0;
 
-        if(orderDetailed?.OrderDetails && orderDetailed.OrderDetails.length > 0){
+        if (orderDetailed?.OrderDetails && orderDetailed.OrderDetails.length > 0) {
             orderDetailed.OrderDetails.map((ordersMrp) => {
                 toReturnTotal += ordersMrp.MRP
             });
