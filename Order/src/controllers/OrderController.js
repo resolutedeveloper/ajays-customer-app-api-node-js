@@ -561,14 +561,14 @@ async function getOrderDetail(req, res) {
             where: whereCondition
         });
 
-        const orderIdArr = orderDetailed.map((ordersID) => (ordersID.ItemID));
-        const respOrder = await axios.post(`${process.env.CATALOG_LOCAL_URL}/httpResponse/itemsBulkGetId`, { itemIdArr: orderIdArr }, {
-            headers: { "Authorization": `Bearer ${process.env.HTTP_REQUEST_SECRET_KEY}` }
-        })
+        // const orderIdArr = orderDetailed.map((ordersID) => (ordersID.ItemID));
+        // const respOrder = await axios.post(`${process.env.CATALOG_LOCAL_URL}/httpResponse/itemsBulkGetId`, { itemIdArr: orderIdArr }, {
+        //     headers: { "Authorization": `Bearer ${process.env.HTTP_REQUEST_SECRET_KEY}` }
+        // })
         return res.status(200).json({
             message: 'Success',
             orderDetail: orderDetailed,
-            orderItemDetails: respOrder?.data?.itemsData
+            // orderItemDetails: respOrder?.data?.itemsData
         });
     } catch (error) {
         console.log(error);
