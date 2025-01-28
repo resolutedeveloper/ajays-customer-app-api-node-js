@@ -193,7 +193,7 @@ const latlonglocation = async (req, res) => {
 
         if (!stateDistrict) {
             return res.status(201).json({
-                message: "Currently we are not in this location",
+                message: "Currently we are not serving in this location",
                 status: 0
             })
         }

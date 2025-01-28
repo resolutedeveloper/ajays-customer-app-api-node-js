@@ -67,8 +67,11 @@ const sendCustomerNotification = async (req, res) => {
 
 const sendCustomerNotificationHttp = async (req, res) => {
   try {
+    // console.log(req.body);
     // const CustomerID = req?.UserDetail?.CustomerID;
     const { title, body, customData, CustomerID } = req.body;
+    console.log(req.body);
+    console.log(`Sending notification`);
 
     if (!CustomerID || !title || !body) {
       return res.status(400).json({ message: 'CustomerID, title, and body are required.' });
@@ -77,9 +80,9 @@ const sendCustomerNotificationHttp = async (req, res) => {
 
     if (result.success) {
       return res.status(200).json({ message: 'Notification sent successfully' });
-    } else {
-      return res.status(400).json({ message: 'Error sending notification', error: result.error });
     }
+    return res.status(400).json({ message: 'Error sending notification', error: result.error });
+
   } catch (error) {
     console.error('Error sending notification:', error.message);
     return res.status(400).json({ message: 'Error sending notification', error: error.message });

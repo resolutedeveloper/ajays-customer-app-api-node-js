@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const { saveFCMKey, sendCustomerNotification, sendCustomerNotificationHttp } = require('../controllers/CustomerFcmController');
-const httpRequest = require("../middelware/httpRequest");
+const httpRequest = require("../middelware/httpRequestBearer");
 // const { validateRequest } = require('../config/validate-request');
 // const Joi = require('joi');
 
