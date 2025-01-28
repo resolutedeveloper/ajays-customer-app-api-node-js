@@ -27,11 +27,14 @@ function timeCalculator(distance, speed) {
 function getCityName(lat, long) {
     const lat1 = parseFloat(lat);
     const lon1 = parseFloat(long);
-
-    const cityDesc = cityData.find(
-        (city) => parseFloat(city.latitude) == lat1 && parseFloat(city.longitude) == lon1
-    );
-    const cityName = cityDesc?.name;
+    let cityName = null;
+    for (const city of cityData) {
+        const distance = haversine(lat1, lon1, parseFloat(city.latitude), parseFloat(city.longitude));
+        if (distance <= 10) {
+            cityName = city.name;
+        }
+    }
+    // return 'City not found within the threshold.';
 
     if (!cityName) {
         return { status: false };
@@ -40,6 +43,25 @@ function getCityName(lat, long) {
         status: true,
         city: cityName
     }
+}
+
+// haversine theorm
+function haversine(lat1, lon1, lat2, lon2) {
+    const toRad = angle => (angle * Math.PI) / 180;
+
+    const R = 6371; // Radius of Earth in km
+    const dLat = toRad(lat2 - lat1);
+    const dLon = toRad(lon2 - lon1);
+
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(toRad(lat1)) *
+        Math.cos(toRad(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c; // Distance in km
 }
 
 module.exports = { distanceCalculator, timeCalculator, getCityName };

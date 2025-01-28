@@ -194,10 +194,11 @@ const latlonglocation = async (req, res) => {
         if (!stateDistrict) {
             return res.status(201).json({
                 message: "Currently we are not serving in this location",
-                status: 0
+                status: 0,
+                backendDebug: "Service failed"
             })
         }
-
+        // console.log(stateDistrict);
         const cityData = await db.city.findOne({
             where: {
                 CityName: {
@@ -209,9 +210,11 @@ const latlonglocation = async (req, res) => {
         const LatLongcityID = cityData?.dataValues?.CityID;
 
         if (!LatLongcityID) {
-            return res.status(400).send({
-                message: 'Location details not found'
-            });
+            return res.status(201).json({
+                message: "Currently we are not serving in this location",
+                status: 0,
+                backendDebug: `City database is null. City was ${stateDistrict}`
+            })
         }
 
         const locations = await db.location.findAll({
@@ -223,15 +226,17 @@ const latlonglocation = async (req, res) => {
             ]
         });
         if (!locations || locations.length <= 0) {
-            return res.status(400).send({
-                message: 'Location details not found'
-            });
+            return res.status(201).json({
+                message: "Currently we are not serving in this location",
+                status: 0,
+                backendDebug: `Location database is null. City was ${stateDistrict}`
+            })
         }
 
         const results = locations.map((location) => {
             const lat2 = parseFloat(location?.Latitude);
             const lon2 = parseFloat(location?.Longitude);
-            const distance = distanceCalculator(lat1, lon1, lat2, lon2);
+            const distance = distanceCalculator(latitude, longitude, lat2, lon2);
             const duration = timeCalculator(distance, 40);
 
             return {
