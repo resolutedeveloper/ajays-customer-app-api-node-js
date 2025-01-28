@@ -256,7 +256,12 @@ const OrderApprove = async (req) => {
         }, {
             transaction: db_transaction, // Use the transaction
         });
-
+        console.log({
+            OrderID: req.OrderID,
+            OrderStatus: 'Confirmed',
+            Data: req.Data,
+            CreatedOn: CurrentDateTime
+        })
         await db.orderHistory.create(
             {
                 OrderID: req.OrderID,
@@ -272,7 +277,7 @@ const OrderApprove = async (req) => {
         await sendNotification(OrderList.CustomerID, `OrderApprove`, `Your order is approved`);
 
         await db_transaction.commit();
-
+        console.log('4')
         return {
             status: 1,
             message: 'Order has been confirmed'
@@ -388,7 +393,7 @@ const OrderPending = async (LocationID) => {
     }
 };
 
-const OrderMarkAsRead = async (LocationID) => {
+const OrderMarkAsRead = async (req) => {
     try {
         req = req.message;
 
@@ -459,7 +464,7 @@ const OrderMarkAsRead = async (LocationID) => {
 };
 
 
-const OrderCompleted = async (LocationID) => {
+const OrderCompleted = async (req) => {
     try {
         req = req.message;
 

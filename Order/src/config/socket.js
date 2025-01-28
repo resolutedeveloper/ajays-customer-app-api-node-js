@@ -23,6 +23,7 @@ async function setupSocket(server) {
                 const LocationID = room.replace("location_room_", "");
                 msg.message.LocationID = LocationID;
                 const result = await OrderApprove(msg);
+                console.log('result', result);
                 callback({ success: result.status == 1 ? true : false, message: result.message });
             });
 

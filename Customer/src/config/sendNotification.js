@@ -1,4 +1,4 @@
-const admin = require('../utils/fireBaseConfig.js'); 
+const admin = require('../utils/fireBaseConfig.js');
 const db = require('../models/index.js');
 
 const promotion = "promotion";
@@ -11,7 +11,8 @@ const sendNotification = async (customerId, title, body, customData = {}) => {
         const customerFCM = await db.customerFCM.findOne({ where: { CustomerID: customerId } });
 
         if (!customerFCM) {
-            throw new Error('FCM Key not found for this customer');
+            // throw new Error('FCM Key not found for this customer');
+            return { success: true };
         }
 
         console.log(" ~ sendNotification ~ customData:", customData);
@@ -69,7 +70,7 @@ const sendNotification = async (customerId, title, body, customData = {}) => {
 
         const response = await admin.messaging().send(notificationPayload);
         console.log('Notification sent:', response);
-        
+
         return { success: true, response };
     } catch (err) {
         console.error('Error sending notification:', err.message);
