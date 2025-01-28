@@ -67,11 +67,9 @@ const sendCustomerNotification = async (req, res) => {
 
 const sendCustomerNotificationHttp = async (req, res) => {
   try {
-    // console.log(req.body);
-    // const CustomerID = req?.UserDetail?.CustomerID;
     const { title, body, customData, CustomerID } = req.body;
-    console.log(req.body);
-    console.log(`Sending notification`);
+    // console.log(req.body);
+    // console.log(`Sending notification`);
 
     if (!CustomerID || !title || !body) {
       return res.status(400).json({ message: 'CustomerID, title, and body are required.' });

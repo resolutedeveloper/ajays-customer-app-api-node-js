@@ -2,15 +2,16 @@ const express = require('express');
 const router = express.Router();
 
 const { saveFCMKey, sendCustomerNotification, sendCustomerNotificationHttp } = require('../controllers/CustomerFcmController');
-const httpRequest = require("../middelware/httpRequestBearer");
+const httpRequestBearer = require("../middelware/httpRequestBearer");
+const checKValidity = require("../middelware/TokenVerification");
 // const { validateRequest } = require('../config/validate-request');
 // const Joi = require('joi');
 
 
 
-router.post("/save-fcm", saveFCMKey);
-router.post("/send-notification", sendCustomerNotification);
-router.post("/send-notification-http", httpRequest, sendCustomerNotificationHttp);
+router.post("/save-fcm", checKValidity, saveFCMKey);
+router.post("/send-notification", checKValidity, sendCustomerNotification);
+router.post("/send-notification-http", httpRequestBearer, sendCustomerNotificationHttp);
 
 
 
