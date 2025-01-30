@@ -10,7 +10,7 @@ const { redisConnection } = require("./src/cache/redis.js");
 
 redisConnection();
 
-const setupSocket = require('./src/config/socket');  // socket.js ko import karein
+const { setupSocket } = require('./src/config/socket');  // socket.js ko import karein
 
 const app = express();
 const server = http.createServer(app);

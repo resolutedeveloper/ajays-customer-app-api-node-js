@@ -36,10 +36,7 @@ const AddOrderRequest = (req, res, next) => {
 };
 
 // router.post("/", AddOrderRequest, AddOrder);
-router.post("/", AddOrderRequest, (req, res) => {
-    const io = req.io;  // Retrieve the io instance
-    AddOrder(req, res, io);  // Pass io instance to AddOrder controller
-});
+router.post("/", AddOrderRequest, AddOrder);
 
 router.get("/list", getOrderListUser);
 router.get("/detail", getOrderDetail);

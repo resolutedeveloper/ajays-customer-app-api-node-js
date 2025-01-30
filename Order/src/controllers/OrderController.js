@@ -3,6 +3,7 @@ const db = require("../models/index.js");
 const moment = require('moment-timezone');
 const axios = require('axios');
 const { sendNotification } = require("../utils/notification.js");
+const { getIoInstance } = require("../config/socket.js");
 
 
 function generateOTP(length) {
@@ -11,7 +12,7 @@ function generateOTP(length) {
     return Math.floor(min + Math.random() * (max - min + 1)).toString();
 }
 
-const AddOrder = async (req, res, io) => {
+const AddOrder = async (req, res) => {
     try {
         const db_transaction = await db.sequelize.transaction(); // Start a transaction
         var {
@@ -190,14 +191,16 @@ const AddOrder = async (req, res, io) => {
         var payment_info = [];
 
         const room = `location_room_${LocationID}`; // Generate the room name
-        // io.to(room).emit('NewOrder', {
-        //     success: true,
-        //     message: 'New order created!',
-        //     order: socket_order,
-        //     items: socket_items,
-        //     taxs: socket_taxs,
-        //     payment_info: payment_info
-        // });
+        const io = await getIoInstance();
+        
+        io.to(room).emit('NewOrder', {
+            success: true,
+            message: 'New order created!',
+            order: socket_order,
+            items: socket_items,
+            taxs: socket_taxs,
+            payment_info: payment_info
+        }); 
 
         return res.status(201).send({
             success: true,

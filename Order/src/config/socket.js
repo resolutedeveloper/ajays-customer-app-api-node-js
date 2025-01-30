@@ -1,6 +1,8 @@
 const socketIo = require('socket.io');
 const { OrderApprove, OrderReject, OrderPending, OrderMarkAsRead, OrderCompleted } = require('../controllers/OrderController');
 
+let ioReturn = null;
+
 async function setupSocket(server) {
     const io = socketIo(server);
 
@@ -59,8 +61,16 @@ async function setupSocket(server) {
             });
         });
     });
-
+    ioReturn = io;
     return io;
 }
 
-module.exports = setupSocket;
+async function getIoInstance() {
+    if (!ioReturn) {
+        throw new Error("Io not found");
+    }
+
+    return ioReturn;
+}
+
+module.exports = { setupSocket, getIoInstance };

@@ -29,8 +29,8 @@ function getCityName(lat, long) {
     const lon1 = parseFloat(long);
     let cityName = null;
     for (const city of cityData) {
-        const distance = haversine(lat1, lon1, parseFloat(city.latitude), parseFloat(city.longitude));
-        if (distance <= 10) {
+        const distance = vincenty(lat1, lon1, parseFloat(city.latitude), parseFloat(city.longitude)); // Change between heversine and vincenty to measure accuracy
+        if (distance <= 30) {
             cityName = city.name;
         }
     }
@@ -45,7 +45,7 @@ function getCityName(lat, long) {
     }
 }
 
-// haversine theorm
+// haversine formula to calculate distance between two points
 function haversine(lat1, lon1, lat2, lon2) {
     const toRad = angle => (angle * Math.PI) / 180;
 
@@ -62,6 +62,52 @@ function haversine(lat1, lon1, lat2, lon2) {
 
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c; // Distance in km
+}
+
+// Vincenty formula to calculate distance between two points
+function vincenty(lat1, lon1, lat2, lon2) {
+    const a = 6378137.0; // Semi-major axis of the Earth in meters
+    const f = 1 / 298.257223563; // Flattening of the Earth
+    const b = (1 - f) * a; // Semi-minor axis
+
+    const U1 = Math.atan((1 - f) * Math.tan(lat1 * (Math.PI / 180)));
+    const U2 = Math.atan((1 - f) * Math.tan(lat2 * (Math.PI / 180)));
+    const L = (lon2 - lon1) * (Math.PI / 180);
+    let lambda = L;
+
+    let sinU1 = Math.sin(U1);
+    let cosU1 = Math.cos(U1);
+    let sinU2 = Math.sin(U2);
+    let cosU2 = Math.cos(U2);
+
+    let sinLambda, cosLambda, sinSigma, cosSigma, sigma, sinAlpha, cosSqAlpha, cos2SigmaM;
+    let lambdaP, iterLimit = 100;
+
+    do {
+        sinLambda = Math.sin(lambda);
+        cosLambda = Math.cos(lambda);
+        sinSigma = Math.sqrt((cosU2 * sinLambda) ** 2 + (cosU1 * sinU2 - sinU1 * cosU2 * cosLambda) ** 2);
+        cosSigma = sinU1 * sinU2 + cosU1 * cosU2 * cosLambda;
+        sigma = Math.atan2(sinSigma, cosSigma);
+        sinAlpha = (cosU1 * cosU2 * sinLambda) / sinSigma;
+        cosSqAlpha = 1 - sinAlpha ** 2;
+        cos2SigmaM = cosSigma - (2 * sinU1 * sinU2) / cosSqAlpha;
+        const C = (f / 16) * cosSqAlpha * (4 + f * (4 - 3 * cosSqAlpha));
+        lambdaP = lambda;
+        lambda = L + (1 - C) * f * sinAlpha * (sigma + C * sinSigma * (cos2SigmaM + C * cosSigma * (-1 + 2 * cos2SigmaM ** 2)));
+    } while (Math.abs(lambda - lambdaP) > 1e-12 && --iterLimit > 0);
+
+    if (iterLimit === 0) {
+        return NaN; // Formula failed to converge
+    }
+
+    const uSq = (cosSqAlpha * (a ** 2 - b ** 2)) / (b ** 2);
+    const A = 1 + (uSq / 16384) * (4096 + uSq * (-768 + uSq * (320 - 175 * uSq)));
+    const B = (uSq / 1024) * (256 + uSq * (-128 + uSq * (74 - 47 * uSq)));
+    const deltaSigma = B * sinSigma * (cos2SigmaM + (B / 4) * (cosSigma * (-1 + 2 * cos2SigmaM ** 2) - (B / 6) * cos2SigmaM * (-3 + 4 * sinSigma ** 2) * (-3 + 4 * cos2SigmaM ** 2)));
+
+    const distance = b * A * (sigma - deltaSigma); // Distance in meters
+    return distance / 1000; // Convert to kilometers
 }
 
 module.exports = { distanceCalculator, timeCalculator, getCityName };
