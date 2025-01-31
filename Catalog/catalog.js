@@ -15,8 +15,8 @@ require('./src/jobs/processImage');
 // Middleware for parsing JSON requests
 app.use(express.json());
 
-app.use('/itemImage', express.static(path.join(__dirname, '/public', '/items')));
-app.use('/categoryImage', express.static(path.join(__dirname, '/public', '/catlog')));
+app.use('/itemImage', express.static(path.join(__dirname, 'src', 'public', 'items')));
+app.use('/categoryImage', express.static(path.join(__dirname, 'src', 'public', 'catlog')));
 
 // Use Morgan middleware for logging HTTP requests
 app.use(morgan('tiny', { stream: { write: (msg) => logger.info(msg.trim()) } }));
