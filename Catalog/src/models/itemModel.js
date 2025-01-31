@@ -47,7 +47,7 @@ const itemModel = sequelize.define("Items",{
         type: DataTypes.BOOLEAN,
     },
     Image:{
-        type: DataTypes.TEXT,
+        type: DataTypes.TEXT("long"),
     },
     Remarks:{
         type: DataTypes.STRING(300),

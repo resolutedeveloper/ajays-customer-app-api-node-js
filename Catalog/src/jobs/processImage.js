@@ -9,7 +9,7 @@ cron.schedule('*/2 * * * *', async () => {
   try {
     // const redisItem = await client.get("itemOffester");
     // const redisCat = await client.get("categoryOffset");
-    // // console.log(redisItem, redisCat, typeof redisItem, typeof redisCat);
+    // console.log(redisItem, redisCat, typeof redisItem, typeof redisCat);
 
     // const offsetItem = redisItem ? Number(redisItem) : 0;
     // const offsetCategory = redisCat ? Number(redisCat) : 0;
