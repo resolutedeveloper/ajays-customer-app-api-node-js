@@ -75,7 +75,7 @@ cron.schedule('*/2 * * * *', async () => {
           // const fileName = path.basename(fullFilePath, path.extname(fullFilePath)).match(/^image-\d+/)[0];
 
           if (fullFilePath) {
-            await db.item.update({ CategoryImage: fileName }, { where: { CategoryID: item.CategoryID } });
+            await db.category.update({ CategoryImage: fileName }, { where: { CategoryID: item.CategoryID } });
           }
           // await client.set("itemOffester", updatedCount);
 
