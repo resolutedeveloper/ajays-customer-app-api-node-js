@@ -15,26 +15,35 @@ cron.schedule('*/2 * * * *', async () => {
     // const offsetCategory = redisCat ? Number(redisCat) : 0;
     const limit = 10;
 
-    const whereCondition = {};
-    whereCondition.baseFilter = {
-      [db.Sequelize.Op.or]: [
-        { [db.Sequelize.Op.like]: 'data:image/%' }, // Base64 images
-        { [db.Sequelize.Op.like]: 'http%' },         // URL images
-        { [db.Sequelize.Op.like]: '{%' },             // JSON metadata images
-        { [db.Sequelize.Op.like]: '%/%' }             // File path images
-      ],
-    };
-
+    // const whereCondition = {};
+    // whereCondition = {
+    //   [db.Sequelize.Op.or]: [
+    //     { Image: { [db.Sequelize.Op.like]: 'data:image/%' } }, // Base64 images
+    //     { [db.Sequelize.Op.like]: 'http%' },         // URL images
+    //     { [db.Sequelize.Op.like]: '{%' },             // JSON metadata images
+    //     { [db.Sequelize.Op.like]: '%/%' }             // File path images
+    //   ],
+    // };
+    function retrunWhereClause(imageCol) {
+      return {
+        [db.Sequelize.Op.or]: [
+          { [imageCol]: { [db.Sequelize.Op.like]: 'data:image/%' } }, // Base64 images
+          { [imageCol]: { [db.Sequelize.Op.like]: 'http%' } },         // URL images
+          { [imageCol]: { [db.Sequelize.Op.like]: '{%' } },             // JSON metadata images
+          { [imageCol]: { [db.Sequelize.Op.like]: '%/%' } }           // File path images
+        ],
+      };
+    }
     const items = await db.item.findAll({
       where: {
-        Image: whereCondition.baseFilter,
+        Image: retrunWhereClause("Image"),
       },
       limit: limit,
     });
 
     const categories = await db.category.findAll({
       where: {
-        CategoryImage: whereCondition.baseFilter
+        CategoryImage: retrunWhereClause("CategoryImage")
       },
       limit: limit,
     });
