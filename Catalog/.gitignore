@@ -45,3 +45,7 @@ coverage/
 # Database files
 *.sqlite
 *.sqlite3
+
+# Files 
+/src/public/catlog/*
+/src/public/items/*
