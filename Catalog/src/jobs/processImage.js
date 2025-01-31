@@ -35,16 +35,12 @@ cron.schedule('*/2 * * * *', async () => {
       };
     }
     const items = await db.item.findAll({
-      where: {
-        Image: retrunWhereClause("Image"),
-      },
+      where: retrunWhereClause("Image"),
       limit: limit,
     });
 
     const categories = await db.category.findAll({
-      where: {
-        CategoryImage: retrunWhereClause("CategoryImage")
-      },
+      where: retrunWhereClause("CategoryImage"),
       limit: limit,
     });
 
@@ -57,7 +53,9 @@ cron.schedule('*/2 * * * *', async () => {
 
           // const fileName = path.basename(fullFilePath, path.extname(fullFilePath)).match(/^image-\d+/)[0];
 
-          const [updatedCount] = await db.item.update({ Image: fileName }, { where: { ItemID: item.ItemID } });
+          if (fullFilePath) {
+            await db.item.update({ Image: fileName }, { where: { ItemID: item.ItemID } });
+          }
           // await client.set("categoryOffset", updatedCount);
 
           // console.log(`Processed ItemID ${item.ItemID}: ${fileName}`);
@@ -76,7 +74,9 @@ cron.schedule('*/2 * * * *', async () => {
 
           // const fileName = path.basename(fullFilePath, path.extname(fullFilePath)).match(/^image-\d+/)[0];
 
-          const [updatedCount] = await db.item.update({ Image: fileName }, { where: { ItemID: item.ItemID } });
+          if (fullFilePath) {
+            await db.item.update({ CategoryImage: fileName }, { where: { CategoryID: item.CategoryID } });
+          }
           // await client.set("itemOffester", updatedCount);
 
           // console.log(`Processed ItemID ${item.ItemID}: ${fileName}`);
