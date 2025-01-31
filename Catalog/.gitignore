@@ -47,5 +47,5 @@ coverage/
 *.sqlite3
 
 # Files 
-/src/public/catlog/*
-/src/public/items/*
+# /src/public/catlog/*
+# /src/public/items/*
