@@ -49,7 +49,7 @@ cron.schedule('*/2 * * * *', async () => {
         try {
           const fileName = `ITEM_${item.ItemID}.jpg`;
 
-          const fullFilePath = await convertAndSaveImage(item.Image, fileName);
+          const fullFilePath = await convertAndSaveImage(item.Image, fileName, "items");
 
           // const fileName = path.basename(fullFilePath, path.extname(fullFilePath)).match(/^image-\d+/)[0];
 
@@ -70,7 +70,7 @@ cron.schedule('*/2 * * * *', async () => {
       for (const item of categories) {
         try {
           const fileName = `CATEGORY_${item.CategoryID}.jpg`;
-          const fullFilePath = await convertAndSaveImage(item.CategoryImage, fileName);
+          const fullFilePath = await convertAndSaveImage(item.CategoryImage, fileName, "catlog");
 
           // const fileName = path.basename(fullFilePath, path.extname(fullFilePath)).match(/^image-\d+/)[0];
 

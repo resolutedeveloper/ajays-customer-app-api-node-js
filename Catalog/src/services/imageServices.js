@@ -37,7 +37,7 @@ function isValidJsonMetadata(jsonString) {
   }
 }
 
-async function convertAndSaveImage(imageInput, paramFileName, width = 200, height = null, quality = 80) {
+async function convertAndSaveImage(imageInput, paramFileName, savePath, width = 200, height = null, quality = 80) {
   imageInput = imageInput.trim();
   // console.log(imageInput);
   try {
@@ -47,7 +47,7 @@ async function convertAndSaveImage(imageInput, paramFileName, width = 200, heigh
 
     let imageBuffer;
     // const fileName = `${paramFileName}.jpg`;
-    const outputPath = path.join(__dirname, '..', '/public', '/items', `/${paramFileName}`);
+    const outputPath = path.join(__dirname, '..', '/public', `/${savePath}`, `/${paramFileName}`);
 
 
     // fs.mkdirSync(path.dirname(outputPath), { recursive: true });
