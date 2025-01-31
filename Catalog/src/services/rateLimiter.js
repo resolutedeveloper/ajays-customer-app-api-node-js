@@ -28,7 +28,7 @@ function rateLimiter(maxLimit, maxTime) {
                 const timeLeft = await client.ttl(`RATE_LIMIT_${ip}`);
                 return res.status(429).json({
                     message: "Too many requests. Please try again later.",
-                    suggestion: timeLeft ? `Try after ${timeLeft} seconds` : `Slow down your request speed or try again later.`,
+                    suggestion: timeLeft ? `Try after ${timeLeft} seconds.` : `Slow down your request speed or try again later.`,
                 });
             }
 
@@ -37,7 +37,7 @@ function rateLimiter(maxLimit, maxTime) {
             console.log(error);
             return res.status(500).json({
                 message: "There was an error in rate-limiter.",
-                suggestion: "Disable any VPN or Proxy changers or try again after some time"
+                suggestion: "Disable any VPN or Proxy changers or try again after some time."
             })
         }
     };
