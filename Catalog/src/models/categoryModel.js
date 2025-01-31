@@ -23,7 +23,7 @@ const categoryModel = sequelize.define("Categories",{
         type: DataTypes.INTEGER,
     },
     CategoryImage:{
-        type: DataTypes.STRING(300),
+        type: DataTypes.TEXT("long"),
     },
     IsSpecial:{
         type: DataTypes.BOOLEAN,
