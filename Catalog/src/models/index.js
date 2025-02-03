@@ -41,6 +41,7 @@ db.taxDefinition = require('../models/taxDefinition')(sequelize, DataTypes);
 db.taxDefinitionDetails = require('../models/taxDefinitionDetails')(sequelize, DataTypes);
 db.itemTaxDet = require('../models/itemTaxDet')(sequelize, DataTypes);
 db.LocationCompanyMapping = require('./locationCompanyMapping')(sequelize, DataTypes);
+db.exceptions = require("./exceptions")(sequelize, DataTypes);
 
 // Association of tables
 db.categoryAllocation.hasOne(db.category, { foreignKey: 'CategoryID' });

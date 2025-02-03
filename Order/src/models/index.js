@@ -28,6 +28,7 @@ db.orderDetailsTax = require('../models/orderDetailsTaxModel.js')(sequelize, Dat
 // db.ratingItem = require('../models/ratingItemModel.js')(sequelize, DataTypes);
 db.feedback = require('../models/feedbackModel.js')(sequelize, DataTypes);
 db.orderHistory = require('../models/orderHistoryModel.js')(sequelize, DataTypes);
+db.exceptions = require("./exceptions")(sequelize, DataTypes);
 
 //Associatiom
 db.order.hasMany(db.orderDetails, { foreignKey: 'OrderID' });

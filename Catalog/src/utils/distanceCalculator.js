@@ -110,4 +110,5 @@ function vincenty(lat1, lon1, lat2, lon2) {
     return distance / 1000; // Convert to kilometers
 }
 
+
 module.exports = { distanceCalculator, timeCalculator, getCityName };
