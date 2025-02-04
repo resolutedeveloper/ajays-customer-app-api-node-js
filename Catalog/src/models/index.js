@@ -24,6 +24,7 @@ const sequelizeLog = new Sequelize(dbConfig.DB_NAME_LOG, dbConfig.DB_USER, dbCon
         multipleStatements: true,
     },
 });
+
 sequelize.authenticate()
     .then(() => {
         console.log("connected..");
@@ -85,7 +86,7 @@ db.sequelize.sync({ force: false, alter: true })
     });
 dbLog.sequelize.sync({ force: false, alter: true })
     .then(() => {
-        console.log("yes re-sync done!");
+        console.log("Log re-sync done!");
     })
     .catch((error) => {
         console.error("Error while syncing the database:", error);

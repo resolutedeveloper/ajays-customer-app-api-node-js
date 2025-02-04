@@ -71,7 +71,7 @@ db.sequelize.sync({ force: false, alter: true })
     });
 dbLog.sequelize.sync({ force: false, alter: true })
     .then(() => {
-        console.log("yes re-sync done!");
+        console.log("Log re-sync done!");
     })
     .catch((error) => {
         console.error("Error while syncing the database:", error);
