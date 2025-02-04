@@ -1,5 +1,5 @@
 const logger = require('../utils/logger');
-const db = require("../models/index.js");
+const { db } = require("../models/index.js");
 const moment = require('moment-timezone');
 const axios = require('axios');
 const { sendNotification } = require("../utils/notification.js");
@@ -192,7 +192,7 @@ const AddOrder = async (req, res) => {
 
         const room = `location_room_${LocationID}`; // Generate the room name
         const io = await getIoInstance();
-        
+
         io.to(room).emit('NewOrder', {
             success: true,
             message: 'New order created!',
@@ -200,7 +200,7 @@ const AddOrder = async (req, res) => {
             items: socket_items,
             taxs: socket_taxs,
             payment_info: payment_info
-        }); 
+        });
 
         return res.status(201).send({
             success: true,

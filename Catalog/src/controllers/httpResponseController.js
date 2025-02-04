@@ -1,4 +1,4 @@
-const db = require('../models');
+const { db } = require('../models');
 const location = db.location;
 const logger = require("../utils/logger");
 const { Op, where, QueryTypes } = require('sequelize');

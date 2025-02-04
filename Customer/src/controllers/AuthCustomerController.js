@@ -1,5 +1,5 @@
 const logger = require('../utils/logger');
-const db = require("../models/index.js");
+const { db } = require("../models/index.js");
 const moment = require('moment-timezone');
 const { encryption, decryption } = require("../helpers/services");
 const jwt = require("jsonwebtoken");
@@ -71,7 +71,7 @@ const MobileNumberVerification = async (req, res) => {
 
             if (FindCustomer) {
                 if (FindCustomer.IsActive == true) {
-                    
+
                     db.mobileVerificationOTP.update({
                         IsStatus: true,
                         ExpiredOn: CurrentDateTime
@@ -130,7 +130,7 @@ const MobileNumberVerification = async (req, res) => {
 
             if (FindCustomer) {
                 if (FindCustomer.IsActive == true) {
-            
+
                     db.mobileVerificationOTP.update({
                         IsStatus: true,
                         ExpiredOn: CurrentDateTime

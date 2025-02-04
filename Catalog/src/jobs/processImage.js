@@ -1,6 +1,6 @@
 const cron = require('node-cron');
 const { convertAndSaveImage } = require('../services/imageServices');
-const db = require("../models/index.js");
+const { db } = require("../models/index.js");
 const path = require('path');
 const { client } = require("../cache/redis.js");
 

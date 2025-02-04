@@ -1,4 +1,4 @@
-const db = require('../models');
+const { db } = require('../models');
 const { distanceCalculator, timeCalculator } = require("../utils/distanceCalculator");
 
 async function getCityOutletsById(req, res) {
@@ -14,7 +14,7 @@ async function getCityOutletsById(req, res) {
             where: { CityId: cityId }
         });
 
-        if(cityForOutlet && cityForOutlet.length == 0){
+        if (cityForOutlet && cityForOutlet.length == 0) {
             return res.status(200).json({
                 message: 'fetched success',
                 locations: cityForOutlet
@@ -22,7 +22,7 @@ async function getCityOutletsById(req, res) {
         }
 
         const dataWithDistance = cityForOutlet.map((locationDb) => {
-            const dist = distanceCalculator(latitude , longitude, locationDb.Latitude ? locationDb.Latitude : 0, locationDb.Longitude ? locationDb.Longitude : 0);
+            const dist = distanceCalculator(latitude, longitude, locationDb.Latitude ? locationDb.Latitude : 0, locationDb.Longitude ? locationDb.Longitude : 0);
             const t = timeCalculator(dist, 40); // 40 km / hrs
 
             locationDb.dataValues.Distance = `${dist} km`;
@@ -33,7 +33,7 @@ async function getCityOutletsById(req, res) {
             message: 'fetched success',
             locations: dataWithDistance
         });
-        
+
     } catch (error) {
         console.log(error);
         return res.status(500).json({

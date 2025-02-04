@@ -10,6 +10,17 @@ const sequelize = new Sequelize(dbConfig.DB_NAME_CUSTOMER, dbConfig.DB_USER, dbC
         multipleStatements: true, // Yeh zaroori hai
     },
 });
+const sequelizeLog = new Sequelize(dbConfig.DB_NAME_LOG, dbConfig.DB_USER, dbConfig.DB_PASSWORD, {
+    host: dbConfig.DB_HOST,
+    dialect: 'mysql',
+    dialectModule: require('mysql2'),
+    logging: false,
+    alter: true,
+    port: 3306,                // MySQL port (default is 3306)
+    dialectOptions: {
+        multipleStatements: true,
+    },
+});
 sequelize.authenticate()
     .then(() => {
         console.log("connected..");
@@ -17,9 +28,21 @@ sequelize.authenticate()
     .catch((err) => {
         console.log("Error" + err);
     });
+sequelizeLog.authenticate()
+    .then(() => {
+        console.log("Log connected..");
+    })
+    .catch((err) => {
+        console.log("Error" + err);
+    });
 const db = {};
+const dbLog = {};
+
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
+
+dbLog.Sequelize = Sequelize;
+dbLog.sequelize = sequelizeLog;
 
 db.customer = require('../models/customerModel')(sequelize, DataTypes);
 db.customerEmail = require('../models/customerEmailModel')(sequelize, DataTypes);
@@ -30,12 +53,13 @@ db.emailVerificationOTP = require('../models/emailVerificationOTPModel')(sequeli
 db.customerFCM = require('../models/customerFCMModel')(sequelize, DataTypes);
 db.customerVerManagement = require('../models/customerVerManagementModel')(sequelize, DataTypes);
 db.historyCustomer = require('../models/historyCustomerModel')(sequelize, DataTypes);
-db.exceptions = require("./exceptions")(sequelize, DataTypes);
+
 //version
 db.VersionManagementSupport = require('../models/VersionManagementSupportModel')(sequelize, DataTypes);
 db.VersionManagement = require('../models/VersionManagementModel')(sequelize, DataTypes);
 
-
+// Logger <<-->>
+dbLog.exceptions = require("./exceptions")(sequelizeLog, DataTypes);
 
 db.sequelize.sync({ force: false, alter: true })
     .then(() => {
@@ -44,4 +68,11 @@ db.sequelize.sync({ force: false, alter: true })
     .catch((error) => {
         console.error("Error while syncing the database:", error);
     });
-module.exports = db;
+dbLog.sequelize.sync({ force: false, alter: true })
+    .then(() => {
+        console.log("yes re-sync done!");
+    })
+    .catch((error) => {
+        console.error("Error while syncing the database:", error);
+    });
+module.exports = { db, dbLog };

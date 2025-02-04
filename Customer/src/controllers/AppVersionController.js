@@ -1,4 +1,4 @@
-const db = require('../models/index');
+const { db } = require('../models/index');
 const appversioncheck = async (req, res) => {
     try {
         const latestVersion = await db.VersionManagement.findOne({
@@ -12,7 +12,7 @@ const appversioncheck = async (req, res) => {
         const VersionExistCheck = await db.VersionManagement.count({
             where: { VersionID: req.body.Version },
         });
-       
+
         if (VersionExistCheck > 0) {
             const versionExists = await db.VersionManagement.findOne({
                 where: { VersionID: req.body.Version },

@@ -1,5 +1,5 @@
 const logger = require('../utils/logger');
-const db = require("../models/index.js");
+const { db } = require("../models/index.js");
 
 
 const historycustmoer = async (req, res) => {
@@ -10,7 +10,7 @@ const historycustmoer = async (req, res) => {
         // current data find
         const existingCustomer = await db.customer.findOne({ where: { CustomerID: req.UserDetail.CustomerID } });
 
-        
+
         if (!existingCustomer) {
             return res.status(404).json({ message: 'Customer not found' });
         }
@@ -22,7 +22,7 @@ const historycustmoer = async (req, res) => {
             PhoneNumber: existingCustomer.PhoneNumber,
             EmailID: existingCustomer.EmailID,
             LastUpdateBy: existingCustomer.Name,
-          
+
         });
 
         // update data
@@ -37,7 +37,7 @@ const historycustmoer = async (req, res) => {
 
         logger.info(`Customer updated with history: ${req.UserDetail.CustomerID} - ${req.body.Name}`);
 
-        if (NameUpdated[0] === 1){
+        if (NameUpdated[0] === 1) {
 
             return res.status(200).json({
                 message: 'Customer name updated successfully with history.',
@@ -56,4 +56,4 @@ const historycustmoer = async (req, res) => {
 };
 
 
-module.exports = {historycustmoer}
+module.exports = { historycustmoer }

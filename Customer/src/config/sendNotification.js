@@ -1,5 +1,5 @@
 const admin = require('../utils/fireBaseConfig.js');
-const db = require('../models/index.js');
+const { db } = require('../models/index.js');
 
 const promotion = "promotion";
 const success = "success";

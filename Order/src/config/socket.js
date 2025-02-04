@@ -1,6 +1,6 @@
 const socketIo = require('socket.io');
 const logger = require('../utils/logger');
-const db = require("../models/index.js");
+const { db } = require("../models/index.js");
 const moment = require('moment-timezone');
 const { sendNotification } = require("../utils/notification.js");
 // const { OrderApprove, OrderReject, OrderPending, OrderCompleted, OrderMarkAsRead } = require("../controllers/OrderController.js")

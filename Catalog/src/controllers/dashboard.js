@@ -1,4 +1,4 @@
-const db = require("../models/index.js");
+const { db } = require("../models/index.js");
 const { promotionBanner } = require("../utils/promotionData.js");
 
 async function DashboardData(req, res) {
@@ -27,7 +27,7 @@ async function DashboardData(req, res) {
         // `, {
         //     type: db.Sequelize.QueryTypes.SELECT
         // });
-        
+
 
         // GET DATA FOR ITEM & CATEGORIES IN DIFFERENT ARRAYS
 

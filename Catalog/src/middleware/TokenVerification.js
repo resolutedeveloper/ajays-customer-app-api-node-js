@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const db = require('../models/index');
+const { db } = require('../models/index');
 const { client } = require('../cache/redis'); // Redis client ko import karna
 require('dotenv').config();
 const moment = require('moment-timezone');

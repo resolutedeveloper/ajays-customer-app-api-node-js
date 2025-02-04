@@ -1,4 +1,4 @@
-const db = require("../models/index.js");
+const { db } = require("../models/index.js");
 const logger = require('../utils/logger');
 const getCustomer = async (req, res) => {
     try {

@@ -1,5 +1,5 @@
 const logger = require('../utils/logger');
-const db = require("../models/index.js");
+const { db } = require("../models/index.js");
 const { convertAndSaveImage } = require('../services/imageServices.js');
 
 
@@ -34,18 +34,18 @@ const getItemDetails = async (req, res) => {
   }
 };
 
-const getCatalogData = (req,res)=>{
+const getCatalogData = (req, res) => {
   try {
     const customerDetails = req.UserDetail;
     console.log("🚀 ~ getCatalogData ~ customerDetails:", customerDetails)
     res.status(200).json({
-        message: "Catalog data retrieved successfully",
-        customerDetails
+      message: "Catalog data retrieved successfully",
+      customerDetails
     });
-} catch (error) {
+  } catch (error) {
     console.error("Error fetching catalog data:", error);
     res.status(500).json({ message: "Server-side error fetching catalog data" });
-}
+  }
 }
 
 

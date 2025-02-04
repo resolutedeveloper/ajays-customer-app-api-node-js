@@ -1,5 +1,5 @@
 const logger = require('../utils/logger');
-const db = require("../models/index.js");
+const { db } = require("../models/index.js");
 
 const customerVersionHandler = async (req, res) => {
     try {
@@ -24,15 +24,15 @@ const customerVersionHandler = async (req, res) => {
         });
 
         logger.info(`New version entry created for CustomerID: ${CustomerID}, Version: ${Version}`);
-        return res.status(200).json({ 
+        return res.status(200).json({
             message: "New version entry created successfully",
-            data: newVersionEntry 
+            data: newVersionEntry
         });
     } catch (error) {
         logger.error(`Error processing customer version: ${error.message}`);
-        return res.status(400).json({ 
+        return res.status(400).json({
             message: "Error processing customer version",
-            error: error.message 
+            error: error.message
         });
     }
 };

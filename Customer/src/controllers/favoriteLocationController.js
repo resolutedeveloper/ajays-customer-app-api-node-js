@@ -1,4 +1,4 @@
-const db = require('../models');
+const { db } = require('../models');
 const favoriteLocation = db.favoriteLocation  // Import the db object from index.js
 const logger = require("../utils/logger");
 const moment = require('moment-timezone');

@@ -13,6 +13,17 @@ const sequelize = new Sequelize(dbConfig.DB_NAME_CATALOG, dbConfig.DB_USER, dbCo
         multipleStatements: true,
     },
 });
+const sequelizeLog = new Sequelize(dbConfig.DB_NAME_LOG, dbConfig.DB_USER, dbConfig.DB_PASSWORD, {
+    host: dbConfig.DB_HOST,
+    dialect: 'mysql',
+    dialectModule: require('mysql2'),
+    logging: false,
+    alter: true,
+    port: 3306,                // MySQL port (default is 3306)
+    dialectOptions: {
+        multipleStatements: true,
+    },
+});
 sequelize.authenticate()
     .then(() => {
         console.log("connected..");
@@ -20,9 +31,21 @@ sequelize.authenticate()
     .catch((err) => {
         console.log("Error" + err);
     });
+sequelizeLog.authenticate()
+    .then(() => {
+        console.log("Log connected..");
+    })
+    .catch((err) => {
+        console.log("Error" + err);
+    });
 const db = {};
+const dbLog = {};
+
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
+
+dbLog.Sequelize = Sequelize;
+dbLog.sequelize = sequelizeLog;
 
 db.company = require('../models/companyModel')(sequelize, DataTypes);
 db.location = require('../models/locationModel')(sequelize, DataTypes);
@@ -41,7 +64,7 @@ db.taxDefinition = require('../models/taxDefinition')(sequelize, DataTypes);
 db.taxDefinitionDetails = require('../models/taxDefinitionDetails')(sequelize, DataTypes);
 db.itemTaxDet = require('../models/itemTaxDet')(sequelize, DataTypes);
 db.LocationCompanyMapping = require('./locationCompanyMapping')(sequelize, DataTypes);
-db.exceptions = require("./exceptions")(sequelize, DataTypes);
+
 
 // Association of tables
 db.categoryAllocation.hasOne(db.category, { foreignKey: 'CategoryID' });
@@ -50,6 +73,9 @@ db.category.belongsTo(db.categoryAllocation, { foreignKey: 'CategoryID' });
 db.location.hasOne(db.LocationCompanyMapping, { foreignKey: 'LocationID' });
 db.LocationCompanyMapping.belongsTo(db.location);
 
+// Logger <<-->>
+dbLog.exceptions = require("./exceptions")(sequelizeLog, DataTypes);
+
 db.sequelize.sync({ force: false, alter: true })
     .then(() => {
         console.log("yes re-sync done!");
@@ -57,4 +83,11 @@ db.sequelize.sync({ force: false, alter: true })
     .catch((error) => {
         console.error("Error while syncing the database:", error);
     });
-module.exports = db;
+dbLog.sequelize.sync({ force: false, alter: true })
+    .then(() => {
+        console.log("yes re-sync done!");
+    })
+    .catch((error) => {
+        console.error("Error while syncing the database:", error);
+    });
+module.exports = { db, dbLog };
