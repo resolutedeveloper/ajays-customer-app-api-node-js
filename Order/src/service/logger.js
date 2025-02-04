@@ -7,12 +7,12 @@ async function logger(req, res, next) {
 
         res.json = function (body) {
             res.locals.responseBody = body;
-            return originalJson.call(this, body); 
+            return originalJson.call(this, body);
         };
 
         res.send = function (body) {
-            res.locals.responseBody = body; 
-            return originalSend.call(this, body); 
+            res.locals.responseBody = body;
+            return originalSend.call(this, body);
         };
         res.on('finish', async () => {
             console.log(
@@ -27,6 +27,15 @@ async function logger(req, res, next) {
                     reqQuery: req?.query,
                     reqBody: req?.body,
                     errorMessage: res?.ErrorMessage?.stack || JSON.stringify(res.locals.responseBody)
+                });
+            } else {
+                await db.exceptions.create({
+                    routeName: req?.path,
+                    routeMethod: req?.method,
+                    statusCode: res?.statusCode,
+                    reqParams: req?.params,
+                    reqQuery: req?.query,
+                    reqBody: req?.body
                 });
             }
         })
