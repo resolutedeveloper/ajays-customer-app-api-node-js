@@ -26,11 +26,11 @@ app.use(logger);
 // app.use(morgan('tiny', { stream: { write: (msg) => logger.info(msg.trim()) } }));
 
 // Middleware for logging all requests
-app.use((req, res, next) => {
-    logger.info(`Incoming request: ${req.method} ${req.url}`);
-    req.io = io;
-    next();
-});
+// app.use((req, res, next) => {
+//     logger.info(`Incoming request: ${req.method} ${req.url}`);
+//     req.io = io;
+//     next();
+// });
 
 // Health check route
 app.get('/api/v1/health', (req, res) => {
