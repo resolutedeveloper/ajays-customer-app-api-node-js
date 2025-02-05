@@ -66,7 +66,9 @@ const AddOrder = async (req, res) => {
         const orderDetails = Items.map((item) => {
             const itemDetails = new_items.find((i) => i.ItemID === item.ItemID);
             if (!itemDetails) {
-                throw new Error(`ItemID ${item.ItemID} not found in new_items`);
+                return res.status(404).json({
+                    message: `ItemID ${item.ItemID} not found in new_items`
+                });
             }
 
             const { RateWithoutTax, TaxForSale } = itemDetails;
