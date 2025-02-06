@@ -279,7 +279,7 @@ const OrderApprove = async (req) => {
             }
         );
 
-        await sendNotification(OrderList.CustomerID, `OrderApprove`, `Your order is approved`);
+        await sendNotification(OrderList.CustomerID, `Order Approve`, `Your order is approved`, { status: "OrderApprove" });
 
         await db_transaction.commit();
         console.log('4')

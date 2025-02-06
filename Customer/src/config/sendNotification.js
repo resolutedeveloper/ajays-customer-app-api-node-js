@@ -27,6 +27,7 @@ const sendNotification = async (customerId, title, body, customData = {}) => {
                 body: body,
             },
             token: customerFCM.FCMKEY,
+            data: customData,
         };
 
 
