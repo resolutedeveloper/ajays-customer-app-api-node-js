@@ -11,7 +11,10 @@ async function getCityOutletsById(req, res) {
         }
 
         const cityForOutlet = await db.location.findAll({
-            where: { CityId: cityId }
+            where: { CityId: cityId },
+            include: [
+                { model: db.LocationCompanyMapping, attributes: ['CompanyID'], }
+            ]
         });
 
         if (cityForOutlet && cityForOutlet.length == 0) {

@@ -179,7 +179,7 @@ const citystores = async (req, res) => {
 
 
 const latlonglocation = async (req, res) => {
-    try {
+    try { 
         const { latitude, longitude } = req.query;
         if (!latitude || !longitude) {
             return res.status(400).send({
