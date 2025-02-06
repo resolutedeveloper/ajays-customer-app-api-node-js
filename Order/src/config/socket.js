@@ -163,7 +163,7 @@ const OrderApprove = async (req) => {
             }
         );
 
-        await sendNotification(OrderList.CustomerID, `OrderApprove`, `Your order is approved`);
+        await sendNotification(OrderList.CustomerID, `Your order has been approved. ✔`, `Your order is approved`, { status: "OrderApprove" });
 
         await db_transaction.commit();
         console.log('4')
@@ -239,7 +239,7 @@ const OrderReject = async (req) => {
             }
         );
 
-        await sendNotification(OrderList.CustomerID, `OrderRejected`, `Your order is rejected`);
+        await sendNotification(OrderList.CustomerID, `Your order has been rejected. ❌`, `Your order is rejected`, { status: "OrderRejected" });
 
         await db_transaction.commit();
 
@@ -311,7 +311,7 @@ const OrderMarkAsRead = async (req) => {
             }
         );
 
-        await sendNotification(OrderList.CustomerID, `OrderMarkAsRead`, `Your order is marked Read`);
+        await sendNotification(OrderList.CustomerID, `Your order has been marked as read.`, `Your order is marked Read`, { status: "OrderMarkAsRead" });
 
         await db_transaction.commit();
 
@@ -386,7 +386,7 @@ const OrderCompleted = async (req) => {
             }
         );
 
-        await sendNotification(OrderList.CustomerID, `OrderCompleted`, `Your order is marked completed`);
+        await sendNotification(OrderList.CustomerID, `Thanks for ordering! Order is completed successfully.`, `Your order is marked completed`, { status: "OrderCompleted" });
 
         await db_transaction.commit();
 
