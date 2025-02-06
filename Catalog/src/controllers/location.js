@@ -14,7 +14,9 @@ async function getCityOutletsById(req, res) {
             where: { CityId: cityId },
             include: [
                 { model: db.LocationCompanyMapping, attributes: ['CompanyID'], }
-            ]
+            ],
+            raw: true,
+            nest: false
         });
 
         if (cityForOutlet && cityForOutlet.length == 0) {

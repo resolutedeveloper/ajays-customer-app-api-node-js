@@ -223,7 +223,9 @@ const latlonglocation = async (req, res) => {
             },
             include: [
                 { model: db.LocationCompanyMapping, attributes: ['CompanyID'], }
-            ]
+            ],
+            raw: true,
+            nest: false
         });
         if (!locations || locations.length <= 0) {
             return res.status(201).json({
