@@ -348,7 +348,12 @@ async function bulkfindLocationsHttp(req, res) {
         const dataForReqLocations = await db.location.findAll({
             where: {
                 LocationID: { [Op.in]: parsedLocation }
-            }
+            },
+            include: [
+                { model: db.LocationCompanyMapping, attributes: ['CompanyID'], }
+            ],
+            raw: true,
+            nest: false
         });
 
         if (dataForReqLocations && dataForReqLocations.length == 0) {
@@ -362,8 +367,8 @@ async function bulkfindLocationsHttp(req, res) {
             const dist = distanceCalculator(userLat, userLong, locationDb.Latitude ? locationDb.Latitude : 0, locationDb.Longitude ? locationDb.Longitude : 0);
             const t = timeCalculator(dist, 40); // 40 km / hrs
 
-            locationDb.dataValues.Distance = `${dist} km`;
-            locationDb.dataValues.Duration = `${t} minutes`;
+            locationDb.Distance = `${dist} km`;
+            locationDb.Duration = `${t} minutes`;
             return locationDb;
         })
         return res.status(200).json({
