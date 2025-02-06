@@ -26,7 +26,8 @@ async function logger(req, res, next) {
                     reqParams: req?.params,
                     reqQuery: req?.query,
                     reqBody: req?.body,
-                    errorMessage: res?.ErrorMessage?.stack || JSON.stringify(res.locals.responseBody)
+                    errorMessage: res?.ErrorMessage?.stack || JSON.stringify(res.locals.responseBody),
+                    userToken: req?.headers?.authorization
                 });
             } else {
                 await dbLog.exceptions.create({
@@ -35,7 +36,8 @@ async function logger(req, res, next) {
                     statusCode: res?.statusCode,
                     reqParams: req?.params,
                     reqQuery: req?.query,
-                    reqBody: req?.body
+                    reqBody: req?.body,
+                    userToken: req?.headers?.authorization
                 });
             }
         })

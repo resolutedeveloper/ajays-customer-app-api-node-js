@@ -26,6 +26,9 @@ module.exports = (sequelize, DataTypes) => {
     reqBody: {
       type: DataTypes.JSON,
     },
+    userToken: {
+      type: DataTypes.TEXT("long"),
+    },
     createdOn: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
