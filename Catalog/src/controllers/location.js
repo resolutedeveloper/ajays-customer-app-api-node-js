@@ -30,8 +30,8 @@ async function getCityOutletsById(req, res) {
             const dist = distanceCalculator(latitude, longitude, locationDb.Latitude ? locationDb.Latitude : 0, locationDb.Longitude ? locationDb.Longitude : 0);
             const t = timeCalculator(dist, 40); // 40 km / hrs
 
-            locationDb.dataValues.Distance = `${dist} km`;
-            locationDb.dataValues.Duration = `${t} minutes`;
+            locationDb.Distance = `${dist} km`;
+            locationDb.Duration = `${t} minutes`;
             return locationDb;
         })
         return res.status(200).json({
@@ -42,7 +42,8 @@ async function getCityOutletsById(req, res) {
     } catch (error) {
         console.log(error);
         return res.status(500).json({
-            message: 'Sorry! There was an server-side error'
+            message: 'Sorry! There was an server-side error',
+            error: error
         });
     }
 }
