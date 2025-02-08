@@ -40,8 +40,9 @@ const AddOrder = async (req, res) => {
         }, {
             headers: { "Authorization": "Bearer " + process?.env?.HTTP_REQUEST_SECRET_KEY }
         });
-
+        // console.log(axiosData);
         if (axiosData?.status !== 200 || !axiosData?.data?.data) {
+            // console.log(axiosData.data.data);
             return res.status(axiosData?.status || 500).json({
                 message: "Failed to fetch data"
             });
@@ -59,16 +60,20 @@ const AddOrder = async (req, res) => {
         var new_items = http_item_data[1];
         var new_tax = http_item_data[2];
 
+        // console.log(new_items);
+
         // Calculate total and total tax
         Total = 0;
         TotalTax = 0;
 
-        const orderDetails = Items.map((item) => {
+        Items.map((item) => {
             const itemDetails = new_items.find((i) => i.ItemID === item.ItemID);
+            // console.log(itemDetails);
             if (!itemDetails) {
-                return res.status(404).json({
-                    message: `ItemID ${item.ItemID} not found in new_items`
-                });
+                throw new Error(`ItemID ${item.ItemID} not found in new_items`);
+                // return res.status(404).json({
+                //     message: `ItemID ${item.ItemID} not found in new_items`
+                // });
             }
 
             const { RateWithoutTax, TaxForSale } = itemDetails;
@@ -208,6 +213,7 @@ const AddOrder = async (req, res) => {
             success: true,
             message: "Order created successfully!",
             OrderID: newOrder.OrderID,
+            OTP: newOrder?.OTP
         });
 
     } catch (error) {
