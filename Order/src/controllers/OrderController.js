@@ -25,7 +25,7 @@ const AddOrder = async (req, res) => {
             Total,
             DeviceType,
             DeviceModel,
-            OSVersion,
+            OSVersion, 
             DeviceID,
             IPAddress,
             AppVersion,
