@@ -4,6 +4,7 @@ const logger = require("../utils/logger");
 const { Op, where, QueryTypes } = require('sequelize');
 const axios = require('axios');
 const { distanceCalculator, timeCalculator, getCityName } = require("../utils/distanceCalculator");
+const moment = require("moment-timezone");
 
 const itemlist = async (req, res) => {
     try {
@@ -179,7 +180,7 @@ const citystores = async (req, res) => {
 
 
 const latlonglocation = async (req, res) => {
-    try { 
+    try {
         const { latitude, longitude } = req.query;
         if (!latitude || !longitude) {
             return res.status(400).send({
@@ -389,6 +390,32 @@ const checkoutItemsData = async (req, res) => {
         const itemJson = JSON.stringify(req.body.Items);
         const locationID = req.body.LocationID;
         const companyID = req.body.CompanyID;
+        const currentISTTime = moment().tz("Asia/Kolkata").format("HH:mm:ss");
+
+        const whereCondition = {};
+
+        whereCondition["LocationID"] = locationID;
+        whereCondition["IsLocationOnline"] = {
+            [Op.eq]: 1
+        };
+        whereCondition[Op.and] = [
+            {
+                OutletOpeningTime: { [Op.lte]: currentISTTime }
+            },
+            {
+                OutletClosingTime: { [Op.gte]: currentISTTime }
+            }
+        ];
+
+        const checkLocationAvailability = await db.location.findOne({
+            where: whereCondition
+        });
+
+        if (!checkLocationAvailability) {
+            return res.status(400).json({
+                message: "Location currently not available."
+            })
+        }
 
 
         const result = await db.sequelize.query(
