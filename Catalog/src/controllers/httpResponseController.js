@@ -417,7 +417,6 @@ const checkoutItemsData = async (req, res) => {
             })
         }
 
-
         const result = await db.sequelize.query(
             "CALL SP_ItemList(:ItemJson, :LocationID, :CompanyID)", {
             replacements: {
