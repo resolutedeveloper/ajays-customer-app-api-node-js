@@ -33,7 +33,7 @@ const createFavoriteLocation = async (req, res) => {
         whereCondition["LocationID"] = req.body.LocationID;
         whereCondition["CustomerID"] = req.UserDetail.CustomerID;
         whereCondition["IsDeleted"] = {
-            [Op.ne] : 0
+            [Op.eq] : 0
         }
 
         const FindLocation = await db.favoriteLocation.findOne({ where: whereCondition });
