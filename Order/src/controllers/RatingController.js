@@ -1,4 +1,5 @@
 const { db } = require("../models/index");
+const { Op } = require("sequelize");
 
 async function submitRating(req, res) {
     try {
@@ -28,6 +29,14 @@ async function submitRating(req, res) {
             }));
 
             await db.rating.bulkCreate(toStoreData);
+            await db.orderDetails.update({
+                isRatingDone: true
+            }, {
+                where: {
+                    ItemID: { [Op.in]: ItemID },
+                    OrderID: OrderID
+                }
+            });
 
             return res.status(200).json({
                 message: 'Success'
@@ -42,7 +51,17 @@ async function submitRating(req, res) {
             Remark: Remark,
             Rating: Rating,
             CreatedOn: Date.now()
-        })
+        });
+
+        await db.orderDetails.update({
+            isRatingDone: true
+        }, {
+            where: {
+                ItemID: ItemID,
+                OrderID: OrderID
+            }
+        });
+        
         return res.status(200).json({
             message: 'Success'
         });

@@ -93,6 +93,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: true,
         },
+        isRatingDone:{
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
+        }
     }, { timestamps: false });
 
     return OrderDetails;
