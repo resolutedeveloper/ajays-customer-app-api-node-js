@@ -3,6 +3,7 @@ const favoriteLocation = db.favoriteLocation  // Import the db object from index
 const logger = require("../utils/logger");
 const moment = require('moment-timezone');
 const axios = require('axios');
+const { Op } = require('sequelize');
 
 const createFavoriteLocation = async (req, res) => {
     try {
@@ -28,8 +29,14 @@ const createFavoriteLocation = async (req, res) => {
         // }));
         // // Insert records
         // const createLocations = await favoriteLocation.bulkCreate(locations);
+        const whereCondition = {};
+        whereCondition["LocationID"] = req.body.LocationID;
+        whereCondition["CustomerID"] = req.UserDetail.CustomerID;
+        whereCondition["IsDeleted"] = {
+            [Op.ne] : 0
+        }
 
-        const FindLocation = await db.favoriteLocation.findOne({ where: { LocationID: req.body.LocationID, IsDeleted: 0 } });
+        const FindLocation = await db.favoriteLocation.findOne({ where: whereCondition });
         if (FindLocation) {
             return res.status(400).send({
                 ErrorCode: "USEDID",
