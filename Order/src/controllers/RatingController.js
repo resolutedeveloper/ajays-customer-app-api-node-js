@@ -17,6 +17,21 @@ async function submitRating(req, res) {
             })
         }
 
+        const whereCondition = {};
+        whereCondition["OrderID"] = OrderID;
+        whereCondition["CustomerID"] = UserDetail.CustomerID;
+        whereCondition["ItemID"] = ItemID;
+
+        const alreadyRated = await db.rating.findOne({
+            where: whereCondition
+        });
+
+        if (alreadyRated) {
+            return res.status(400).json({
+                message: "This item is already rated from your side."
+            });
+        }
+
         if (Array.isArray(ItemID)) {
             const toStoreData = ItemID.map((item) => ({
                 CustomerID: UserDetail.CustomerID,
@@ -61,7 +76,7 @@ async function submitRating(req, res) {
                 OrderID: OrderID
             }
         });
-        
+
         return res.status(200).json({
             message: 'Success'
         });

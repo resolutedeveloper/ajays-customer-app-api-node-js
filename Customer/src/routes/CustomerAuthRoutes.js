@@ -18,7 +18,7 @@ const MobileNOValidation = (req, res, next) => {
 
 const OTPValidation = (req, res, next) => {
     // Get OTP digits length from environment variable, default to 6 if not set
-    const otpDigits = process.env.OTPDIGITS === '4' ? 4 : 6;
+    const otpDigits = process.env.OTPDIGITS === '4' ? 4 : 4;
 
     const schema = Joi.object({
         // PhoneNumber: Joi.string()
