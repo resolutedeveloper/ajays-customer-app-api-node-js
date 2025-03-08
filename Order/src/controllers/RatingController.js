@@ -1,5 +1,6 @@
 const { db } = require("../models/index");
 const { Op } = require("sequelize");
+const moment = require("moment");
 
 async function submitRating(req, res) {
     try {
@@ -16,10 +17,23 @@ async function submitRating(req, res) {
                 message: "Item id or Order id or Location id is missing"
             })
         }
-
         const whereCondition = {};
         whereCondition["OrderID"] = OrderID;
         whereCondition["CustomerID"] = UserDetail.CustomerID;
+        const oneMonthAgo = moment().subtract(1, 'months').format("YYYY-MM-DD");
+
+        whereCondition["CreatedOn"] = {[Op.get] : oneMonthAgo};
+        const isOrdered = await db.order.findOne({
+            where: whereCondition
+        });
+
+        if(!isOrdered){
+            return res.status(404).json({
+                message:"Order not found or expired the review date."
+            })
+        }
+        delete whereCondition["CreatedOn"];
+        
         whereCondition["ItemID"] = ItemID;
 
         const alreadyRated = await db.rating.findOne({
