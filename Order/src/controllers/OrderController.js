@@ -179,45 +179,47 @@ const AddOrder = async (req, res) => {
 
             await db.orderDetailsTax.bulkCreate(orderDetailTaxEntries, { transaction: db_transaction });
 
+            // Notification send to pos machine
+            var socket_order = await db.order.findAll({
+                where: {
+                    OrderID: newOrder.OrderID,
+                },
+            });
+
+            var socket_items = await db.orderDetails.findAll({
+                where: {
+                    OrderID: newOrder.OrderID,
+                },
+            });
+            var socket_taxs = await db.orderDetailsTax.findAll({
+                where: {
+                    OrderID: newOrder.OrderID,
+                },
+            });
+            var payment_info = [];
+
+            const room = `location_room_${LocationID}`; // Generate the room name
+            const io = await getIoInstance();
+
+            io.to(room).emit('NewOrder', {
+                success: true,
+                message: 'New order created!',
+                order: socket_order,
+                items: socket_items,
+                taxs: socket_taxs,
+                payment_info: payment_info
+            });
+
             await db_transaction.commit();
         } catch (error) {
             await db_transaction.rollback(); // Rollback the commit
             return res.status(500).json({
-                message:"There was an error commiting changes"
+                message: "There was an error commiting changes"
             })
 
         }
 
-        // Notification send to pos machine
-        var socket_order = await db.order.findAll({
-            where: {
-                OrderID: newOrder.OrderID,
-            },
-        });
 
-        var socket_items = await db.orderDetails.findAll({
-            where: {
-                OrderID: newOrder.OrderID,
-            },
-        });
-        var socket_taxs = await db.orderDetailsTax.findAll({
-            where: {
-                OrderID: newOrder.OrderID,
-            },
-        });
-        var payment_info = [];
-
-        const room = `location_room_${LocationID}`; // Generate the room name
-        const io = await getIoInstance();
-
-        io.to(room).emit('NewOrder', {
-            success: true,
-            message: 'New order created!',
-            order: socket_order,
-            items: socket_items,
-            taxs: socket_taxs,
-            payment_info: payment_info
-        });
 
         return res.status(200).send({
             success: true,
