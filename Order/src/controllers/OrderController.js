@@ -70,10 +70,11 @@ const AddOrder = async (req, res) => {
             const itemDetails = new_items.find((i) => i.ItemID === item.ItemID);
             // console.log(itemDetails);
             if (!itemDetails) {
-                throw new Error(`ItemID ${item.ItemID} not found in new_items`);
-                // return res.status(404).json({
-                //     message: `ItemID ${item.ItemID} not found in new_items`
-                // });
+                // throw new Error(`ItemID ${item.ItemID} not found in new_items`);
+                // Error point could be here 
+                return res.status(404).json({
+                    message: `ItemID ${item.ItemID} not found in new_items`
+                });
             }
 
             const { RateWithoutTax, TaxForSale } = itemDetails;
@@ -209,7 +210,7 @@ const AddOrder = async (req, res) => {
             payment_info: payment_info
         });
 
-        return res.status(201).send({
+        return res.status(200).send({
             success: true,
             message: "Order created successfully!",
             OrderID: newOrder.OrderID,
