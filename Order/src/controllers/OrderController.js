@@ -14,7 +14,7 @@ function generateOTP(length) {
 
 const AddOrder = async (req, res) => {
     try {
-        const db_transaction = await db.sequelize.transaction(); // Start a transaction
+
         var {
             CompanyID,
             CustomerID,
@@ -25,7 +25,7 @@ const AddOrder = async (req, res) => {
             Total,
             DeviceType,
             DeviceModel,
-            OSVersion, 
+            OSVersion,
             DeviceID,
             IPAddress,
             AppVersion,
@@ -92,92 +92,101 @@ const AddOrder = async (req, res) => {
                 Tax: itemTax,
             };
         });
+        const db_transaction = await db.sequelize.transaction(); // Start a transaction
 
-        const newOrder = await db.order.create(
-            {
+        try {
+            const newOrder = await db.order.create(
+                {
 
-                CompanyID: CompanyID,
-                CustomerID: CustomerID,
-                LocationID: LocationID,
-                OrderMode: OrderMode,
-                TotalTax: TotalTax,
-                Total: Total,
-                DeviceType: DeviceType,
-                DeviceModel: DeviceModel,
-                OSVersion: OSVersion,
-                DeviceID: DeviceID,
-                IPAddress: IPAddress,
-                AppVersion: AppVersion,
-                CreatedOn: new Date(),
-                UpdatedOn: new Date(),
-                NoOfItem: Items.length,
-                PaymentInfo: '',
-                Remark: Remark,
-                OTP: OTP
-            },
-            {
-                transaction: db_transaction, // Use the transaction
-            }
-        );
-
-
-        // Insert order details
-        const orderDetailsEntries = new_items.map((detail) => {
-            const item = Items.find((i) => i.ItemID === detail.ItemID);
-            const qty = item ? item.Qty : 0;
-            const ItemRemark = item ? item.Remark : 0;
-
-            // Return the order details entry
-            return {
-                OrderID: newOrder.OrderID,
-                ItemID: detail.ItemID,
-                Qty: qty,
-                CategoryID: detail.CategoryID,
-                CategoryName: detail.CategoryName,
-                ItemName: detail.ItemName,
-                Description: detail.Description,
-                UnitRate: detail.UnitRate,
-                MRP: detail.MRP,
-                BigUnit: detail.BigUnit,
-                BigUnitValue: detail.BigUnitValue,
-                SmallUnit: detail.SmallUnit,
-                SmallUnitValue: detail.SmallUnitValue,
-                OperationalUnit: detail.OperationalUnit,
-                OperationalUnitValue: detail.OperationalUnitValue,
-                CostingUnit: detail.CostingUnit,
-                CostingUnitValue: detail.CostingUnitValue,
-                SellingUnit: detail.SellingUnit,
-                SellingUnitValue: detail.SellingUnitValue,
-                ConversionRatio: detail.ConversionRatio,
-                RateWithoutTax: detail.RateWithoutTax,
-                TaxForSale: detail.TaxForSale,
-                IsVisible: detail.IsVisible,
-                Image: detail.ItemIImageD,
-                Remarks: detail.Remarks,
-                ItemOrder: detail.ItemOrder,
-                Remark: ItemRemark
-            };
-        });
-
-        const createdOrderDetails = await db.orderDetails.bulkCreate(orderDetailsEntries, { transaction: db_transaction });
-
-        // Insert order detail taxes
-        const orderDetailTaxEntries = createdOrderDetails.flatMap((detail) => {
-            const taxes = new_tax.filter((tax) => tax.ItemID === detail.ItemID);
-
-            return taxes.map((tax) => ({
-                OrderID: newOrder.OrderID,
-                ItemID: tax.ItemID,
-                TaxID: tax.TaxID,
-                TaxName: tax.TaxName,
-                Percentage: tax.Percentage
-            }));
-        });
+                    CompanyID: CompanyID,
+                    CustomerID: CustomerID,
+                    LocationID: LocationID,
+                    OrderMode: OrderMode,
+                    TotalTax: TotalTax,
+                    Total: Total,
+                    DeviceType: DeviceType,
+                    DeviceModel: DeviceModel,
+                    OSVersion: OSVersion,
+                    DeviceID: DeviceID,
+                    IPAddress: IPAddress,
+                    AppVersion: AppVersion,
+                    CreatedOn: new Date(),
+                    UpdatedOn: new Date(),
+                    NoOfItem: Items.length,
+                    PaymentInfo: '',
+                    Remark: Remark,
+                    OTP: OTP
+                },
+                {
+                    transaction: db_transaction, // Use the transaction
+                }
+            );
 
 
-        await db.orderDetailsTax.bulkCreate(orderDetailTaxEntries, { transaction: db_transaction });
+            // Insert order details
+            const orderDetailsEntries = new_items.map((detail) => {
+                const item = Items.find((i) => i.ItemID === detail.ItemID);
+                const qty = item ? item.Qty : 0;
+                const ItemRemark = item ? item.Remark : 0;
 
-        await db_transaction.commit();
+                // Return the order details entry
+                return {
+                    OrderID: newOrder.OrderID,
+                    ItemID: detail.ItemID,
+                    Qty: qty,
+                    CategoryID: detail.CategoryID,
+                    CategoryName: detail.CategoryName,
+                    ItemName: detail.ItemName,
+                    Description: detail.Description,
+                    UnitRate: detail.UnitRate,
+                    MRP: detail.MRP,
+                    BigUnit: detail.BigUnit,
+                    BigUnitValue: detail.BigUnitValue,
+                    SmallUnit: detail.SmallUnit,
+                    SmallUnitValue: detail.SmallUnitValue,
+                    OperationalUnit: detail.OperationalUnit,
+                    OperationalUnitValue: detail.OperationalUnitValue,
+                    CostingUnit: detail.CostingUnit,
+                    CostingUnitValue: detail.CostingUnitValue,
+                    SellingUnit: detail.SellingUnit,
+                    SellingUnitValue: detail.SellingUnitValue,
+                    ConversionRatio: detail.ConversionRatio,
+                    RateWithoutTax: detail.RateWithoutTax,
+                    TaxForSale: detail.TaxForSale,
+                    IsVisible: detail.IsVisible,
+                    Image: detail.ItemIImageD,
+                    Remarks: detail.Remarks,
+                    ItemOrder: detail.ItemOrder,
+                    Remark: ItemRemark
+                };
+            });
+
+            const createdOrderDetails = await db.orderDetails.bulkCreate(orderDetailsEntries, { transaction: db_transaction });
+
+            // Insert order detail taxes
+            const orderDetailTaxEntries = createdOrderDetails.flatMap((detail) => {
+                const taxes = new_tax.filter((tax) => tax.ItemID === detail.ItemID);
+
+                return taxes.map((tax) => ({
+                    OrderID: newOrder.OrderID,
+                    ItemID: tax.ItemID,
+                    TaxID: tax.TaxID,
+                    TaxName: tax.TaxName,
+                    Percentage: tax.Percentage
+                }));
+            });
+
+
+            await db.orderDetailsTax.bulkCreate(orderDetailTaxEntries, { transaction: db_transaction });
+
+            await db_transaction.commit();
+        } catch (error) {
+            await db_transaction.rollback(); // Rollback the commit
+            return res.status(500).json({
+                message:"There was an error commiting changes"
+            })
+
+        }
 
         // Notification send to pos machine
         var socket_order = await db.order.findAll({
@@ -218,6 +227,7 @@ const AddOrder = async (req, res) => {
         });
 
     } catch (error) {
+        // await db_transaction.rollback();
         return res.status(500).send({
             success: false,
             message: "Failed to create order!",
