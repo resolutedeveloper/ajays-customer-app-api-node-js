@@ -211,6 +211,12 @@ const AddOrder = async (req, res) => {
             });
 
             await db_transaction.commit();
+            return res.status(200).send({
+                success: true,
+                message: "Order created successfully!",
+                OrderID: newOrder.OrderID,
+                OTP: newOrder?.OTP
+            });
         } catch (error) {
             await db_transaction.rollback(); // Rollback the commit
             return res.status(500).json({
@@ -218,15 +224,6 @@ const AddOrder = async (req, res) => {
             })
 
         }
-
-
-
-        return res.status(200).send({
-            success: true,
-            message: "Order created successfully!",
-            OrderID: newOrder.OrderID,
-            OTP: newOrder?.OTP
-        });
 
     } catch (error) {
         // await db_transaction.rollback();
