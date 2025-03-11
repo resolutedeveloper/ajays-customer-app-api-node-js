@@ -1,0 +1,75 @@
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_PASSWORD: q#w2MS8#uiF5HDt
+      MYSQL_DATABASE: CatalogDB
+    ports:
+      - "3306:3306"
+    networks:
+      - network
+    healthcheck:
+      test: ["CMD", "mysqlcatalog", "ping", "-h", "localhost"]
+      interval: 10s
+      retries: 5
+      timeout: 5s
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - network
+
+  Catalog:
+    build: ./Catalog
+    container_name: Catalog-server
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    env_file:
+      - ./Catalog/.env  # Load environment variables from the .env file
+    networks:
+      - network
+    ports:
+      - "302:302"
+
+  Customer:
+    build: ./Customer
+    container_name: Customer-server
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    env_file:
+      - ./Customer/.env  # Load environment variables
+    networks:
+      - network
+    ports:
+      - "301:301"
+
+  Order:
+    build: ./Order
+    container_name: Order-server
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    env_file:
+      - ./Order/.env  # Load environment variables
+    networks:
+      - network
+    ports:
+      - "300:300"
+
+networks:
+  network:
+    driver: bridge
