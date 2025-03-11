@@ -1,6 +1,7 @@
 {
   "name": "ajays-customer-app-api-node-js",
   "version": "1.0.0",
+  "type":  "module",  
   "main": "customer_order_app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
