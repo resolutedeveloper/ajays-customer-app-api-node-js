@@ -26,45 +26,48 @@ services:
       - network
 
   Catalog:
-    build: ./catalog
+    build: ./Catalog
     container_name: catalog-server
+    image: ajays-customer-app-api-node-js-catalog
     depends_on:
       mysql:
         condition: service_healthy
       redis:
         condition: service_started
     env_file:
-      - ./catalog/.env  # Load environment variables from the .env file
+      - ./Catalog/.env  # Load environment variables from the .env file
     networks:
       - network
     ports:
       - "302:302"
 
   Customer:
-    build: ./customer
+    build: ./Customer
     container_name: customer-server
+    image: ajays-customer-app-api-node-js-customer
     depends_on:
       mysql:
         condition: service_healthy
       redis:
         condition: service_started
     env_file:
-      - ./customer/.env  # Load environment variables
+      - ./Customer/.env  # Load environment variables
     networks:
       - network
     ports:
       - "301:301"
 
   Order:
-    build: ./order
+    build: ./Order
     container_name: order-server
+    image: ajays-customer-app-api-node-js-order 
     depends_on:
       mysql:
         condition: service_healthy
       redis:
         condition: service_started
     env_file:
-      - ./order/.env  # Load environment variables
+      - ./Order/.env  # Load environment variables
     networks:
       - network
     ports:
