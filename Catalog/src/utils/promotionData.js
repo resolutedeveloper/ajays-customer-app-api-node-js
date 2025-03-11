@@ -1,4 +1,4 @@
-export const promotionBanner = [
+const promotionBanner = [
     {
         imgUrl: "https://catalog.ajaysapi.resolutesolutions.in.net/images/banner.png",
         discountUpto: 20,
@@ -6,3 +6,7 @@ export const promotionBanner = [
         buttonTitle: "Shop Now"
     }
 ];
+
+
+module.exports = { promotionBanner };
+

@@ -27,6 +27,10 @@ app.use((req, res, next) => {
     loggerUtils.info(`Incoming request: ${req.method} ${req.url}`);
     next();
 });
+//New route to handle `/`
+app.get('/', (req, res) => {
+    res.status(200).send({ message: 'Welcome to the Catalog API!' });
+});
 
 // Health check route
 app.get('/api/v1/health', (req, res) => {
@@ -70,3 +74,5 @@ connectDB()
         loggerUtils.error('Error connecting to the database:', err);
         process.exit(1);
     });
+//Export app for testing (optional)
+module.exports = app;
