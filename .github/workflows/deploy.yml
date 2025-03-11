@@ -1,0 +1,56 @@
+name: Deploy Dockerized App CICD
+
+on:
+  push:
+    branches:
+      - test
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Free up disk space
+        run: |
+          ip addr show
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        
+      - name: Install Docker Compose
+        run: |
+          DOCKER_COMPOSE_VERSION=2.22.0
+          sudo curl -L "https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Extract commit SHA for tagging
+        id: vars
+        run: echo "SHA_TAG=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+        
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+        
+      - name: Fix Docker permissions
+        run: |
+          sudo usermod -aG docker $USER
+          newgrp docker
+          sudo systemctl restart docker
+           sleep 5
+      - name: Check Docker Installation
+        run: docker --version
+      
+      - name: Verify Docker Login
+        run: docker info | grep -i "username"
+        
+      - name: Check Docker Compose Version
+        run: docker-compose --version
+        
+          
+     
