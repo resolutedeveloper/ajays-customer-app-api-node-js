@@ -5,7 +5,7 @@ services:
     restart: always
     environment:
       MYSQL_PASSWORD: q#w2MS8#uiF5HDt
-      MYSQL_DATABASE: CatalogDB
+      MYSQL_DATABASE: catalogDB
     ports:
       - "3306:3306"
     networks:
@@ -26,45 +26,45 @@ services:
       - network
 
   Catalog:
-    build: ./Catalog
-    container_name: Catalog-server
+    build: ./catalog
+    container_name: catalog-server
     depends_on:
       mysql:
         condition: service_healthy
       redis:
         condition: service_started
     env_file:
-      - ./Catalog/.env  # Load environment variables from the .env file
+      - ./catalog/.env  # Load environment variables from the .env file
     networks:
       - network
     ports:
       - "302:302"
 
   Customer:
-    build: ./Customer
-    container_name: Customer-server
+    build: ./customer
+    container_name: customer-server
     depends_on:
       mysql:
         condition: service_healthy
       redis:
         condition: service_started
     env_file:
-      - ./Customer/.env  # Load environment variables
+      - ./customer/.env  # Load environment variables
     networks:
       - network
     ports:
       - "301:301"
 
   Order:
-    build: ./Order
-    container_name: Order-server
+    build: ./order
+    container_name: order-server
     depends_on:
       mysql:
         condition: service_healthy
       redis:
         condition: service_started
     env_file:
-      - ./Order/.env  # Load environment variables
+      - ./order/.env  # Load environment variables
     networks:
       - network
     ports:
