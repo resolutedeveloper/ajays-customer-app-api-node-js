@@ -181,29 +181,37 @@ const citystores = async (req, res) => {
 
 const latlonglocation = async (req, res) => {
     try {
-        const { latitude, longitude } = req.query;
-        if (!latitude || !longitude) {
-            return res.status(400).send({
-                message: 'Latitude or Longitude not found'
-            });
-        }
+        // const { latitude, longitude } = req.query;
+        // if (!latitude || !longitude) {
+        //     return res.status(400).send({
+        //         message: 'Latitude or Longitude not found'
+        //     });
+        // }
 
 
-        const response = getCityName(latitude, longitude);
-        const stateDistrict = response?.city;
+        // const response = getCityName(latitude, longitude);
+        // const stateDistrict = response?.city;
 
-        if (!stateDistrict) {
-            return res.status(201).json({
-                message: "Currently we are not serving in this location",
-                status: 0,
-                backendDebug: "Service failed"
+        // if (!stateDistrict) {
+        //     return res.status(201).json({
+        //         message: "Currently we are not serving in this location",
+        //         status: 0,
+        //         backendDebug: "Service failed"
+        //     })
+        // }
+        // console.log(stateDistrict);
+
+        const { cityName, latitude, longitude } = req.query;
+
+        if (!cityName || !latitude || !longitude) {
+            return res.status(404).json({
+                message: "City not found"
             })
         }
-        // console.log(stateDistrict);
         const cityData = await db.city.findOne({
             where: {
                 CityName: {
-                    [Op.like]: stateDistrict
+                    [Op.like]: cityName
                 }
             }
         });
@@ -214,7 +222,7 @@ const latlonglocation = async (req, res) => {
             return res.status(201).json({
                 message: "Currently we are not serving in this location",
                 status: 0,
-                backendDebug: `City database is null. City was ${stateDistrict}`
+                backendDebug: `City database is null. City was ${cityName}`
             })
         }
 
@@ -232,7 +240,7 @@ const latlonglocation = async (req, res) => {
             return res.status(201).json({
                 message: "Currently we are not serving in this location",
                 status: 0,
-                backendDebug: `Location database is null. City was ${stateDistrict}`
+                backendDebug: `Location database is null. City was ${cityName}`
             })
         }
 
