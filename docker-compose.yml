@@ -4,14 +4,14 @@ services:
     container_name: mysql
     restart: always
     environment:
-      MYSQL_PASSWORD: q#w2MS8#uiF5HDt
+      MYSQL_ROOT_PASSWORD: q#w2MS8#uiF5HDt  # Make sure this password is defined
       MYSQL_DATABASE: catalogDB
     ports:
       - "3306:3306"
     networks:
       - network
     healthcheck:
-      test: ["CMD", "mysqlcatalog", "ping", "-h", "localhost"]
+      test: ["CMD", "mysql", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}", "-e", "SELECT 1"]
       interval: 10s
       retries: 5
       timeout: 5s
@@ -60,7 +60,7 @@ services:
   Order:
     build: ./Order
     container_name: order-server
-    image: ajays-customer-app-api-node-js-order 
+    image: ajays-customer-app-api-node-js-order
     depends_on:
       mysql:
         condition: service_healthy
@@ -76,3 +76,4 @@ services:
 networks:
   network:
     driver: bridge
+
