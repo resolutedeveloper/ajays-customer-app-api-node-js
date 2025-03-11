@@ -249,9 +249,10 @@ const latlonglocation = async (req, res) => {
             const lon2 = parseFloat(location?.Longitude);
             const distance = distanceCalculator(latitude, longitude, lat2, lon2);
             const duration = timeCalculator(distance, 40);
+            // console.log(location);
 
             return {
-                ...location?.dataValues,
+                ...location,
                 Distance: `${distance.toFixed(2)} km`,
                 Duration: `${duration.toFixed(2)} minutes`,
             };
