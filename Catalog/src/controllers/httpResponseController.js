@@ -196,7 +196,7 @@ const latlonglocation = async (req, res) => {
         //     return res.status(201).json({
         //         message: "Currently we are not serving in this location",
         //         status: 0,
-        //         backendDebug: "Service failed"
+        //         backendMessage: "Service failed"
         //     })
         // }
         // console.log(stateDistrict);
@@ -222,7 +222,7 @@ const latlonglocation = async (req, res) => {
             return res.status(201).json({
                 message: "Currently we are not serving in this location",
                 status: 0,
-                backendDebug: `City database is null. City was ${cityName}`
+                backendMessage: `City database is null. City was ${cityName}`
             })
         }
 
@@ -240,7 +240,7 @@ const latlonglocation = async (req, res) => {
             return res.status(201).json({
                 message: "Currently we are not serving in this location",
                 status: 0,
-                backendDebug: `Location database is null. City was ${cityName}`
+                backendMessage: `Location database is null. City was ${cityName}`
             })
         }
 
