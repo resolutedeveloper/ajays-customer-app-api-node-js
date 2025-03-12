@@ -1,24 +1,4 @@
 services:
-  mysql:
-    image: mysql:8.0
-    container_name: mysql
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: q#w2MS8#uiF5HDt  # Make sure this password is defined
-      MYSQL_DATABASE: CatalogDB
-
-    ports:
-      - "3306:3306"
-    volumes:
-      - ./mysql.cnf:/etc/mysql/conf.d/mysql.cnf    
-    networks:
-      - network
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p$MYSQL_ROOT_PASSWORD"]
-      interval: 10s
-      retries: 5
-      timeout: 5s
-
   redis:
     image: redis:latest
     container_name: redis
