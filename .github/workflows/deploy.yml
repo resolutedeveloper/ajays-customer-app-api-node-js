@@ -79,12 +79,11 @@ jobs:
          script: |
               echo "Connected to server..."
               uname -a  # Print system info
-              git clone https://github.com/resolutedeveloper/ajays-customer-app-api-node-js.git || echo "already clone"
+              git clone https://${{ secrets.GH_PAT }}@github.com/resolutedeveloper/ajays-customer-app-api-node-js.git || echo "already clone"
               cd Node.js-application-task || exit 1
-              git checkout dev
-              git pull origin dev
-              pwd
-              ls
+              git fetch origin test
+              git checkout test
+              git pull origin test
              
               # Pull latest images
               docker pull ${{ secrets.DOCKER_USERNAME }}/catalog:${{ env.SHA_TAG }}
