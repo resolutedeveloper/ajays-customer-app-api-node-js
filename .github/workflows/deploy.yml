@@ -79,6 +79,11 @@ jobs:
          script: |
               echo "Connected to server..."
               uname -a  # Print system info
+              cd Node.js-application-task || exit 1
+              git checkout dev
+              git pull origin dev
+              pwd
+              ls
              
               # Pull latest images
               docker pull ${{ secrets.DOCKER_USERNAME }}/catalog:${{ env.SHA_TAG }}
