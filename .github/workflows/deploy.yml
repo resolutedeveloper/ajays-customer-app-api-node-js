@@ -80,7 +80,7 @@ jobs:
               echo "Connected to server..."
               uname -a  # Print system info
               git clone https://${{ secrets.GH_PAT }}@github.com/resolutedeveloper/ajays-customer-app-api-node-js.git || echo "already clone"
-              cd Node.js-application-task || exit 1
+              cd ajays-customer-app-api-node-js || exit 1
               git fetch origin test
               git checkout test
               git pull origin test
