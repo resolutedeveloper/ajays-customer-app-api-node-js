@@ -55,5 +55,17 @@ jobs:
       -  name: Build and push Docker images
          run: |
           DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
-          SHA_TAG=${{ env.SHA_TAG }} 
-    
+          SHA_TAG=${{ env.SHA_TAG }}
+          
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/catalog:${{ env.SHA_TAG }} -t ${{ secrets.DOCKER_USERNAME }}/catalog:latest ./Catalog
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/customer:${{ env.SHA_TAG }} -t ${{ secrets.DOCKER_USERNAME }}/customer:latest ./Customer
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/order:${{ env.SHA_TAG }} -t ${{ secrets.DOCKER_USERNAME }}/order:latest ./Order
+
+          docker push ${{ secrets.DOCKER_USERNAME }}/catalog:${{ env.SHA_TAG }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/catalog:latest
+
+          docker push ${{ secrets.DOCKER_USERNAME }}/customer:${{ env.SHA_TAG }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/customer:latest
+
+          docker push ${{ secrets.DOCKER_USERNAME }}/order:${{ env.SHA_TAG }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/order:latest
