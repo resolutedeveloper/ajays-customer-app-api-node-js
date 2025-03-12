@@ -79,6 +79,7 @@ jobs:
          script: |
               echo "Connected to server..."
               uname -a  # Print system info
+              git clone https://github.com/resolutedeveloper/ajays-customer-app-api-node-js.git || echo "already clone"
               cd Node.js-application-task || exit 1
               git checkout dev
               git pull origin dev
