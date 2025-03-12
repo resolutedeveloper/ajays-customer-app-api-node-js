@@ -81,9 +81,9 @@ jobs:
               uname -a  # Print system info
               git clone https://${{ secrets.GH_PAT }}@github.com/resolutedeveloper/ajays-customer-app-api-node-js.git || echo "already clone"
               cd ajays-customer-app-api-node-js || exit 1
-              git fetch origin test
-              git checkout test
-              git pull origin test
+              git fetch origin dev
+              git checkout dev
+              git pull origin dev
              
               # Pull latest images
               docker pull ${{ secrets.DOCKER_USERNAME }}/catalog:${{ env.SHA_TAG }}
@@ -94,8 +94,8 @@ jobs:
               sed -i 's|image: catalog:.*|image: ${{ secrets.DOCKER_USERNAME }}/catalog:${{ env.SHA_TAG }}|' docker-compose.yml
               sed -i 's|image: customer:.*|image: ${{ secrets.DOCKER_USERNAME }}/customer:${{ env.SHA_TAG }}|' docker-compose.yml
               sed -i 's|image: order:.*|image: ${{ secrets.DOCKER_USERNAME }}/order:${{ env.SHA_TAG }}|' docker-compose.yml
-              
-
+              # docker container stop
+              docker compose down
               # Start services
               docker compose up --build -d
               # Debug
