@@ -84,6 +84,11 @@ jobs:
               git fetch origin dev
               git checkout dev
               git pull origin dev
+
+              # remove privious img
+              docker rmi -f ${{ secrets.DOCKER_USERNAME }}/catalog:latest || true
+              docker rmi -f ${{ secrets.DOCKER_USERNAME }}/customer:latest || true
+              docker rmi -f ${{ secrets.DOCKER_USERNAME }}/order:latest || true
              
               # Pull latest images
               docker pull ${{ secrets.DOCKER_USERNAME }}/catalog:${{ env.SHA_TAG }}
