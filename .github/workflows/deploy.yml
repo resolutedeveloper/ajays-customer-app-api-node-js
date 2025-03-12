@@ -3,7 +3,7 @@ name: Deploy Dockerized App CICD
 on:
   push:
     branches:
-      - test
+      - dev
 
 jobs:
   build-and-deploy:
@@ -56,4 +56,4 @@ jobs:
          run: |
           DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
           SHA_TAG=${{ env.SHA_TAG }} 
-     
+    
