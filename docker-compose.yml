@@ -14,8 +14,6 @@ services:
     container_name: catalog-server
     image: catalog
     depends_on:
-      mysql:
-        condition: service_healthy
       redis:
         condition: service_started
     env_file:
@@ -30,8 +28,6 @@ services:
     container_name: customer-server
     image: customer
     depends_on:
-      mysql:
-        condition: service_healthy
       redis:
         condition: service_started
     env_file:
@@ -46,8 +42,6 @@ services:
     container_name: order-server
     image: order
     depends_on:
-      mysql:
-        condition: service_healthy
       redis:
         condition: service_started
     env_file:
