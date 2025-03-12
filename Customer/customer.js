@@ -40,6 +40,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get('/api/v1/health', (req, res) => {
     res.status(200).send({ success: true, message: 'customer API is working!' });
 });
+//health check route
+app.get('/', (req, res) => {
+    res.send("Customer API is running!");
+});
+
 
 // Load all routes
 app.use('/api/v1', routes);
