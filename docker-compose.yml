@@ -9,6 +9,8 @@ services:
 
     ports:
       - "3306:3306"
+    volumes:
+      - ./mysql.cnf:/etc/mysql/conf.d/mysql.cnf    
     networks:
       - network
     healthcheck:
