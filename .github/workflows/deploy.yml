@@ -69,3 +69,36 @@ jobs:
 
           docker push ${{ secrets.DOCKER_USERNAME }}/order:${{ env.SHA_TAG }}
           docker push ${{ secrets.DOCKER_USERNAME }}/order:latest
+
+      - name: Deploy to server via SSH
+        uses: appleboy/ssh-action@master  # Use the latest stable version
+        with:
+         host: ${{ secrets.SSH_HOST }}
+         username: ${{ secrets.SSH_USER }}
+         password: ${{ secrets.SSH_PASSWORD }}
+         script: |
+              echo "Connected to server..."
+              uname -a  # Print system info
+              # Change to your project directory
+              git clone https://github.com/resolutedeveloper/ajays-customer-app-api-node-js.git || echo "already clone"
+              cd ajays-customer-app-api-node-js.git || exit 1
+              git checkout test
+              git pull origin test
+              pwd
+              ls
+              # Pull latest images
+              docker pull ${{ secrets.DOCKER_USERNAME }}/catalog:${{ env.SHA_TAG }}
+              docker pull ${{ secrets.DOCKER_USERNAME }}/customer:${{ env.SHA_TAG }}
+              docker pull ${{ secrets.DOCKER_USERNAME }}/order:${{ env.SHA_TAG }}
+              
+              # Update docker-compose.yml with new image versions
+              sed -i 's|image: catalog:.*|image: ${{ secrets.DOCKER_USERNAME }}/catalog:${{ env.SHA_TAG }}|' docker-compose.yml
+              sed -i 's|image: customer:.*|image: ${{ secrets.DOCKER_USERNAME }}/customer:${{ env.SHA_TAG }}|' docker-compose.yml
+              sed -i 's|image: order:.*|image: ${{ secrets.DOCKER_USERNAME }}/order:${{ env.SHA_TAG }}|' docker-compose.yml
+
+              # Start services
+              docker-compose down
+              docker-compose up -d
+              # Debug
+              docker ps 
+              
