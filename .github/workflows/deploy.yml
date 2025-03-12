@@ -96,7 +96,7 @@ jobs:
               sed -i 's|image: order:.*|image: ${{ secrets.DOCKER_USERNAME }}/order:${{ env.SHA_TAG }}|' docker-compose.yml
 
               # Start services
-              docker compose up
+              docker compose up --build -d
               # Debug
               docker ps 
               
