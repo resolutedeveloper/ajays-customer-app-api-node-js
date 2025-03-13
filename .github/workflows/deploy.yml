@@ -103,6 +103,6 @@ jobs:
               docker compose dowm
               # Start services
               docker compose up --build -d
-              # Debug
+              # Debug 
               docker ps 
               
