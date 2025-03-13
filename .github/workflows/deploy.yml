@@ -96,9 +96,9 @@ jobs:
               docker pull ${{ secrets.DOCKER_USERNAME }}/order:${{ env.SHA_TAG }}
               
               # Update docker-compose.yml with new image versions
-              sed -i 's|image: catalog:.*|image: ${{ secrets.DOCKER_USERNAME }}/catalog:${{ env.SHA_TAG }}|' docker-compose.yml
-              sed -i 's|image: customer:.*|image: ${{ secrets.DOCKER_USERNAME }}/customer:${{ env.SHA_TAG }}|' docker-compose.yml
-              sed -i 's|image: order:.*|image: ${{ secrets.DOCKER_USERNAME }}/order:${{ env.SHA_TAG }}|' docker-compose.yml
+              sed -i 's|image: ${{ secrets.DOCKER_USERNAME }}/catalog:.*|image: ${{ secrets.DOCKER_USERNAME }}/catalog:${{ env.SHA_TAG }}|' docker-compose.yml
+              sed -i 's|image: ${{ secrets.DOCKER_USERNAME }}/customer:.*|image: ${{ secrets.DOCKER_USERNAME }}/customer:${{ env.SHA_TAG }}|' docker-compose.yml
+              sed -i 's|image: ${{ secrets.DOCKER_USERNAME }}/order:.*|image: ${{ secrets.DOCKER_USERNAME }}/order:${{ env.SHA_TAG }}|' docker-compose.yml
               # stop service
               docker compose dowm
               # Start services
