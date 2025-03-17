@@ -8,8 +8,10 @@ const routes = require('./src/routes'); // Import all routes from src/routes/ind
 const bodyParser = require('body-parser');
 const { redisConnection } = require("./src/cache/redis.js");
 const { logger } = require("./src/service/logger.js");
+const cors = require("cors");
 
 const app = express();
+app.use(cors());
 const PORT = process.env.PORT_CUSTOMER || 301;
 const path = require('path');
 // Middleware for parsing JSON requests
