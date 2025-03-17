@@ -630,7 +630,7 @@ async function getOrderDetail(req, res) {
 
         // const orderIdArr = orderDetailed.map((ordersID) => (ordersID.ItemID));
         // const respOrder = await axios.post(`${process.env.CATALOG_LOCAL_URL}/httpResponse/itemsBulkGetId`, { itemIdArr: orderIdArr }, {
-        //     headers: { "Authorization": `Bearer ${process.env.HTTP_REQUEST_SECRET_KEY}` }
+        // headers: { "Authorization": `Bearer ${process.env.HTTP_REQUEST_SECRET_KEY}` }
         // })
         return res.status(200).json({
             message: 'Success',

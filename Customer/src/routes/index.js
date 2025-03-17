@@ -10,6 +10,8 @@ route.use("/customefcm", require("./CustomerFcmRoutes.js"));
 route.use("/customeVersion", CustomerToken, require("./CustomerValidationRouter.js"));
 route.use("/customerHistory", CustomerToken, require("./historyCustomerRoutes.js"));
 
+route.use("/payment", require("./CustomerPayment.js"));
+
 route.use('/app-version', require('./AppversionMaintananceRouter')); // currently not use
 
 
