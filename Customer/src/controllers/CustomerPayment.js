@@ -18,7 +18,7 @@ async function startPayment(req, res) {
         let encRequest = encrypt(postData, workingKey);
 
         let toSend = `
-        <form method="post" action="https://test.ccavenue.com/transaction/transaction.do?command=initiateTransaction">
+        <form method="post" action="https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction">
             <input type="hidden" name="encRequest" value="${encRequest}">
             <input type="hidden" name="access_code" value="${accessCode}">
             <button type="submit">Pay Now</button>
