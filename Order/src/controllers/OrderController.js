@@ -32,7 +32,7 @@ const AddOrder = async (req, res) => {
             Remark
         } = req.body;
 
-        // console.log(req.body);
+        console.log(req.body);
 
         var OTP = await generateOTP(process?.env?.OTPDIGITS);
 
