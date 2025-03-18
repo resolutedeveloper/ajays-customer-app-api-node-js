@@ -31,23 +31,25 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
         },
         UnitRate: {
-            type: DataTypes.FLOAT,
+            type: DataTypes.STRING,
             allowNull: false,
         },
         MRP: {
-            type: DataTypes.FLOAT,
+            type: DataTypes.STRING,
         },
         BigUnit: {
-            type: DataTypes.STRING,
+            type: DataTypes.INTEGER,
         },
         BigUnitValue: {
             type: DataTypes.STRING,
         },
         SmallUnit: {
             type: DataTypes.STRING,
+            allowNull: true
         },
         SmallUnitValue: {
             type: DataTypes.STRING,
+            allowNull: true
         },
         OperationalUnit: {
             type: DataTypes.STRING,
@@ -71,10 +73,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
         },
         RateWithoutTax: {
-            type: DataTypes.FLOAT,
+            type: DataTypes.STRING,
         },
         TaxForSale: {
-            type: DataTypes.FLOAT,
+            type: DataTypes.STRING,
         },
         IsVisible: {
             type: DataTypes.BOOLEAN,
@@ -87,7 +89,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
         },
         ItemOrder: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
         },
         Remark: {
             type: DataTypes.STRING,
