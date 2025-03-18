@@ -32,7 +32,7 @@ const AddOrder = async (req, res) => {
             Remark
         } = req.body;
 
-        console.log(req.body);
+        // console.log(req.body);
 
         var OTP = await generateOTP(process?.env?.OTPDIGITS);
 
@@ -128,9 +128,9 @@ const AddOrder = async (req, res) => {
             // Insert order details
             const orderDetailsEntries = new_items.map((detail) => {
                 const item = Items.find((i) => i.ItemID === detail.ItemID);
-                const qty = item ? item.Qty : 0;
-                const ItemRemark = item ? item.Remark : 0;
-
+                const qty = item?.Qty ? item.Qty : 0;
+                const ItemRemark = item?.Remark ? item.Remark : '';
+                console.log(ItemRemark);
                 // Return the order details entry
                 return {
                     OrderID: newOrder.OrderID,
@@ -157,7 +157,7 @@ const AddOrder = async (req, res) => {
                     TaxForSale: detail.TaxForSale,
                     IsVisible: detail.IsVisible,
                     Image: detail.ItemIImageD,
-                    Remarks: detail.Remark,
+                    Remarks: detail.Remarks,
                     ItemOrder: detail.ItemOrder,
                     Remark: ItemRemark
                 };

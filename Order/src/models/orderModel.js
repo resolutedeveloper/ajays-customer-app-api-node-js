@@ -22,8 +22,8 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
         },
         TotalTax: {
-            type: DataTypes.FLOAT,
-            allowNull: false,
+            type: DataTypes.DOUBLE,
+            defaultValue: 0.0
         },
         Total: {
             type: DataTypes.INTEGER,
