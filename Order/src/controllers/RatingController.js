@@ -22,18 +22,18 @@ async function submitRating(req, res) {
         whereCondition["CustomerID"] = UserDetail.CustomerID;
         const oneMonthAgo = moment().subtract(1, 'months').format("YYYY-MM-DD");
 
-        whereCondition["CreatedOn"] = {[Op.get] : oneMonthAgo};
+        whereCondition["CreatedOn"] = { [Op.get]: oneMonthAgo };
         const isOrdered = await db.order.findOne({
             where: whereCondition
         });
 
-        if(!isOrdered){
+        if (!isOrdered) {
             return res.status(404).json({
-                message:"Order not found or expired the review date."
+                message: "Order not found or expired the review date."
             })
         }
         delete whereCondition["CreatedOn"];
-        
+
         whereCondition["ItemID"] = ItemID;
 
         const alreadyRated = await db.rating.findOne({

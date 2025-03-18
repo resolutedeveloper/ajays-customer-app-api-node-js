@@ -32,7 +32,7 @@ const AddOrder = async (req, res) => {
             Remark
         } = req.body;
 
-        console.log(req.body);
+        // console.log(req.body);
 
         var OTP = await generateOTP(process?.env?.OTPDIGITS);
 
@@ -64,6 +64,8 @@ const AddOrder = async (req, res) => {
         var new_items = http_item_data[1];
         var new_tax = http_item_data[2];
 
+        // console.log(new_tax);
+
 
         // console.log(new_items);
 
@@ -73,7 +75,7 @@ const AddOrder = async (req, res) => {
 
         Items.map((item) => {
             const itemDetails = new_items.find((i) => i.ItemID === item.ItemID);
-            // console.log(itemDetails);
+            // console.log(new_items);
             if (!itemDetails) {
                 throw new Error(`ItemID ${item.ItemID} not found in new_items`);
                 // Error point could be here 
@@ -83,8 +85,13 @@ const AddOrder = async (req, res) => {
             }
 
             const { RateWithoutTax, TaxForSale } = itemDetails;
-            const itemTotal = RateWithoutTax * item.Qty;
-            const itemTax = (itemTotal * TaxForSale) / 100;
+           
+            const itemTotal = parseFloat(RateWithoutTax) * item.Qty;
+            // const itemTax = (parseFloat(itemTotal) * parseFloat(TaxForSale)) / 100;
+            const itemTax = parseFloat(TaxForSale) * item.Qty;
+
+            // console.log(RateWithoutTax, TaxForSale, item.Qty, itemTotal, itemTax );
+            // console.log(`--------------------------`);
 
             Total += itemTotal + itemTax;
             TotalTax += itemTax;
