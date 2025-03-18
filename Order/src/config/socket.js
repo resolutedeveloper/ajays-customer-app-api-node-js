@@ -63,6 +63,7 @@ async function setupSocket(server) {
 
             socket.on('disconnect', () => {
                 console.log('User disconnected');
+                socket.removeAllListeners();
             });
         });
     });

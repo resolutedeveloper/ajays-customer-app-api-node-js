@@ -130,7 +130,7 @@ const AddOrder = async (req, res) => {
                 const item = Items.find((i) => i.ItemID === detail.ItemID);
                 const qty = item?.Qty ? item.Qty : 0;
                 const ItemRemark = item?.Remark ? item.Remark : '';
-                console.log(ItemRemark);
+                // console.log(ItemRemark);
                 // Return the order details entry
                 return {
                     OrderID: newOrder.OrderID,
