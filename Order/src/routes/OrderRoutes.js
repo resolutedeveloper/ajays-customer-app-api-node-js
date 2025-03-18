@@ -17,6 +17,7 @@ const AddOrderRequest = (req, res, next) => {
                 Joi.object({
                     ItemID: Joi.number().integer().required(),
                     Qty: Joi.number().integer().min(1).required(),
+                    Remark: Joi.string().optional()
                 })
             )
             .min(1)

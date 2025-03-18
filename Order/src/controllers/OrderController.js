@@ -31,6 +31,9 @@ const AddOrder = async (req, res) => {
             AppVersion,
             Remark
         } = req.body;
+
+        console.log(req.body);
+
         var OTP = await generateOTP(process?.env?.OTPDIGITS);
 
         const axiosData = await axios.post(`${process?.env?.CATALOG_LOCAL_URL}/httpResponse/checkoutItemsData`, {
@@ -97,7 +100,6 @@ const AddOrder = async (req, res) => {
         try {
             const newOrder = await db.order.create(
                 {
-
                     CompanyID: CompanyID,
                     CustomerID: CustomerID,
                     LocationID: LocationID,
@@ -155,7 +157,7 @@ const AddOrder = async (req, res) => {
                     TaxForSale: detail.TaxForSale,
                     IsVisible: detail.IsVisible,
                     Image: detail.ItemIImageD,
-                    Remarks: detail.Remarks,
+                    Remarks: detail.Remark,
                     ItemOrder: detail.ItemOrder,
                     Remark: ItemRemark
                 };

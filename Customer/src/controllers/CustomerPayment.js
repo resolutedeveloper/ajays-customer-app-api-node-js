@@ -13,7 +13,7 @@ async function startPayment(req, res) {
 
         let postData = `merchant_id=${merchantId}&order_id=${orderId}&amount=${amount}&currency=INR&redirect_url=${redirectUrl}&cancel_url=${cancelUrl}`;
 
-        const newTester = `merchant_id=${merchantId}&order_id=${orderId}&currency=INR&amount=${amount}&redirect_url=${redirectUrl}&cancel_url=${cancelUrl}`;
+        // const newTester = `merchant_id=${merchantId}&order_id=${orderId}&currency=INR&amount=${amount}&redirect_url=${redirectUrl}&cancel_url=${cancelUrl}`;
 
         let encRequest = encrypt(postData, workingKey);
 
