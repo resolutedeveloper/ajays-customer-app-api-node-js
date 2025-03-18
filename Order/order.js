@@ -1,4 +1,6 @@
-// Updated main file (index.js)
+const EventEmitter = require("events");
+EventEmitter.defaultMaxListeners = 100;
+
 require('dotenv').config();
 const express = require('express');
 const http = require('http');
