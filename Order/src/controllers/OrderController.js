@@ -164,7 +164,7 @@ const AddOrder = async (req, res) => {
                     RateWithoutTax: detail.RateWithoutTax,
                     TaxForSale: detail.TaxForSale,
                     IsVisible: detail.IsVisible,
-                    Image: detail.ItemIImageD,
+                    Image: detail?.ItemIImageD || null,
                     Remarks: detail.Remarks,
                     ItemOrder: detail.ItemOrder,
                     Remark: ItemRemark

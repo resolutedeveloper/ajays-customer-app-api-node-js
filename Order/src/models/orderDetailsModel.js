@@ -83,7 +83,8 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: true,
         },
         Image: {
-            type: DataTypes.STRING, // Use STRING for image URLs or paths
+            type: DataTypes.STRING,
+            allowNull: true
         },
         Remarks: {
             type: DataTypes.STRING,
