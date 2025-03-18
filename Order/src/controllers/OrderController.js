@@ -14,7 +14,7 @@ function generateOTP(length) {
 
 const AddOrder = async (req, res) => {
     try {
-        console.log(`Reacted 1`);
+
         var {
             CompanyID,
             CustomerID,
@@ -33,7 +33,6 @@ const AddOrder = async (req, res) => {
         } = req.body;
 
         // console.log(req.body);
-        console.log(`Reacted 2`);
 
         var OTP = await generateOTP(process?.env?.OTPDIGITS);
 
@@ -44,7 +43,7 @@ const AddOrder = async (req, res) => {
         }, {
             headers: { "Authorization": "Bearer " + process?.env?.HTTP_REQUEST_SECRET_KEY }
         });
-        console.log(`Reacted 3`);
+ 
         // console.log(axiosData);
         if (axiosData?.status !== 200 || !axiosData?.data?.data) {
             // console.log(axiosData.data.data);
@@ -54,7 +53,6 @@ const AddOrder = async (req, res) => {
         }
 
         var http_item_data = axiosData?.data?.data;
-        console.log(`Reacted 4`);
 
         if (http_item_data[0]?.SUCCESS == 0) {
             return res.status(400).json({
@@ -66,7 +64,6 @@ const AddOrder = async (req, res) => {
         var new_items = http_item_data[1];
         var new_tax = http_item_data[2];
 
-        console.log(`Reacted 5`);
 
         // console.log(new_items);
 
@@ -100,12 +97,9 @@ const AddOrder = async (req, res) => {
                 Tax: itemTax,
             };
         });
-        console.log(`Reacted 6`);
         const db_transaction = await db.sequelize.transaction(); // Start a transaction
-        console.log(`Reacted 7`);
 
         try {
-            console.log(`Reacted Err 1`);
             const newOrder = await db.order.create(
                 {
                     CompanyID: CompanyID,
@@ -132,7 +126,6 @@ const AddOrder = async (req, res) => {
                 }
             );
 
-            console.log(`Reacted Err 2`);
             // Insert order details
             const orderDetailsEntries = new_items.map((detail) => {
                 const item = Items.find((i) => i.ItemID === detail.ItemID);
@@ -170,9 +163,8 @@ const AddOrder = async (req, res) => {
                     Remark: ItemRemark
                 };
             });
-            console.log(`Reacted Err 3`, orderDetailsEntries);
+
             const createdOrderDetails = await db.orderDetails.bulkCreate(orderDetailsEntries, { transaction: db_transaction });
-            console.log(`Reacted Err 4`);
 
             // Insert order detail taxes
             const orderDetailTaxEntries = createdOrderDetails.flatMap((detail) => {
@@ -186,10 +178,8 @@ const AddOrder = async (req, res) => {
                     Percentage: tax.Percentage
                 }));
             });
-            console.log(`Reacted Err 5`);
 
             await db.orderDetailsTax.bulkCreate(orderDetailTaxEntries, { transaction: db_transaction });
-            console.log(`Reacted Err 6`);
 
             // Notification send to pos machine
             var socket_order = await db.order.findAll({
@@ -197,24 +187,22 @@ const AddOrder = async (req, res) => {
                     OrderID: newOrder.OrderID,
                 },
             });
-            console.log(`Reacted Err 7`);
+
             var socket_items = await db.orderDetails.findAll({
                 where: {
                     OrderID: newOrder.OrderID,
                 },
             });
-            console.log(`Reacted Err 8`);
+
             var socket_taxs = await db.orderDetailsTax.findAll({
                 where: {
                     OrderID: newOrder.OrderID,
                 },
             });
             var payment_info = [];
-            console.log(`Reacted 8`);
 
             const room = `location_room_${LocationID}`; // Generate the room name
             const io = await getIoInstance();
-            console.log(`Reacted 9`);
 
             io.to(room).emit('NewOrder', {
                 success: true,
@@ -224,10 +212,9 @@ const AddOrder = async (req, res) => {
                 taxs: socket_taxs,
                 payment_info: payment_info
             });
-            console.log(`Reacted 10`);
 
             await db_transaction.commit();
-            console.log(`Reacted 11`);
+
             return res.status(200).send({
                 success: true,
                 message: "Order created successfully!",
@@ -235,7 +222,6 @@ const AddOrder = async (req, res) => {
                 OTP: newOrder?.OTP
             });
         } catch (error) {
-            console.log(`Reacted Err 44564515`);
             await db_transaction.rollback(); // Rollback the commit
             return res.status(500).json({
                 message: "There was an error commiting changes"
