@@ -22,7 +22,7 @@ const AddOrderRequest = (req, res, next) => {
             )
             .min(1)
             .required(),
-        TotalTax: Joi.number().positive().optional(),
+        TotalTax: Joi.number().min(0).positive().optional(),
         Total: Joi.number().positive().required(),
         DeviceType: Joi.string().required(),
         DeviceModel: Joi.string().required(),
