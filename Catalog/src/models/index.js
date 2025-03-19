@@ -74,6 +74,9 @@ db.category.belongsTo(db.categoryAllocation, { foreignKey: 'CategoryID' });
 db.location.hasOne(db.LocationCompanyMapping, { foreignKey: 'LocationID' });
 db.LocationCompanyMapping.belongsTo(db.location);
 
+db.city.hasMany(db.location, { foreignKey: "CityId", sourceKey: "CityID" });
+db.location.belongsTo(db.city, { foreignKey: "CityId", targetKey: "CityID" });
+
 // Logger <<-->>
 dbLog.exceptions = require("./exceptions")(sequelizeLog, DataTypes);
 

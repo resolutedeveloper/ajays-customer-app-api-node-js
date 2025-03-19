@@ -69,8 +69,8 @@ const locationDetail = async (req, res) => {
         const { CityID } = req.params;
         const { latitude, longitude } = req.query;
 
-        console.log("CityID received:", CityID);
-        console.log("Latitude and Longitude received:", latitude, longitude);
+        // console.log("CityID received:", CityID);
+        // console.log("Latitude and Longitude received:", latitude, longitude);
 
         // Validate input latitude and longitude
         if (!latitude || !longitude || isNaN(latitude) || isNaN(longitude)) {
@@ -148,16 +148,18 @@ const locationDetail = async (req, res) => {
 
 const citystores = async (req, res) => {
     try {
-        const Cities = await db.sequelize.query(
-            `SELECT DISTINCT c.*
-             FROM Cities c
-             INNER JOIN Locations l ON c.CityID = l.CityId
-             ORDER BY c.CityName`,
-            {
-                type: db.Sequelize.QueryTypes.SELECT,
-            }
-        );
-
+        // const Cities = await db.sequelize.query(
+        //     `SELECT DISTINCT c.*
+        //      FROM Cities c
+        //      INNER JOIN Locations l ON c.CityID = l.CityId
+        //      ORDER BY c.CityName`,
+        //     {
+        //         type: db.Sequelize.QueryTypes.SELECT,
+        //     }
+        // );
+        const Cities = await db.city.findAll({
+            include: [{ model: db.location, attributes: ["Latitude", "Longitude", "LocationID"] }]
+        });
         if (Cities) {
             return res.status(200).json({
                 message: 'Cities details found successfully',
@@ -181,26 +183,6 @@ const citystores = async (req, res) => {
 
 const latlonglocation = async (req, res) => {
     try {
-        // const { latitude, longitude } = req.query;
-        // if (!latitude || !longitude) {
-        //     return res.status(400).send({
-        //         message: 'Latitude or Longitude not found'
-        //     });
-        // }
-
-
-        // const response = getCityName(latitude, longitude);
-        // const stateDistrict = response?.city;
-
-        // if (!stateDistrict) {
-        //     return res.status(201).json({
-        //         message: "Currently we are not serving in this location",
-        //         status: 0,
-        //         backendMessage: "Service failed"
-        //     })
-        // }
-        // console.log(stateDistrict);
-
         const { cityName, latitude, longitude } = req.query;
 
         if (!cityName || !latitude || !longitude) {
@@ -244,22 +226,22 @@ const latlonglocation = async (req, res) => {
             })
         }
 
-        const results = locations.map((location) => {
-            const lat2 = parseFloat(location?.Latitude);
-            const lon2 = parseFloat(location?.Longitude);
-            const distance = distanceCalculator(latitude, longitude, lat2, lon2);
-            const duration = timeCalculator(distance, 40);
+        // const results = locations.map((location) => {
+        //     // const lat2 = parseFloat(location?.Latitude);
+        //     // const lon2 = parseFloat(location?.Longitude);
+        //     // const distance = distanceCalculator(latitude, longitude, lat2, lon2);
+        //     // const duration = timeCalculator(distance, 40);
 
-            return {
-                ...location,
-                Distance: `${distance.toFixed(2)} km`,
-                Duration: `${duration.toFixed(2)} minutes`,
-            };
-        });
+        //     return {
+        //         ...location,
+        //         Distance: `${distance.toFixed(2)} km`,
+        //         Duration: `${duration.toFixed(2)} minutes`,
+        //     };
+        // });
 
         return res.status(200).json({
             message: 'Location details found successfully',
-            data: results,
+            data: locations,
         });
 
     } catch (error) {
