@@ -20,21 +20,34 @@ async function submitRating(req, res) {
         const whereCondition = {};
         whereCondition["OrderID"] = OrderID;
         whereCondition["CustomerID"] = UserDetail.CustomerID;
-        const oneMonthAgo = moment().subtract(1, 'months').format("YYYY-MM-DD");
 
-        whereCondition["CreatedOn"] = { [Op.get]: oneMonthAgo };
         const isOrdered = await db.order.findOne({
             where: whereCondition
         });
 
         if (!isOrdered) {
             return res.status(404).json({
-                message: "Order not found or expired the review date."
+                message: "Order not found."
             })
         }
-        delete whereCondition["CreatedOn"];
 
-        whereCondition["ItemID"] = ItemID;
+        const createdOn = moment(isOrdered.CreatedOn);
+        const oneMonthAfter = createdOn.add(1, "months");
+        if (moment().isAfter(oneMonthAfter)) {
+            return res.status(404).json({
+                message: "Order expired the review date."
+            })
+        }
+        // whereCondition["CreatedOn"] = { [Op.lte]: oneMonthAgo };
+
+        // const isOrdered = await db.order.findOne({
+        //     where: whereCondition
+        // });
+
+
+        // delete whereCondition["CreatedOn"];
+
+        whereCondition["OrderID"] = OrderID;
 
         const alreadyRated = await db.rating.findOne({
             where: whereCondition
@@ -49,11 +62,11 @@ async function submitRating(req, res) {
         if (ItemID.length > 0) {
             const toStoreData = ItemID.map((item) => ({
                 CustomerID: UserDetail.CustomerID,
-                ItemID: item,
+                ItemID: item.ItemID,
                 OrderID: OrderID,
                 LocationID: LocationID,
                 // Remark: Remark,
-                Rating: item?.Rating,
+                Rating: item?.Rating ? parseInt(item.Rating) : 0,
                 CreatedOn: Date.now()
             }));
 
