@@ -92,6 +92,10 @@ module.exports = (sequelize, DataTypes) => {
         ItemOrder: {
             type: DataTypes.STRING,
         },
+        OverallRating: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0
+        },
         Remark: {
             type: DataTypes.STRING,
             allowNull: true,

@@ -10,9 +10,9 @@ async function submitRating(req, res) {
                 message: "Invalid token! Login again"
             })
         }
-        const { ItemID, OrderID, Remark, Rating, LocationID } = req.body;
+        const { ItemID, OrderID, Remark, Rating, LocationID, locationRating } = req.body;
 
-        if (!ItemID || !OrderID || !LocationID) {
+        if (!ItemID || !Array.isArray(ItemID) || !OrderID || !LocationID) {
             return res.status(400).json({
                 message: "Item id or Order id or Location id is missing"
             })
@@ -46,23 +46,25 @@ async function submitRating(req, res) {
             });
         }
 
-        if (Array.isArray(ItemID)) {
+        if (ItemID.length > 0) {
             const toStoreData = ItemID.map((item) => ({
                 CustomerID: UserDetail.CustomerID,
                 ItemID: item,
                 OrderID: OrderID,
                 LocationID: LocationID,
-                Remark: Remark,
-                Rating: Rating,
+                // Remark: Remark,
+                Rating: item?.Rating,
                 CreatedOn: Date.now()
             }));
 
             await db.rating.bulkCreate(toStoreData);
             await db.orderDetails.update({
-                isRatingDone: true
+                isRatingDone: true,
+                OverallRating: locationRating ? locationRating : 0,
+                Remark: Remark
             }, {
                 where: {
-                    ItemID: { [Op.in]: ItemID },
+                    // ItemID: { [Op.in]: ItemID },
                     OrderID: OrderID
                 }
             });
@@ -72,21 +74,23 @@ async function submitRating(req, res) {
             });
         }
 
-        await db.rating.create({
-            CustomerID: UserDetail.CustomerID,
-            ItemID: ItemID,
-            OrderID: OrderID,
-            LocationID: LocationID,
-            Remark: Remark,
-            Rating: Rating,
-            CreatedOn: Date.now()
-        });
+        // await db.rating.create({
+        //     CustomerID: UserDetail.CustomerID,
+        //     ItemID: ItemID,
+        //     OrderID: OrderID,
+        //     LocationID: LocationID,
+        //     Remark: Remark,
+        //     Rating: Rating,
+        //     CreatedOn: Date.now(),
+        // });
 
         await db.orderDetails.update({
-            isRatingDone: true
+            isRatingDone: true,
+            OverallRating: locationRating ? locationRating : 0,
+            Remark: Remark
         }, {
             where: {
-                ItemID: ItemID,
+                // ItemID: ItemID,
                 OrderID: OrderID
             }
         });
@@ -101,5 +105,6 @@ async function submitRating(req, res) {
         });
     }
 }
+
 
 module.exports = { submitRating };
