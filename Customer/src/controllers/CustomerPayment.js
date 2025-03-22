@@ -17,13 +17,15 @@ async function startPayment(req, res) {
 
         let encRequest = encrypt(postData, workingKey);
 
-        let toSend = `
-        <form method="post" action="https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction">
-            <input type="hidden" name="encRequest" value="${encRequest}">
-            <input type="hidden" name="access_code" value="${accessCode}">
-            <button type="submit">Pay Now</button>
-        </form>
-    `;
+    //     let toSend = `
+    //     <form method="post" action="https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction">
+    //         <input type="hidden" name="encRequest" value="${encRequest}">
+    //         <input type="hidden" name="access_code" value="${accessCode}">
+    //         <button type="submit">Pay Now</button>
+    //     </form>
+    // `;
+
+    let toSend = `https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction&encRequest=${encRequest}&access_code=${accessCode}`
 
         return res.send(toSend);
     } catch (error) {
