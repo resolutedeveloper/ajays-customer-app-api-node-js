@@ -155,9 +155,8 @@ jobs:
           export REDIS_URL_INTERNAL=127.0.0.1
           export REDIS_PORT=6379
           export MERCHANT_ID=4076598
-          export MERCHANT_ID=4076598
-          export ACCESS_CODE=AVJH59MC34AW54HJWA
-          export WORKING_KEY=546503C401FF208C893C7683B5910988
+          export ACCESS_CODE=AVXU60MC48BJ28UXJB
+          export WORKING_KEY=D3AE36AB2BD084CA0E465674AD54CF00
           export REDIRECT_URL=http://192.168.29.171:5173/payment-success
           export CANCEL_URL=http://192.168.29.171:5173/payment-failed
 
