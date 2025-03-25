@@ -30,7 +30,7 @@ async function setupSocket(server) {
                 const LocationID = room.replace("location_room_", "");
                 msg.message.LocationID = LocationID;
                 const result = await OrderApprove(msg);
-                console.log('result', result);
+                // console.log('result', result);
                 callback({ success: result.status == 1 ? true : false, message: result.message });
             });
 
@@ -53,11 +53,15 @@ async function setupSocket(server) {
             });
 
             socket.on('OrderCompleted', async (msg, callback) => {
-                /* { OrderID: 'f17a5045-0ab5-4112-a985-75596e761091', Data: { CounterID: 1, OperatorID: 2 }, OTP: "1111" } */
                 const LocationID = room.replace("location_room_", "");
                 msg.message.LocationID = LocationID;
 
                 const result = await OrderCompleted(msg);
+                callback({ success: result.status == 1 ? true : false, message: result.message });
+            });
+
+            socket.on('InvoiceGenerate', async (msg, callback) => {
+                const result = await saveInvoice(msg);
                 callback({ success: result.status == 1 ? true : false, message: result.message });
             });
 
@@ -372,7 +376,7 @@ const OrderCompleted = async (req) => {
                 LocationID: req.LocationID,
             },
         }, {
-            transaction: db_transaction, // Use the transaction
+            transaction: db_transaction,
         });
 
         await db.orderHistory.create(
@@ -403,6 +407,46 @@ const OrderCompleted = async (req) => {
         }
     }
 };
+
+async function saveInvoice(req, res) {
+    try {
+        req = req.message;
+
+        const OrderList = await db.order.findOne({
+            where: {
+                OrderID: req.OrderID,
+                LocationID: req.LocationID,
+            }
+        });
+        if (!OrderList) {
+            return {
+                status: 0,
+                message: 'Permission denied'
+            }
+        }
+
+        const CurrentDateTime = moment.tz(new Date(), "Asia/Kolkata").format('YYYY-MM-DD HH:mm:ss');
+        await db.order.update({
+            Invoice: req.Invoice,
+            InvoiceKOT: req.InvoiceKOT,
+            UpdatedOn: CurrentDateTime
+        }, {
+            where: {
+                OrderID: req.OrderID,
+                LocationID: req.LocationID,
+            },
+        });
+        return {
+            status: 1,
+            message: 'Invoice Saved'
+        }
+    } catch (error) {
+        return {
+            status: 0,
+            message: error.message
+        }
+    }
+}
 
 // Module exports
 module.exports = { setupSocket, getIoInstance };

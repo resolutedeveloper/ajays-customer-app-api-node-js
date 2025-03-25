@@ -66,6 +66,12 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: true,
         },
+        Invoice: {
+            type: DataTypes.JSON
+        },
+        InvoiceKOT: {
+            type: DataTypes.JSON
+        },
         OTP: {
             type: DataTypes.STRING(4), // Stores a 4-digit OTP
             allowNull: false,
