@@ -407,6 +407,8 @@ const checkoutItemsData = async (req, res) => {
             })
         }
 
+        // console.log(itemJson);
+
         const result = await db.sequelize.query(
             "CALL SP_ItemList(:ItemJson, :LocationID, :CompanyID)", {
             replacements: {
@@ -420,6 +422,10 @@ const checkoutItemsData = async (req, res) => {
         );
 
         const cleanedResult = result.map(item => Object.values(item));
+
+        // console.log(result);
+        // console.log(`%%%%%%%%%%%%%%%%%%%%%%`);
+        // console.log(cleanedResult);
 
         return res.status(200).json({
             message: 'fetched success',

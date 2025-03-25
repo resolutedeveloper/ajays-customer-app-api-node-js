@@ -24,13 +24,13 @@ const AddOrderRequest = (req, res, next) => {
             .required(),
         TotalTax: Joi.number().min(0).precision(2).optional(),
         Total: Joi.number().positive().required(),
-        DeviceType: Joi.string().required(),
-        DeviceModel: Joi.string().required(),
-        OSVersion: Joi.string().required(),
-        DeviceID: Joi.string().required(),
-        IPAddress: Joi.string().ip({ version: ['ipv4', 'ipv6'] }).required(),
-        AppVersion: Joi.string().required(),
-        Version: Joi.string().max(20).required(),
+        DeviceType: Joi.string().optional(),
+        DeviceModel: Joi.string().optional(),
+        OSVersion: Joi.string().optional(),
+        DeviceID: Joi.string().optional(),
+        IPAddress: Joi.string().ip({ version: ['ipv4', 'ipv6'] }).optional(),
+        AppVersion: Joi.string().optional(),
+        Version: Joi.string().max(20).optional(),
     });
 
     validateRequest(req, res, next, schema);

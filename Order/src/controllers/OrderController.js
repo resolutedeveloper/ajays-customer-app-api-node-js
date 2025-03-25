@@ -61,6 +61,8 @@ const AddOrder = async (req, res) => {
             });
         }
 
+        // console.log(http_item_data);
+
         var new_items = http_item_data[1];
         var new_tax = http_item_data[2];
 
@@ -72,6 +74,7 @@ const AddOrder = async (req, res) => {
         // Calculate total and total tax
         Total = 0;
         TotalTax = 0;
+        // console.log(Items);
 
         Items.map((item) => {
             const itemDetails = new_items.find((i) => i.ItemID === item.ItemID);
