@@ -28,7 +28,7 @@ const AddOrderRequest = (req, res, next) => {
         DeviceModel: Joi.string().optional(),
         OSVersion: Joi.string().optional(),
         DeviceID: Joi.string().optional(),
-        IPAddress: Joi.string().ip({ version: ['ipv4', 'ipv6'] }).optional(),
+        IPAddress: Joi.string().ip({ version: ['ipv4', 'ipv6'] }).allow(null, "").optional(),
         AppVersion: Joi.string().optional(),
         Version: Joi.string().max(20).optional(),
     });
