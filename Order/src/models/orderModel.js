@@ -44,19 +44,15 @@ module.exports = (sequelize, DataTypes) => {
         },
         DeviceModel: {
             type: DataTypes.STRING(256),
-            allowNull: false,
         },
         OSVersion: {
             type: DataTypes.STRING(256),
-            allowNull: false,
         },
         DeviceID: {
             type: DataTypes.STRING(256),
-            allowNull: false,
         },
         IPAddress: {
             type: DataTypes.STRING(256),
-            allowNull: false,
         },
         AppVersion: {
             type: DataTypes.STRING(256),
