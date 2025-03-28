@@ -54,7 +54,14 @@ async function DashboardData(req, res) {
                 Items.CategoryID,
                 Items.Description,
                 Items.UnitRate,
-                Items.MRP
+                Items.MRP,
+                Items.BigUnit,
+                Items.OperationalUnit,
+                Items.CostingUnit,
+                Items.SellingUnit,
+                Items.ConversionRatio,
+                Items.Remarks,
+                ItemLocationRates.*
             FROM Items
             INNER JOIN ItemAllocations ON ItemAllocations.ItemID = Items.ItemID
             LEFT OUTER JOIN ItemLocationRates ON ItemAllocations.ItemID = ItemLocationRates.ItemID and ItemLocationRates.LocationID = ItemAllocations.LocationID
