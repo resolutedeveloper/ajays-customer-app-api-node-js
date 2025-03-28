@@ -88,7 +88,7 @@ const AddOrder = async (req, res) => {
             }
 
             const { RateWithoutTax, TaxForSale } = itemDetails;
-           
+            // console.log(RateWithoutTax, TaxForSale);
             const itemTotal = parseFloat(RateWithoutTax) * item.Qty;
             // const itemTax = (parseFloat(itemTotal) * parseFloat(TaxForSale)) / 100;
             const itemTax = parseFloat(TaxForSale) * item.Qty;

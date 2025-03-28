@@ -46,18 +46,26 @@ async function DashboardData(req, res) {
 
         const itemAllocation = await db.sequelize.query(`
             SELECT 
-                ItemAllocations.ID, 
+                ItemAllocations.ID,
                 ItemAllocations.LocationID,
                 ItemAllocations.ItemID,
-                Items.*  -- Select all fields from the Items table
-            FROM ItemAllocations
-            LEFT OUTER JOIN Items AS Items 
-                ON ItemAllocations.ItemID = Items.ItemID
-            WHERE ItemAllocations.LocationID = ${LocationId};
+                Items.ItemID,
+                Items.ItemName,
+                Items.CategoryID,
+                Items.Description,
+                Items.UnitRate,
+                Items.MRP
+            FROM Items
+            INNER JOIN ItemAllocations ON ItemAllocations.ItemID = Items.ItemID
+            LEFT OUTER JOIN ItemLocationRates ON ItemAllocations.ItemID = ItemLocationRates.ItemID and ItemLocationRates.LocationID = ItemAllocations.LocationID
+            WHERE ItemAllocations.LocationID = ${LocationId}
+            ;
         `, {
             type: db.Sequelize.QueryTypes.SELECT
         });
-
+        // db.itemLocationRate
+        // const 
+        // console.log(itemAllocation);
 
         return res.status(200).json({
             message: 'Success',
