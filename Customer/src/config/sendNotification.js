@@ -70,7 +70,7 @@ const sendNotification = async (customerId, title, body, customData = {}) => {
         console.log("🚀 ~ sendNotification ~ notificationPayload:", notificationPayload);
 
         const response = await admin.messaging().send(notificationPayload);
-        console.log('Notification sent:', response);
+        // console.log('Notification sent:', response);
 
         return { success: true, response };
     } catch (err) {
