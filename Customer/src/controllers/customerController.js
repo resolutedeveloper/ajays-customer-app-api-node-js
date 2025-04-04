@@ -59,7 +59,17 @@ async function deleteCustomerAccount(req, res) {
         if (!customerId) {
             return res.status(404).json({
                 message: "User not found."
-            })
+            });
+        }
+
+        const isExist = await db.customer.findOne({
+            where: { CustomerID: customerId, IsDeleted: false }
+        });
+
+        if (!isExist) {
+            return res.status(404).json({
+                message: "User not found."
+            });
         }
 
         await db.customer.update({
