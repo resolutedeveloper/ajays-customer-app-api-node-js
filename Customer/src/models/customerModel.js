@@ -55,9 +55,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         IsDeleted:{
             type:DataTypes.BOOLEAN,
-            allowNull: false,
             defaultValue: false,
-            allowNull: true
         },
     }, {
         timestamps: false,

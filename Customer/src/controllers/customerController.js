@@ -52,6 +52,38 @@ async function getCustomerDetails(req, res) {
     }
 }
 
+async function deleteCustomerAccount(req, res) {
+    try {
+        const { customerId } = req.params;
+
+        if (!customerId) {
+            return res.status(404).json({
+                message: "User not found."
+            })
+        }
+
+        await db.customer.update({
+            IsDeleted: true
+        }, { where: { CustomerID: customerId } });
+
+        await db.customerEmail.update({
+            IsDeleted: true
+        }, { where: { CustomerID: customerId } });
+
+        return res.status(200).json({
+            status: 'true',
+            message: 'User deleted successfully.'
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            status: 'false',
+            message: 'Sorry! There was a server-side error.',
+            error: error
+        });
+    }
+}
 
 
-module.exports = { getCustomer, getCustomerDetails }
+
+module.exports = { getCustomer, getCustomerDetails, deleteCustomerAccount };
