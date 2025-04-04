@@ -54,7 +54,7 @@ async function getCustomerDetails(req, res) {
 
 async function deleteCustomerAccount(req, res) {
     try {
-        const { customerId } = req.params;
+        const customerId = req?.UserDetail?.CustomerID;
 
         if (!customerId) {
             return res.status(404).json({
