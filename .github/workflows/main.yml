@@ -131,6 +131,7 @@ jobs:
           export CUSTOMER_LOCAL_URL=http://localhost:301/api/v1/
           export ORDER_LOCAL_URL=http://localhost:300/api/v1/
           export HTTP_REQUEST_SECRET_KEY=b4365ed7a1ed00f705f4bff7e7f4e977cdc14f4c3b967f0d38e57ab1552b1497
+          export POS_TOKEN=66efd054958dabe83e69af39138573ea925768045359c60a708865214595f1a5
           export SECRET_KEY=9lkeFOhxt10
           export JWT_SECRET="AjaysToken"
           export OTPDIGITS=4
@@ -159,6 +160,11 @@ jobs:
           export WORKING_KEY=D3AE36AB2BD084CA0E465674AD54CF00
           export REDIRECT_URL=http://192.168.29.171:5173/payment-success
           export CANCEL_URL=http://192.168.29.171:5173/payment-failed
+          export MERCHANT_ID_POS=4235640
+          export ACCESS_CODE_POS=AVMU65MD50AW18UMWA
+          export WORKING_KEY_POS=68501C18BF38F2960325E220CD18DF2E
+          export REDIRECT_URL_POS=http://192.168.29.171:5173/payment-success
+          export CANCEL_URL_POS=http://192.168.29.171:5173/payment-failed
 
           # Copy the Customer files to the target directory
           cp -r /var/www/repo/public_html/ajays-customer-app-api-node-js/Customer/* /var/www/Customer/public_html
