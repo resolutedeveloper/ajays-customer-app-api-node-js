@@ -38,7 +38,8 @@ async function startPayment(req, res) {
     } catch (error) {
         console.log(error);
         return res.status(500).json({
-            message: 'Sorry! There was an server-side error'
+            message: 'Sorry! There was an server-side error',
+            error: error
         });
     }
 }
@@ -63,7 +64,8 @@ async function startPaymentPosMachine(req, res) {
     } catch (error) {
         console.log(error);
         return res.status(500).json({
-            message: 'Sorry! There was an server-side error'
+            message: 'Sorry! There was an server-side error',
+            error: error
         });
     }
 }
