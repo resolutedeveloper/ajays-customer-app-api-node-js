@@ -54,7 +54,7 @@ async function startPaymentPosMachine(req, res) {
         let cancelUrl = process.env.CANCEL_URL_POS;
 
 
-        let postData = `merchant_id=${merchantId}&order_id=${orderId}&amount=${amount}&currency=INR&redirect_url=${redirectUrl}&cancel_url=${cancelUrl}&billing_name=${req.body.billing_name}&billing_address=${req.body.billing_address}&billing_city=${req.body.billing_city}&billing_state=${req.body.billing_state}&billing_zip=${req.body.billing_zipcode}&billing_tel=${req.body.billing_mobile}&billing_email=${req.body.billing_email}`;
+        let postData = `merchant_id=${merchantId}&order_id=${req.body.orderId}&amount=${req.body.amount}&currency=INR&redirect_url=${redirectUrl}&cancel_url=${cancelUrl}&billing_name=${req.body.billing_name}&billing_address=${req.body.billing_address}&billing_city=${req.body.billing_city}&billing_state=${req.body.billing_state}&billing_zip=${req.body.billing_zipcode}&billing_tel=${req.body.billing_mobile}&billing_email=${req.body.billing_email}`;
 
         let encRequest = encrypt(postData, workingKey);
 
