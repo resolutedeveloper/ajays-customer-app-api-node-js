@@ -26,7 +26,9 @@ async function validatePosRequest(req, res, next) {
             billing_city: Joi.string().min(2).max(50).pattern(/^[a-zA-Z\s]+$/).required(),
             billing_state: Joi.string().min(2).max(50).pattern(/^[a-zA-Z\s]+$/).required(),
             billing_mobile: Joi.string().pattern(/^[6-9]\d{9}$/).required(),
-            billing_email: Joi.string().required()
+            billing_email: Joi.string().required(),
+            payment_option: Joi.string().required(),
+            billing_country: Joi.string().required(),
         });
 
         const { error } = schema.validate(req?.body);
